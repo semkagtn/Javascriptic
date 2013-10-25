@@ -16,6 +16,7 @@ statement
     | ifStat
     | whileStat
     | functionCall ';'
+    | returnStat ';'
     ;
 
 scopeStat
@@ -43,12 +44,21 @@ whileStat
     ;
 
 expression
-    : ID
-    | constant
-    | functionCall
+    : op=('!' | '-') expression # UnaryExpr
+    | expression op=('*' | '/' | '%') expression # MulDivModExpr
+    | expression op=('+' | '-') expression # AddSubExpr
+    | expression op=('<' | '<=' | '>' | '>=') expression # CmpExpr
+    | expression op=('==' | '!=') expression # EqExpr
+    | expression '&&' expression # AndExpr
+    | expression '||' expression # OrExpr
+    | assignment # AssignExpr 
+    | '(' expression ')' # ParenExpr
+    | ID # Id
+    | constantExpr # Constant
+    | functionCall # FunctionCallExpr 
     ;
 
-constant
+constantExpr
     : NUM
     | STR
     | BOOL
@@ -59,6 +69,10 @@ functionCall
     : ID '(' functionArgs? ')' 
     ;
 
+returnStat
+    : 'return' expression
+    ;
+
 functionParams
     : ID (',' ID)* 
     ;
@@ -67,7 +81,20 @@ functionArgs
     : expression (',' expression)*
     ;
 
-NUM : '-'? DIGIT+ ;
+NOT : '!' ;
+MINUS : '-' ;
+MUL : '*' ;
+DIV : '/' ;
+MOD : '%' ;
+ADD : '+' ;
+LT : '<' ;
+LQ : '<=' ;
+GT : '>' ;
+GE : '>=' ;
+EQ : '==' ;
+NE : '!=' ;
+
+NUM : DIGIT+ ;
 STR : '"' (ESC | . )*? '"' ;
 BOOL : 'true' | 'false' ;
 UNDEF : 'undefined' ; 
