@@ -5,16 +5,19 @@ program
     ; 
 
 block
-    : statement*
+    : stat*
     ;
 
-statement
-    : scopeStat
+// unlike JavaScript in this language we MUST type ';' after some statement
+// ';' in this rule because some statements are expressions (expressions uses without semicolon)
+stat
+    : scopeStat        // { ... }
     | functionDecl
     | varDecl ';'
-    | assignment ';'
+    | assign ';'       // x = 2 + 2 * 2;
     | ifStat
-    | whileStat
+    | whileStat 
+    | doWhileStat ';'
     | functionCall ';'
     | returnStat ';'
     ;
@@ -28,31 +31,36 @@ functionDecl
     ;
 
 varDecl
-    : 'var' ID ('=' expression)? 
+    : 'var' ID ('=' expr)? 
     ;
 
-assignment
-    : ID '=' expression 
+assign
+    : ID '=' expr 
     ;
 
 ifStat
-    : 'if' '(' expression ')' statement ('else' statement)? 
+    : 'if' '(' expr ')' stat ('else' stat)? 
     ;
 
 whileStat
-    : 'while' '(' expression ')' statement
+    : 'while' '(' expr ')' stat
     ;
 
-expression
-    : op=('!' | '-') expression # UnaryExpr
-    | expression op=('*' | '/' | '%') expression # MulDivModExpr
-    | expression op=('+' | '-') expression # AddSubExpr
-    | expression op=('<' | '<=' | '>' | '>=') expression # CmpExpr
-    | expression op=('==' | '!=') expression # EqExpr
-    | expression '&&' expression # AndExpr
-    | expression '||' expression # OrExpr
-    | assignment # AssignExpr 
-    | '(' expression ')' # ParenExpr
+doWhileStat
+    : 'do' stat 'while' '(' expr ')'
+    ;
+
+// operations with priority
+expr
+    : op=('!' | '-') expr # UnaryExpr
+    | expr op=('*' | '/' | '%') expr # MulDivModExpr
+    | expr op=('+' | '-') expr # AddSubExpr
+    | expr op=('<' | '<=' | '>' | '>=') expr # CmpExpr
+    | expr op=('==' | '!=') expr # EqExpr
+    | expr '&&' expr # AndExpr
+    | expr '||' expr # OrExpr
+    | assign # AssignExpr
+    | '(' expr ')' # ParenExpr
     | ID # Id
     | constantExpr # Constant
     | functionCall # FunctionCallExpr 
@@ -70,15 +78,17 @@ functionCall
     ;
 
 returnStat
-    : 'return' expression
+    : 'return' expr
     ;
 
+// abstract values
 functionParams
     : ID (',' ID)* 
     ;
 
+// concrete values
 functionArgs
-    : expression (',' expression)*
+    : expr (',' expr)*
     ;
 
 NOT : '!' ;
@@ -94,9 +104,9 @@ GE : '>=' ;
 EQ : '==' ;
 NE : '!=' ;
 
-NUM : DIGIT+ ;
-STR : '"' (ESC | . )*? '"' ;
-BOOL : 'true' | 'false' ;
+NUM : DIGIT+ ; // we can get negative numbers using unary minus operator
+STR : '"' (ESC | . )*? '"' ; // unlike JavaScript only double quotes
+BOOL : 'true' | 'false' ; 
 UNDEF : 'undefined' ; 
 
 ID : ID_LETTER (ID_LETTER | DIGIT)* ;
