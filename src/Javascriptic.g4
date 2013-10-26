@@ -1,5 +1,9 @@
 grammar Javascriptic;
 
+@package {
+com.semkagtn.generated;
+}
+
 program
     : block
     ; 
