@@ -1,5 +1,6 @@
 package com.semkagtn.visitor;
 
+import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.DoWhileNode;
 import com.semkagtn.tree.FunctionCallNode;
 import com.semkagtn.tree.FunctionNode;
@@ -24,4 +25,5 @@ public interface AstVisitor<T> {
 	T visit(FunctionCallNode functionCall);
 	T visit(ReturnNode returnStatement);
 	T visit(FunctionParameterNode functionParameter);
+	T visit(ConstantNode constant);
 }
