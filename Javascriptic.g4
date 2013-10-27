@@ -12,18 +12,17 @@ block
     : stat*
     ;
 
-// unlike JavaScript in this language we MUST type ';' after some statement
-// ';' in this rule because some statements are expressions (expressions uses without semicolon)
+// unlike JavaScript in this language we MUST type ';' after statements which are expressions
 stat
     : scopeStat        // { ... }
     | functionDecl
-    | varDecl ';'
-    | assign ';'       // x = 2 + 2 * 2;
+    | varDecl 
+    | assign        // x = 2 + 2 * 2;
     | ifStat
     | whileStat 
-    | doWhileStat ';'
-    | functionCall ';'
-    | returnStat ';'
+    | doWhileStat 
+    | returnStat 
+    | expr ';'
     ;
 
 scopeStat
@@ -35,11 +34,11 @@ functionDecl
     ;
 
 varDecl
-    : 'var' ID ('=' expr)? 
+    : 'var' ID ('=' expr)? ';'
     ;
 
 assign
-    : ID '=' expr 
+    : ID '=' expr ';'
     ;
 
 ifStat
@@ -51,7 +50,7 @@ whileStat
     ;
 
 doWhileStat
-    : 'do' stat 'while' '(' expr ')'
+    : 'do' stat 'while' '(' expr ')' ';'
     ;
 
 // operations with priority
@@ -63,14 +62,13 @@ expr
     | expr op=('==' | '!=') expr # EqExpr
     | expr '&&' expr # AndExpr
     | expr '||' expr # OrExpr
-    | assign # AssignExpr
     | '(' expr ')' # ParenExpr
     | ID # Id
-    | constantExpr # Constant
+    | valueExpr # Value
     | functionCall # FunctionCallExpr 
     ;
 
-constantExpr
+valueExpr
     : NUM
     | STR
     | BOOL
@@ -82,7 +80,7 @@ functionCall
     ;
 
 returnStat
-    : 'return' expr
+    : 'return' expr ';'
     ;
 
 // abstract values
