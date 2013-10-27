@@ -64,11 +64,11 @@ expr
     | expr '||' expr # OrExpr
     | '(' expr ')' # ParenExpr
     | ID # Id
-    | valueExpr # Value
+    | constantExpr # Constant
     | functionCall # FunctionCallExpr 
     ;
 
-valueExpr
+constantExpr
     : NUM
     | STR
     | BOOL
