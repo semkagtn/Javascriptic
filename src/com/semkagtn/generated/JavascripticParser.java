@@ -32,11 +32,11 @@ public class JavascripticParser extends Parser {
 	public static final int
 		RULE_program = 0, RULE_block = 1, RULE_stat = 2, RULE_scopeStat = 3, RULE_functionDecl = 4, 
 		RULE_varDecl = 5, RULE_assign = 6, RULE_ifStat = 7, RULE_whileStat = 8, 
-		RULE_doWhileStat = 9, RULE_expr = 10, RULE_valueExpr = 11, RULE_functionCall = 12, 
+		RULE_doWhileStat = 9, RULE_expr = 10, RULE_constantExpr = 11, RULE_functionCall = 12, 
 		RULE_returnStat = 13, RULE_functionParams = 14, RULE_functionArgs = 15;
 	public static final String[] ruleNames = {
 		"program", "block", "stat", "scopeStat", "functionDecl", "varDecl", "assign", 
-		"ifStat", "whileStat", "doWhileStat", "expr", "valueExpr", "functionCall", 
+		"ifStat", "whileStat", "doWhileStat", "expr", "constantExpr", "functionCall", 
 		"returnStat", "functionParams", "functionArgs"
 	};
 
@@ -605,17 +605,6 @@ public class JavascripticParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class ValueContext extends ExprContext {
-		public ValueExprContext valueExpr() {
-			return getRuleContext(ValueExprContext.class,0);
-		}
-		public ValueContext(ExprContext ctx) { copyFrom(ctx); }
-		@Override
-		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitValue(this);
-			else return visitor.visitChildren(this);
-		}
-	}
 	public static class AddSubExprContext extends ExprContext {
 		public Token op;
 		public List<ExprContext> expr() {
@@ -736,6 +725,17 @@ public class JavascripticParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
+	public static class ConstantContext extends ExprContext {
+		public ConstantExprContext constantExpr() {
+			return getRuleContext(ConstantExprContext.class,0);
+		}
+		public ConstantContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitConstant(this);
+			else return visitor.visitChildren(this);
+		}
+	}
 
 	public final ExprContext expr(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
@@ -790,10 +790,10 @@ public class JavascripticParser extends Parser {
 
 			case 4:
 				{
-				_localctx = new ValueContext(_localctx);
+				_localctx = new ConstantContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(110); valueExpr();
+				setState(110); constantExpr();
 				}
 				break;
 
@@ -926,25 +926,25 @@ public class JavascripticParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ValueExprContext extends ParserRuleContext {
+	public static class ConstantExprContext extends ParserRuleContext {
 		public TerminalNode BOOL() { return getToken(JavascripticParser.BOOL, 0); }
 		public TerminalNode UNDEF() { return getToken(JavascripticParser.UNDEF, 0); }
 		public TerminalNode STR() { return getToken(JavascripticParser.STR, 0); }
 		public TerminalNode NUM() { return getToken(JavascripticParser.NUM, 0); }
-		public ValueExprContext(ParserRuleContext parent, int invokingState) {
+		public ConstantExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_valueExpr; }
+		@Override public int getRuleIndex() { return RULE_constantExpr; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitValueExpr(this);
+			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitConstantExpr(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ValueExprContext valueExpr() throws RecognitionException {
-		ValueExprContext _localctx = new ValueExprContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_valueExpr);
+	public final ConstantExprContext constantExpr() throws RecognitionException {
+		ConstantExprContext _localctx = new ConstantExprContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_constantExpr);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);

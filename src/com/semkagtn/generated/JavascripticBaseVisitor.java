@@ -60,6 +60,14 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitConstant(@NotNull JavascripticParser.ConstantContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitFunctionCall(@NotNull JavascripticParser.FunctionCallContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -116,22 +124,6 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitValue(@NotNull JavascripticParser.ValueContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitValueExpr(@NotNull JavascripticParser.ValueExprContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitAddSubExpr(@NotNull JavascripticParser.AddSubExprContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -157,6 +149,14 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitUnaryExpr(@NotNull JavascripticParser.UnaryExprContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitConstantExpr(@NotNull JavascripticParser.ConstantExprContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
