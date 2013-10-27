@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.semkagtn.visitor.AstVisitor;
 
-public class FunctionCallNode extends StatementNode {
+public class FunctionCallNode extends ExpressionNode {
 	private String name;
 	private final ArrayList<ExpressionNode> arguments;
 	

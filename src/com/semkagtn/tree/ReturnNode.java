@@ -2,7 +2,7 @@ package com.semkagtn.tree;
 
 import com.semkagtn.visitor.AstVisitor;
 
-public class ReturnNode extends ExpressionNode {
+public class ReturnNode extends StatementNode {
 	private ExpressionNode value;
 	
 	public ReturnNode() {
