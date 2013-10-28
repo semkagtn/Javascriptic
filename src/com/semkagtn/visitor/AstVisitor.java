@@ -1,11 +1,24 @@
 package com.semkagtn.visitor;
 
+import com.semkagtn.tree.AndExpressionNode;
 import com.semkagtn.tree.ConstantNode;
+import com.semkagtn.tree.DivExpressionNode;
 import com.semkagtn.tree.DoWhileNode;
+import com.semkagtn.tree.EqExpressionNode;
 import com.semkagtn.tree.FunctionCallNode;
 import com.semkagtn.tree.FunctionNode;
 import com.semkagtn.tree.FunctionParameterNode;
+import com.semkagtn.tree.GeExpressionNode;
+import com.semkagtn.tree.GtExpressionNode;
 import com.semkagtn.tree.IfElseNode;
+import com.semkagtn.tree.LeExpressionNode;
+import com.semkagtn.tree.LtExpressionNode;
+import com.semkagtn.tree.ModExpressionNode;
+import com.semkagtn.tree.MulExpressionNode;
+import com.semkagtn.tree.NeExpressionNode;
+import com.semkagtn.tree.NegExpressionNode;
+import com.semkagtn.tree.NotExpressionNode;
+import com.semkagtn.tree.OrExpressionNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
 import com.semkagtn.tree.ScopeNode;
@@ -26,4 +39,17 @@ public interface AstVisitor<T> {
 	T visit(ReturnNode returnStatement);
 	T visit(FunctionParameterNode functionParameter);
 	T visit(ConstantNode constant);
+	T visit(NotExpressionNode not);
+	T visit(NegExpressionNode negation);
+	T visit(MulExpressionNode mul);
+	T visit(DivExpressionNode div);
+	T visit(ModExpressionNode mod);
+	T visit(LtExpressionNode lt);
+	T visit(LeExpressionNode le);
+	T visit(GtExpressionNode gt);
+	T visit(GeExpressionNode ge);
+	T visit(EqExpressionNode eq);
+	T visit(NeExpressionNode ne);
+	T visit(AndExpressionNode and);
+	T visit(OrExpressionNode or);
 }
