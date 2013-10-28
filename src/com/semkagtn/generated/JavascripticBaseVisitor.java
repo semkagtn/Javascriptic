@@ -221,4 +221,12 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitId(@NotNull JavascripticParser.IdContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitBreakStat(@NotNull JavascripticParser.BreakStatContext ctx) { return visitChildren(ctx); }
 }

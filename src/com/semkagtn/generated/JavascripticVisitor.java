@@ -194,4 +194,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitId(@NotNull JavascripticParser.IdContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#breakStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBreakStat(@NotNull JavascripticParser.BreakStatContext ctx);
 }

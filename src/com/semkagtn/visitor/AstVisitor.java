@@ -1,5 +1,6 @@
 package com.semkagtn.visitor;
 
+import com.semkagtn.tree.AddExpressionNode;
 import com.semkagtn.tree.AndExpressionNode;
 import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
@@ -23,6 +24,7 @@ import com.semkagtn.tree.OrExpressionNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
 import com.semkagtn.tree.ScopeNode;
+import com.semkagtn.tree.SubExpressionNode;
 import com.semkagtn.tree.VariableDeclarationNode;
 import com.semkagtn.tree.VariableNode;
 import com.semkagtn.tree.WhileNode;
@@ -42,6 +44,8 @@ public interface AstVisitor<T> {
 	T visit(ConstantNode constant);
 	T visit(NotExpressionNode not);
 	T visit(NegExpressionNode negation);
+	T visit(AddExpressionNode add);
+	T visit(SubExpressionNode sub);
 	T visit(MulExpressionNode mul);
 	T visit(DivExpressionNode div);
 	T visit(ModExpressionNode mod);
