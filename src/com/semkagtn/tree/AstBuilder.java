@@ -132,9 +132,9 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		return returnStatement;
 	}
 	
-	/*public BreakNode visitBreakStat(JavascripticParser.BreakStatContext ctx) {
+	public BreakNode visitBreakStat(JavascripticParser.BreakStatContext ctx) {
 		return new BreakNode();
-	}*/
+	}
 	
 	public UnaryExpressionNode visitUnaryExpr(JavascripticParser.UnaryExprContext ctx) {
 		UnaryExpressionNode result;
@@ -239,5 +239,4 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		}
 		return function;
 	}
-	// to be continue...
 }
