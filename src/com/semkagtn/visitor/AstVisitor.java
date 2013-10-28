@@ -1,6 +1,7 @@
 package com.semkagtn.visitor;
 
 import com.semkagtn.tree.AndExpressionNode;
+import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.DivExpressionNode;
 import com.semkagtn.tree.DoWhileNode;
@@ -52,4 +53,5 @@ public interface AstVisitor<T> {
 	T visit(NeExpressionNode ne);
 	T visit(AndExpressionNode and);
 	T visit(OrExpressionNode or);
+	T visit(BreakNode breakStatement);
 }
