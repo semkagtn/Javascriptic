@@ -22,6 +22,7 @@ stat
     | whileStat 
     | doWhileStat 
     | returnStat 
+    | breakStat
     | expr ';'
     ;
 
@@ -81,6 +82,10 @@ functionCall
 
 returnStat
     : 'return' expr ';'
+    ;
+
+breakStat
+    : 'break' ';'
     ;
 
 // abstract values
