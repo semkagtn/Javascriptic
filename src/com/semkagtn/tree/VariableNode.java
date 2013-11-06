@@ -2,7 +2,9 @@ package com.semkagtn.tree;
 
 import com.semkagtn.visitor.AstVisitor;
 
-public class VariableNode extends ValueNode {
+// Maybe need to fix
+
+public class VariableNode implements Node {
 	private String name;
 	
 	public VariableNode() {

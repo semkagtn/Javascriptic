@@ -2,21 +2,23 @@ package com.semkagtn.tree;
 
 import com.semkagtn.visitor.AstVisitor;
 
+// Maybe need to fix
+
 public class AssignmentNode extends StatementNode {
-	private VariableNode variable;
+	private String variableName;
 	private ExpressionNode expression;
 	
 	public AssignmentNode() {
-		variable = null;
+		variableName = "";
 		expression = null;
 	}
 	
-	public VariableNode getVariable() {
-		return variable;
+	public String getVariableName() {
+		return variableName;
 	}
 	
-	public void setVariable(VariableNode variable) {
-		this.variable = variable;
+	public void setVariableName(String variableName) {
+		this.variableName = variableName;
 	}
 	
 	public ExpressionNode getExpression() {

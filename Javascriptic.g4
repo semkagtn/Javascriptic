@@ -5,29 +5,26 @@ package com.semkagtn.generated;
 }
 
 program
-    : block
-    ; 
-
-block
     : stat*
-    ;
+    ; 
 
 // unlike JavaScript in this language we MUST type ';' after statements which are expressions
 stat
     : scopeStat        // { ... }
     | functionDecl
     | varDecl 
-    | assign        // x = 2 + 2 * 2;
+    | assign
     | ifStat
     | whileStat 
     | doWhileStat 
     | returnStat 
     | breakStat
-    | expr ';'
+    | continueStat
+    | exprStat
     ;
 
 scopeStat
-    : '{' block '}'
+    : '{' stat* '}'
     ;
 
 functionDecl
@@ -64,7 +61,7 @@ expr
     | expr '&&' expr # AndExpr
     | expr '||' expr # OrExpr
     | '(' expr ')' # ParenExpr
-    | ID # Id
+    | ID # Variable
     | constantExpr # Constant
     | functionCall # FunctionCallExpr 
     ;
@@ -88,9 +85,21 @@ breakStat
     : 'break' ';'
     ;
 
+continueStat
+    : 'continue' ';'
+    ;
+
+exprStat
+    : expr ';'
+    ;
+
 // abstract values
 functionParams
-    : ID (',' ID)* 
+    : param (',' param)* 
+    ;
+
+param
+    : ID
     ;
 
 // concrete values

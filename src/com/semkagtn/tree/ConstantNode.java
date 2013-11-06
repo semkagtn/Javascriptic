@@ -2,7 +2,9 @@ package com.semkagtn.tree;
 
 import com.semkagtn.visitor.AstVisitor;
 
-public class ConstantNode extends ValueNode {
+// Need to fix
+
+public class ConstantNode implements Node {
 	public <T> T accept(AstVisitor<T> v) {
 		return v.visit(this);
 	}

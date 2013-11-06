@@ -21,6 +21,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitAssign(@NotNull JavascripticParser.AssignContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#param}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParam(@NotNull JavascripticParser.ParamContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#functionArgs}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -42,11 +49,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitVarDecl(@NotNull JavascripticParser.VarDeclContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#block}.
+	 * Visit a parse tree produced by {@link JavascripticParser#exprStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(@NotNull JavascripticParser.BlockContext ctx);
+	T visitExprStat(@NotNull JavascripticParser.ExprStatContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#Constant}.
@@ -103,6 +110,20 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStat(@NotNull JavascripticParser.ReturnStatContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#continueStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitContinueStat(@NotNull JavascripticParser.ContinueStatContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#Variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(@NotNull JavascripticParser.VariableContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#AddSubExpr}.
@@ -187,13 +208,6 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitProgram(@NotNull JavascripticParser.ProgramContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#Id}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitId(@NotNull JavascripticParser.IdContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#breakStat}.
