@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import com.semkagtn.generated.JavascripticLexer;
 import com.semkagtn.generated.JavascripticParser;
+import com.semkagtn.tree.AstBuilder;
+import com.semkagtn.tree.ProgramNode;
 
 public class Compiler {
 	private String inputFileName;
@@ -29,8 +31,8 @@ public class Compiler {
 			// Generate parse tree
 			ParseTree tree = parser.program();
 			// Generate Abstract syntax tree
-			//AstBuilder astBuilder = new AstBuilder(outputFileName);
-			//ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
+			AstBuilder astBuilder = new AstBuilder();
+			ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -4,7 +4,7 @@ import com.semkagtn.visitor.AstVisitor;
 
 // Maybe need to fix
 
-public class AssignmentNode extends StatementNode {
+public class AssignmentNode extends ExpressionNode {
 	private String variableName;
 	private ExpressionNode expression;
 	

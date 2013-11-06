@@ -70,6 +70,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitFunctionCall(@NotNull JavascripticParser.FunctionCallContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#AssignExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssignExpr(@NotNull JavascripticParser.AssignExprContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#AndExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

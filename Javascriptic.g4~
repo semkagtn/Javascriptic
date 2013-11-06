@@ -50,7 +50,7 @@ doWhileStat
     : 'do' stat 'while' '(' expr ')' ';'
     ;
 
-// operators with priority
+// operations with priority
 expr
     : op=('!' | '-') expr # UnaryExpr
     | expr op=('*' | '/' | '%') expr # MulDivModExpr

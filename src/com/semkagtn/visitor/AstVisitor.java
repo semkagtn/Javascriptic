@@ -8,6 +8,7 @@ import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivExpressionNode;
 import com.semkagtn.tree.DoWhileNode;
 import com.semkagtn.tree.EqExpressionNode;
+import com.semkagtn.tree.ExpressionStatementNode;
 import com.semkagtn.tree.FunctionCallNode;
 import com.semkagtn.tree.FunctionNode;
 import com.semkagtn.tree.FunctionParameterNode;
@@ -60,4 +61,5 @@ public interface AstVisitor<T> {
 	T visit(OrExpressionNode or);
 	T visit(BreakNode breakStatement);
 	T visit(ContinueNode continueNode);
+	T visit(ExpressionStatementNode exprStat);
 }
