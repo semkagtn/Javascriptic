@@ -247,7 +247,19 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public ConstantNode visitConstant(ConstantContext ctx) {
 		ConstantNode constant = new ConstantNode();
-		/* need to fix */
+		if (ctx.constantExpr().NUM() != null) {
+			constant.setType(Type.NUM);
+			constant.setValue(ctx.constantExpr().NUM().getText());
+		} else if (ctx.constantExpr().STR() != null) {
+			constant.setType(Type.STR);
+			constant.setValue(ctx.constantExpr().NUM().getText().replace("\"", ""));
+		} else if (ctx.constantExpr().BOOL() != null) {
+			constant.setType(Type.BOOL);
+			constant.setValue(ctx.constantExpr().BOOL().getText());
+		} else {
+			constant.setType(Type.UNDEF);
+			constant.setValue(ctx.constantExpr().UNDEF().toString());
+		}
 		return constant;
 	}
 	
