@@ -34,10 +34,6 @@ varDecl
     : 'var' ID ('=' expr)? ';'
     ;
 
-assign
-    : ID '=' expr
-    ;
-
 ifStat
     : 'if' '(' expr ')' stat ('else' stat)? 
     ;
@@ -50,7 +46,7 @@ doWhileStat
     : 'do' stat 'while' '(' expr ')' ';'
     ;
 
-// operations with priority
+// operators with priority
 expr
     : op=('!' | '-') expr # UnaryExpr
     | expr op=('*' | '/' | '%') expr # MulDivModExpr
@@ -59,11 +55,11 @@ expr
     | expr op=('==' | '!=') expr # EqExpr
     | expr '&&' expr # AndExpr
     | expr '||' expr # OrExpr
-    | assign # AssignExpr
+    | ID '=' expr # AssignExpr
     | '(' expr ')' # ParenExpr
     | ID # Variable
     | constantExpr # Constant
-    | functionCall # FunctionCallExpr 
+    | ID '(' functionArgs? ')' # FunctionCallExpr 
     ;
 
 constantExpr
@@ -71,10 +67,6 @@ constantExpr
     | STR
     | BOOL
     | UNDEF
-    ;
-
-functionCall
-    : ID '(' functionArgs? ')' 
     ;
 
 returnStat
@@ -114,7 +106,7 @@ DIV : '/' ;
 MOD : '%' ;
 ADD : '+' ;
 LT : '<' ;
-LQ : '<=' ;
+LE : '<=' ;
 GT : '>' ;
 GE : '>=' ;
 EQ : '==' ;

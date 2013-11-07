@@ -1,20 +1,32 @@
 package com.semkagtn.tree;
 
 import com.semkagtn.generated.JavascripticBaseVisitor;
-import com.semkagtn.generated.JavascripticParser.AssignContext;
+import com.semkagtn.generated.JavascripticParser;
+import com.semkagtn.generated.JavascripticParser.AddSubExprContext;
+import com.semkagtn.generated.JavascripticParser.AndExprContext;
+import com.semkagtn.generated.JavascripticParser.AssignExprContext;
 import com.semkagtn.generated.JavascripticParser.BreakStatContext;
+import com.semkagtn.generated.JavascripticParser.CmpExprContext;
+import com.semkagtn.generated.JavascripticParser.ConstantContext;
 import com.semkagtn.generated.JavascripticParser.ContinueStatContext;
 import com.semkagtn.generated.JavascripticParser.DoWhileStatContext;
+import com.semkagtn.generated.JavascripticParser.EqExprContext;
 import com.semkagtn.generated.JavascripticParser.ExprContext;
 import com.semkagtn.generated.JavascripticParser.ExprStatContext;
+import com.semkagtn.generated.JavascripticParser.FunctionCallExprContext;
 import com.semkagtn.generated.JavascripticParser.FunctionDeclContext;
 import com.semkagtn.generated.JavascripticParser.IfStatContext;
+import com.semkagtn.generated.JavascripticParser.MulDivModExprContext;
+import com.semkagtn.generated.JavascripticParser.OrExprContext;
 import com.semkagtn.generated.JavascripticParser.ParamContext;
+import com.semkagtn.generated.JavascripticParser.ParenExprContext;
 import com.semkagtn.generated.JavascripticParser.ProgramContext;
 import com.semkagtn.generated.JavascripticParser.ReturnStatContext;
 import com.semkagtn.generated.JavascripticParser.ScopeStatContext;
 import com.semkagtn.generated.JavascripticParser.StatContext;
+import com.semkagtn.generated.JavascripticParser.UnaryExprContext;
 import com.semkagtn.generated.JavascripticParser.VarDeclContext;
+import com.semkagtn.generated.JavascripticParser.VariableContext;
 import com.semkagtn.generated.JavascripticParser.WhileStatContext;
 
 public class AstBuilder extends JavascripticBaseVisitor<Node> {
@@ -135,5 +147,118 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public Node visitExpr(ExprContext ctx) {
 		return visitChildren(ctx);
+	}
+	
+	public UnaryExpressionNode visitUnaryExpr(UnaryExprContext ctx) {
+		UnaryExpressionNode unary;
+		if (ctx.op.getType() == JavascripticParser.NOT) {
+			unary = new NotExpressionNode();
+		} else {
+			unary = new NegExpressionNode();
+		}
+		unary.setExpression((ExpressionNode) visit(ctx.expr()));
+		return unary;
+	}
+	
+	public BinaryExpressionNode visitMulDivModExpr(MulDivModExprContext ctx) {
+		BinaryExpressionNode binary;
+		if (ctx.op.getType() == JavascripticParser.MUL) {
+			binary = new MulExpressionNode();
+		} else if (ctx.op.getType() == JavascripticParser.DIV) {
+			binary = new DivExpressionNode();
+		} else {
+			binary = new ModExpressionNode();
+		}
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public BinaryExpressionNode visitAddSubExpr(AddSubExprContext ctx) {
+		BinaryExpressionNode binary;
+		if (ctx.op.getType() == JavascripticParser.ADD) {
+			binary = new AddExpressionNode();
+		} else {
+			binary = new SubExpressionNode();
+		}
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public BinaryExpressionNode visitCmpExpr(CmpExprContext ctx) {
+		BinaryExpressionNode binary;
+		if (ctx.op.getType() == JavascripticParser.LT) {
+			binary = new LtExpressionNode();
+		} else if (ctx.op.getType() == JavascripticParser.LE) {
+			binary = new LeExpressionNode();
+		} else if (ctx.op.getType() == JavascripticParser.GT){
+			binary = new GtExpressionNode();
+		} else {
+			binary = new GeExpressionNode();
+		}
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public BinaryExpressionNode visitEqExpr(EqExprContext ctx) {
+		BinaryExpressionNode binary;
+		if (ctx.op.getType() == JavascripticParser.EQ) {
+			binary = new EqExpressionNode();
+		} else {
+			binary = new NeExpressionNode();
+		}
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public BinaryExpressionNode visitAndExpr(AndExprContext ctx) {
+		BinaryExpressionNode binary = new AndExpressionNode();
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public BinaryExpressionNode visitOrExpr(OrExprContext ctx) {
+		BinaryExpressionNode binary = new OrExpressionNode();
+		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
+		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
+		return binary;
+	}
+	
+	public AssignmentNode visitAssignExpr(AssignExprContext ctx) {
+		AssignmentNode assignment = new AssignmentNode();
+		assignment.setVariableName(ctx.ID().getText());
+		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
+		return assignment;
+	}
+	
+	public Node visitParenExpr(ParenExprContext ctx) {
+		return visit(ctx.expr());
+	}
+	
+	public VariableNode visitVariable(VariableContext ctx) {
+		VariableNode variable = new VariableNode();
+		variable.setName(ctx.ID().getText());
+		return variable;
+	}
+	
+	public ConstantNode visitConstant(ConstantContext ctx) {
+		ConstantNode constant = new ConstantNode();
+		/* need to fix */
+		return constant;
+	}
+	
+	public FunctionCallNode visitFunctionCallExpr(FunctionCallExprContext ctx) {
+		FunctionCallNode functionCall = new FunctionCallNode();
+		functionCall.setName(ctx.ID().toString());
+		if (ctx.functionArgs() != null) {
+			for (ExprContext arg : ctx.functionArgs().expr()) {
+				functionCall.addArgument((ExpressionNode) visit(arg));
+			}
+		}
+		return functionCall;
 	}
 }

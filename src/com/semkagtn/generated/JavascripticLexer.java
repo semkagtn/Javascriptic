@@ -20,7 +20,7 @@ public class JavascripticLexer extends Lexer {
 		T__17=1, T__16=2, T__15=3, T__14=4, T__13=5, T__12=6, T__11=7, T__10=8, 
 		T__9=9, T__8=10, T__7=11, T__6=12, T__5=13, T__4=14, T__3=15, T__2=16, 
 		T__1=17, T__0=18, NOT=19, MINUS=20, MUL=21, DIV=22, MOD=23, ADD=24, LT=25, 
-		LQ=26, GT=27, GE=28, EQ=29, NE=30, NUM=31, STR=32, BOOL=33, UNDEF=34, 
+		LE=26, GT=27, GE=28, EQ=29, NE=30, NUM=31, STR=32, BOOL=33, UNDEF=34, 
 		ID=35, COMMENT=36, LINE_COMMENT=37, WS=38;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
@@ -37,7 +37,7 @@ public class JavascripticLexer extends Lexer {
 	public static final String[] ruleNames = {
 		"T__17", "T__16", "T__15", "T__14", "T__13", "T__12", "T__11", "T__10", 
 		"T__9", "T__8", "T__7", "T__6", "T__5", "T__4", "T__3", "T__2", "T__1", 
-		"T__0", "NOT", "MINUS", "MUL", "DIV", "MOD", "ADD", "LT", "LQ", "GT", 
+		"T__0", "NOT", "MINUS", "MUL", "DIV", "MOD", "ADD", "LT", "LE", "GT", 
 		"GE", "EQ", "NE", "NUM", "STR", "BOOL", "UNDEF", "ID", "COMMENT", "LINE_COMMENT", 
 		"WS", "DIGIT", "ID_LETTER", "ESC"
 	};

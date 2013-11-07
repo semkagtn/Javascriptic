@@ -14,13 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#assign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAssign(@NotNull JavascripticParser.AssignContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#param}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -61,13 +54,6 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitConstant(@NotNull JavascripticParser.ConstantContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#functionCall}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionCall(@NotNull JavascripticParser.FunctionCallContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#AssignExpr}.

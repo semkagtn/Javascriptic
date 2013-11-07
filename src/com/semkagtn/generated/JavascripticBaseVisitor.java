@@ -20,14 +20,6 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitAssign(@NotNull JavascripticParser.AssignContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
 	@Override public T visitParam(@NotNull JavascripticParser.ParamContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -69,14 +61,6 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitConstant(@NotNull JavascripticParser.ConstantContext ctx) { return visitChildren(ctx); }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.
-	 */
-	@Override public T visitFunctionCall(@NotNull JavascripticParser.FunctionCallContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
