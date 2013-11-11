@@ -5,7 +5,7 @@ public class Main {
 	public static void main(String[] args) {
 		Compiler compiler = new Compiler();
 		compiler.setInputFileName("test.js");
-		compiler.setOutputFileName("");
+		compiler.setOutputFileName("a.pir");
 		compiler.run();
 	}
 	

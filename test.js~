@@ -1,21 +1,26 @@
-/* This * is * a * test * file */
-
-function sayHello(name) {
-    echo("Hello " + name + "!\n");
+function f() {
+    function f() {
+        do {
+            var x = 0;
+            var y = undefined;
+            if (x >= 0) {
+                return false;
+            }
+        } while (true);
+    }
+    return x;
 }
 
-function calcD(a, b, c) {
-    return b * b - 4 * a * c;
+while (true) {
+    if (true || x) 
+        continue;
+    else 
+        return x;
+    do {
+        x = x + 1;
+        if (x == -317) {
+            break;
+        }
+        y = y - 2;
+    } while (x == 7 && y == 9);
 }
-
-var greetings = true; 
-var name = "Artyom"; 
-var a = 1; /***********************************/
-var b = 2; /* can't declarate on one line :(  */
-var c = 3; /***********************************/ 
-
-if (greetings) {
-    sayHello(name);
-}
-echo( calcD(a, b, c) );
-

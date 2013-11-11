@@ -9,6 +9,7 @@ import com.semkagtn.generated.JavascripticLexer;
 import com.semkagtn.generated.JavascripticParser;
 import com.semkagtn.tree.AstBuilder;
 import com.semkagtn.tree.ProgramNode;
+import com.semkagtn.visitor.Checker;
 
 public class Compiler {
 	private String inputFileName;
@@ -33,6 +34,12 @@ public class Compiler {
 			// Generate Abstract syntax tree
 			AstBuilder astBuilder = new AstBuilder();
 			ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
+			// Checking
+			Checker checker = new Checker();
+			checker.visit(ast);
+			// Generate code
+			//CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
+			//codeGenerator.visit(ast);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
