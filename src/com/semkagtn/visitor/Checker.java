@@ -98,7 +98,7 @@ public class Checker implements AstVisitor<Object> {
 	public Object visit(FunctionNode function) {
 		++functionCount;
 		if (findCurrentScope(function.getName())) {
-			System.out.println("Variable " + function.getName() + " already exist");
+			ErrorHandler.alreadyDefined(function.getLine(), function.getSymbol(), function.getName());
 		}
 		scopes.getLast().add(function.getName());
 		scopes.add(new HashSet<String>()); // local function variables
@@ -118,7 +118,8 @@ public class Checker implements AstVisitor<Object> {
 			variableDeclaration.getInitialValue().accept(this);
 		}
 		if (findCurrentScope(variableDeclaration.getName())) {
-			System.out.println("Variable " + variableDeclaration.getName() + " already exist");
+			ErrorHandler.alreadyDefined(variableDeclaration.getLine(),
+					variableDeclaration.getSymbol(), variableDeclaration.getName());
 		}
 		scopes.getLast().add(variableDeclaration.getName());
 		return null;
@@ -128,7 +129,7 @@ public class Checker implements AstVisitor<Object> {
 		if (findGlobal(variable.getName())) {
 			return null;
 		}
-		System.out.println("Variable " + variable.getName() + " doesnt exist");
+		ErrorHandler.notDefined(variable.getLine(), variable.getSymbol(), variable.getName());
 		return null;
 	}
 
@@ -170,13 +171,13 @@ public class Checker implements AstVisitor<Object> {
 		if (findGlobal(functionCall.getName())) {
 			return null;
 		}
-		System.out.println("Function " + functionCall.getName() + " doesnt exist");
+		ErrorHandler.notDefined(functionCall.getLine(), functionCall.getSymbol(), functionCall.getName());
 		return null;
 	}
 
 	public Object visit(ReturnNode returnStatement) {
 		if (functionCount == 0) {
-			System.out.println("return statement not in function");
+			ErrorHandler.returnNotInFunction(returnStatement.getLine(), returnStatement.getSymbol());
 		}
 		returnStatement.getValue().accept(this);
 		return null;
@@ -268,14 +269,14 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(BreakNode breakStatement) {
 		if (loopCount == 0) {
-			System.out.println("break statement not in loop");
+			ErrorHandler.breakNotInLoop(breakStatement.getLine(), breakStatement.getSymbol());
 		}
 		return null;
 	}
 
 	public Object visit(ContinueNode continueNode) {
 		if (loopCount == 0) {
-			System.out.println("continue statement not in loop");
+			ErrorHandler.continueNotInLoop(continueNode.getLine(), continueNode.getSymbol());
 		}
 		return null;
 	}
@@ -290,7 +291,7 @@ public class Checker implements AstVisitor<Object> {
 		if (findGlobal(assign.getVariableName())) {
 			return null;
 		}
-		System.out.println("Variable " + assign.getVariableName() + " doesnt exist");
+		ErrorHandler.notDefined(assign.getLine(), assign.getSymbol(), assign.getVariableName());
 		return null;
 	}
 }

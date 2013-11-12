@@ -32,6 +32,7 @@ import com.semkagtn.generated.JavascripticParser.WhileStatContext;
 public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	public ProgramNode visitProgram(ProgramContext ctx) {
 		ProgramNode program = new ProgramNode();
+		program.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		if (!ctx.stat().isEmpty()) {
 			for (StatContext statement : ctx.stat()) {
 				program.addStatement((StatementNode) visit(statement));
@@ -46,6 +47,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public ScopeNode visitScopeStat(ScopeStatContext ctx) {
 		ScopeNode scope = new ScopeNode();
+		scope.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		for (StatContext statement : ctx.stat()) {
 			scope.addStatement((StatementNode) visit(statement));
 		}
@@ -54,6 +56,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public FunctionNode visitFunctionDecl(FunctionDeclContext ctx) {
 		FunctionNode function = new FunctionNode();
+		function.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		function.setName(ctx.ID().toString());
 		if (ctx.functionParams() != null) {
 			for (ParamContext param : ctx.functionParams().param()) {
@@ -68,6 +71,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public VariableDeclarationNode visitVarDecl(VarDeclContext ctx) {
 		VariableDeclarationNode variableDecl = new VariableDeclarationNode();
+		variableDecl.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		variableDecl.setName(ctx.ID().toString());
 		if (ctx.expr() != null) {
 			variableDecl.setInitialValue((ExpressionNode) visit(ctx.expr()));
@@ -77,6 +81,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public IfElseNode visitIfStat(IfStatContext ctx) {
 		IfElseNode ifElse = new IfElseNode();
+		ifElse.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		ifElse.setCondition((ExpressionNode) visit(ctx.expr()));
 		if (ctx.stat(0).scopeStat() == null) {
 			ifElse.addIfStatement((StatementNode) visit(ctx.stat(0)));
@@ -99,6 +104,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public WhileNode visitWhileStat(WhileStatContext ctx) {
 		WhileNode whileNode = new WhileNode();
+		whileNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		whileNode.setCondition((ExpressionNode) visit(ctx.expr()));
 		if (ctx.stat().scopeStat() == null) {
 			whileNode.addStatement((StatementNode) visit(ctx.stat()));
@@ -112,6 +118,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public DoWhileNode visitDoWhileStat(DoWhileStatContext ctx) {
 		DoWhileNode doWhileNode = new DoWhileNode();
+		doWhileNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		doWhileNode.setCondition((ExpressionNode) visit(ctx.expr()));
 		if (ctx.stat().scopeStat() == null) {
 			doWhileNode.addStatement((StatementNode) visit(ctx.stat()));
@@ -125,6 +132,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public ReturnNode visitReturnStat(ReturnStatContext ctx) {
 		ReturnNode returnNode = new ReturnNode();
+		returnNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		if (ctx.expr() != null) {
 			returnNode.setValue((ExpressionNode) visit(ctx.expr()));
 		}
@@ -132,15 +140,20 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	}
 	
 	public BreakNode visitBreakStat(BreakStatContext ctx) {
-		return new BreakNode();
+		BreakNode breakNode = new BreakNode();
+		breakNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		return breakNode;
 	}
 	
 	public ContinueNode visitContinueStat(ContinueStatContext ctx) {
-		return new ContinueNode();
+		ContinueNode continueNode = new ContinueNode();
+		continueNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		return continueNode;
 	}
 	
 	public ExpressionStatementNode visitExprStat(ExprStatContext ctx) {
 		ExpressionStatementNode statement = new ExpressionStatementNode();
+		statement.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		statement.setExpression((ExpressionNode) visit(ctx.expr()));
 		return statement;
 	}
@@ -156,6 +169,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		} else {
 			unary = new NegExpressionNode();
 		}
+		unary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		unary.setExpression((ExpressionNode) visit(ctx.expr()));
 		return unary;
 	}
@@ -169,6 +183,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		} else {
 			binary = new ModExpressionNode();
 		}
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -181,6 +196,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		} else {
 			binary = new SubExpressionNode();
 		}
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -197,6 +213,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		} else {
 			binary = new GeExpressionNode();
 		}
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -209,6 +226,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		} else {
 			binary = new NeExpressionNode();
 		}
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -216,6 +234,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public BinaryExpressionNode visitAndExpr(AndExprContext ctx) {
 		BinaryExpressionNode binary = new AndExpressionNode();
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -223,6 +242,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public BinaryExpressionNode visitOrExpr(OrExprContext ctx) {
 		BinaryExpressionNode binary = new OrExpressionNode();
+		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
 		binary.setRhs((ExpressionNode) visit(ctx.expr(1)));
 		return binary;
@@ -230,6 +250,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public AssignmentNode visitAssignExpr(AssignExprContext ctx) {
 		AssignmentNode assignment = new AssignmentNode();
+		assignment.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		assignment.setVariableName(ctx.ID().getText());
 		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
 		return assignment;
@@ -241,12 +262,14 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public VariableNode visitVariable(VariableContext ctx) {
 		VariableNode variable = new VariableNode();
+		variable.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		variable.setName(ctx.ID().getText());
 		return variable;
 	}
 	
 	public ConstantNode visitConstant(ConstantContext ctx) {
 		ConstantNode constant = new ConstantNode();
+		constant.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		if (ctx.constantExpr().NUM() != null) {
 			constant.setType(Type.NUM);
 			constant.setValue(ctx.constantExpr().NUM().getText());
@@ -265,6 +288,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public FunctionCallNode visitFunctionCallExpr(FunctionCallExprContext ctx) {
 		FunctionCallNode functionCall = new FunctionCallNode();
+		functionCall.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		functionCall.setName(ctx.ID().toString());
 		if (ctx.functionArgs() != null) {
 			for (ExprContext arg : ctx.functionArgs().expr()) {
@@ -276,6 +300,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 	
 	public FunctionParameterNode visitParam(ParamContext ctx) {
 		FunctionParameterNode param = new FunctionParameterNode();
+		param.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		param.setName(ctx.ID().toString());
 		return param;
 	}
