@@ -1,1 +1,1 @@
-Simple Javascript-like language
+(Not) Simple Javascript-like language
