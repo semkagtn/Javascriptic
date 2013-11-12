@@ -30,6 +30,6 @@ public class AssignmentNode extends ExpressionNode {
 	}
 	
 	public <T> T accept(AstVisitor<T> v) {
-		return null;
+		return v.visit(this);
 	}
 }

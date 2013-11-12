@@ -2,6 +2,7 @@ package com.semkagtn.visitor;
 
 import com.semkagtn.tree.AddExpressionNode;
 import com.semkagtn.tree.AndExpressionNode;
+import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.ContinueNode;
@@ -62,4 +63,5 @@ public interface AstVisitor<T> {
 	T visit(BreakNode breakStatement);
 	T visit(ContinueNode continueNode);
 	T visit(ExpressionStatementNode exprStat);
+	T visit(AssignmentNode assign);
 }

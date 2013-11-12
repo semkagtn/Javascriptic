@@ -2,6 +2,7 @@ package com.semkagtn.visitor;
 
 import com.semkagtn.tree.AddExpressionNode;
 import com.semkagtn.tree.AndExpressionNode;
+import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.ContinueNode;
@@ -209,6 +210,12 @@ public class CodeGenerator implements AstVisitor<Object> {
 
 	@Override
 	public Object visit(ExpressionStatementNode exprStat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object visit(AssignmentNode assign) {
 		// TODO Auto-generated method stub
 		return null;
 	}

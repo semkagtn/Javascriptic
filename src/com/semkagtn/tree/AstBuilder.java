@@ -273,4 +273,10 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		}
 		return functionCall;
 	}
+	
+	public FunctionParameterNode visitParam(ParamContext ctx) {
+		FunctionParameterNode param = new FunctionParameterNode();
+		param.setName(ctx.ID().toString());
+		return param;
+	}
 }
