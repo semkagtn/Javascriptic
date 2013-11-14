@@ -3,8 +3,8 @@ package com.semkagtn.visitor;
 import com.semkagtn.tree.AddNode;
 import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
+import com.semkagtn.tree.BoolNode;
 import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
@@ -22,11 +22,13 @@ import com.semkagtn.tree.MulNode;
 import com.semkagtn.tree.NeNode;
 import com.semkagtn.tree.NegNode;
 import com.semkagtn.tree.NotNode;
+import com.semkagtn.tree.NumberNode;
 import com.semkagtn.tree.OrNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
+import com.semkagtn.tree.StringNode;
 import com.semkagtn.tree.SubNode;
-import com.semkagtn.tree.VarDeclarationNode;
+import com.semkagtn.tree.UndefNode;
 import com.semkagtn.tree.VarNode;
 import com.semkagtn.tree.WhileNode;
 
@@ -37,9 +39,9 @@ public interface AstVisitor<T> {
 
 	T visit(AssignmentNode assign);
 
+	T visit(BoolNode bool);
+	
 	T visit(BreakNode breakStat);
-
-	T visit(ConstantNode constant);
 
 	T visit(ContinueNode continueStat);
 
@@ -74,6 +76,8 @@ public interface AstVisitor<T> {
 	T visit(NeNode ne);
 
 	T visit(NotNode not);
+	
+	T visit(NumberNode number);
 
 	T visit(OrNode or);
 
@@ -81,9 +85,11 @@ public interface AstVisitor<T> {
 
 	T visit(ReturnNode returnStat);
 
+	T visit(StringNode string);
+	
 	T visit(SubNode sub);
-
-	T visit(VarDeclarationNode varDecl);
+	
+	T visit(UndefNode undef);
 
 	T visit(VarNode var);
 

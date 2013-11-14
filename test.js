@@ -31,7 +31,7 @@ while (x >= 0) {
 
 
 print("Input command: ");
-var command = input();
+command = input();
 if (command == "exit") {
     print("OK. Bye bye");
 } else if (command == "2+2*2") {
@@ -39,5 +39,15 @@ if (command == "exit") {
 } else {
     print("???");
 }
+
+var command;
+
+
+var factorial = function(n) {
+    if (n > 0) {
+        return n * factorial(n - 1);
+    }
+    return 1;
+};
 
 

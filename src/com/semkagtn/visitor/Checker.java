@@ -1,6 +1,5 @@
 package com.semkagtn.visitor;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 
 import com.semkagtn.tree.AddNode;
@@ -8,8 +7,8 @@ import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BinaryExpressionNode;
 import com.semkagtn.tree.BlockNode;
+import com.semkagtn.tree.BoolNode;
 import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
@@ -28,13 +27,15 @@ import com.semkagtn.tree.MulNode;
 import com.semkagtn.tree.NeNode;
 import com.semkagtn.tree.NegNode;
 import com.semkagtn.tree.NotNode;
+import com.semkagtn.tree.NumberNode;
 import com.semkagtn.tree.OrNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
 import com.semkagtn.tree.StatementNode;
+import com.semkagtn.tree.StringNode;
 import com.semkagtn.tree.SubNode;
 import com.semkagtn.tree.UnaryExpressionNode;
-import com.semkagtn.tree.VarDeclarationNode;
+import com.semkagtn.tree.UndefNode;
 import com.semkagtn.tree.VarNode;
 import com.semkagtn.tree.WhileNode;
 
@@ -42,22 +43,11 @@ import com.semkagtn.tree.WhileNode;
 public class Checker implements AstVisitor<Object> {
 	private int functionCount; // for checking return statements
 	private int loopCount; // for checking break and continue statements
-	private LinkedList< HashSet<String> > scopes; // for checking variable declarations  
+	private LinkedList<FunctionNode> scopes; // for checking variable declarations
 	
-	private boolean findGlobal(String variable) {
-		for (HashSet<String> scope : scopes) {
-			for (String var : scope) {
-				if (variable.equals(var)) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	private boolean findCurrentScope(String variable) {
-		for (String var : scopes.getLast()) {
-			if (variable.equals(var)) {
+	private boolean findVariable(String name) {
+		for (FunctionNode scope : scopes) {
+			if (scope.findVariable(name)) {
 				return true;
 			}
 		}
@@ -80,11 +70,11 @@ public class Checker implements AstVisitor<Object> {
 	}
 	
 	public Object visit(ProgramNode program) {
-		scopes.add(new HashSet<String>()); // global variables
+		scopes.push(program); // global variables
 		for (StatementNode stat : program.getBody()) {
 			stat.accept(this);
 		}
-		scopes.removeLast();
+		scopes.pop();
 		return null;
 	}
 
@@ -95,19 +85,8 @@ public class Checker implements AstVisitor<Object> {
 		return null;
 	}
 
-	public Object visit(VarDeclarationNode varDeclaration) {
-		if (varDeclaration.getInitialValue() != null) {
-			varDeclaration.getInitialValue().accept(this);
-		}
-		if (findCurrentScope(varDeclaration.getName())) {
-			ErrorHandler.alreadyDefined(varDeclaration.getPosition(), varDeclaration.getName());
-		}
-		scopes.getLast().add(varDeclaration.getName());
-		return null;
-	}
-
 	public Object visit(VarNode var) {
-		if (findGlobal(var.getName())) {
+		if (findVariable(var.getName())) {
 			return null;
 		}
 		ErrorHandler.notDefined(var.getPosition(), var.getName());
@@ -117,7 +96,9 @@ public class Checker implements AstVisitor<Object> {
 	public Object visit(IfElseNode ifElse) {
 		ifElse.getCondition().accept(this);
 		ifElse.getIfStatement().accept(this);
-		ifElse.getElseStatement().accept(this);
+		if (ifElse.getElseStatement() != null) {
+			ifElse.getElseStatement().accept(this);
+		}
 		return null;
 	}
 
@@ -146,11 +127,6 @@ public class Checker implements AstVisitor<Object> {
 	}
 
 	public Object visit(FunctionParameterNode functionParam) {
-		scopes.getLast().add(functionParam.getName());
-		return null;
-	}
-
-	public Object visit(ConstantNode constant) {
 		return null;
 	}
 
@@ -250,7 +226,7 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(AssignmentNode assign) {
 		assign.getExpression().accept(this);
-		if (findGlobal(assign.getVariableName())) {
+		if (findVariable(assign.getVariableName())) {
 			return null;
 		}
 		ErrorHandler.notDefined(assign.getPosition(), assign.getVariableName());
@@ -259,15 +235,31 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(FunctionNode function) {
 		++functionCount;
-		scopes.add(new HashSet<String>());
+		scopes.push(function);
 		for (FunctionParameterNode param : function.getParameters()) {
 			param.accept(this);
 		}
 		for (StatementNode stat : function.getBody()) {
 			stat.accept(this);
 		}
-		scopes.removeLast();
+		scopes.pop();
 		--functionCount;
+		return null;
+	}
+
+	public Object visit(BoolNode bool) {
+		return null;
+	}
+
+	public Object visit(NumberNode number) {
+		return null;
+	}
+
+	public Object visit(StringNode string) {
+		return null;
+	}
+
+	public Object visit(UndefNode undef) {
 		return null;
 	}
 }

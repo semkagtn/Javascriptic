@@ -8,10 +8,6 @@ public class ErrorHandler {
 		System.exit(1);
 	}
 	
-	public static void alreadyDefined(AstNode.Position pos, String label) {
-		error(pos, "'" + label + "' - variable already defined.");
-	}
-	
 	public static void notDefined(AstNode.Position pos, String label) {
 		error(pos, "'" + label + "' - variable not defined.");
 	}

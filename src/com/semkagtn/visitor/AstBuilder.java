@@ -1,5 +1,7 @@
 package com.semkagtn.visitor;
 
+import java.util.Stack;
+
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.semkagtn.generated.JavascripticBaseVisitor;
@@ -34,6 +36,7 @@ import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.AstNode;
 import com.semkagtn.tree.BinaryExpressionNode;
 import com.semkagtn.tree.BlockNode;
+import com.semkagtn.tree.BoolNode;
 import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
 import com.semkagtn.tree.ContinueNode;
@@ -54,24 +57,33 @@ import com.semkagtn.tree.MulNode;
 import com.semkagtn.tree.NeNode;
 import com.semkagtn.tree.NegNode;
 import com.semkagtn.tree.NotNode;
+import com.semkagtn.tree.NumberNode;
 import com.semkagtn.tree.OrNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
 import com.semkagtn.tree.StatementNode;
+import com.semkagtn.tree.StringNode;
 import com.semkagtn.tree.SubNode;
-import com.semkagtn.tree.Type;
 import com.semkagtn.tree.UnaryExpressionNode;
-import com.semkagtn.tree.VarDeclarationNode;
+import com.semkagtn.tree.UndefNode;
 import com.semkagtn.tree.VarNode;
 import com.semkagtn.tree.WhileNode;
 
 public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
+	private Stack<FunctionNode> scopes;
+	
+	public AstBuilder() {
+		scopes = new Stack<>();
+	}
+	
 	public ProgramNode visitProgram(ProgramContext ctx) {
 		ProgramNode program = new ProgramNode();
+		scopes.push(program);
 		program.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		for (StatContext stat : ctx.stat()) {
 			program.addStatement((StatementNode) visit(stat));
 		}
+		scopes.pop();
 		return program;
 	}
 	
@@ -88,14 +100,19 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		return block;
 	}
 	
-	public VarDeclarationNode visitVarDeclStat(VarDeclStatContext ctx) {
-		VarDeclarationNode varDecl = new VarDeclarationNode();
-		varDecl.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		varDecl.setName(ctx.ID().toString());
+	public ExpressionStatementNode visitVarDeclStat(VarDeclStatContext ctx) {
+		AssignmentNode assign = new AssignmentNode();
+		assign.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		assign.setVariableName(ctx.ID().getText());
+		scopes.peek().addVariable(assign.getVariableName());
 		if (ctx.expr() != null) {
-			varDecl.setInitialValue((ExpressionNode) visit(ctx.expr()));
+			assign.setExpression((ExpressionNode) visit(ctx.expr()));
+		} else {
+			assign.setExpression(new UndefNode());
 		}
-		return varDecl;
+		ExpressionStatementNode exprStat = new ExpressionStatementNode();
+		exprStat.setExpression(assign);
+		return exprStat;
 	}
 	
 	public IfElseNode visitIfStat(IfStatContext ctx) {
@@ -267,39 +284,41 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 	}
 	
 	public ConstantNode visitConstant(ConstantContext ctx) {
-		ConstantNode constant = new ConstantNode();
-		constant.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		ConstantNode constant;
 		if (ctx.NUM() != null) {
-			constant.setType(Type.NUM);
+			constant = new NumberNode();
 			constant.setValue(ctx.NUM().getText());
 		} else if (ctx.STR() != null) {
-			constant.setType(Type.STR);
+			constant = new StringNode();
 			constant.setValue(ctx.STR().getText().replace("\"", ""));
 		} else if (ctx.BOOL() != null) {
-			constant.setType(Type.BOOL);
+			constant = new BoolNode();
 			constant.setValue(ctx.BOOL().getText());
 		} else {
-			constant.setType(Type.UNDEF);
+			constant = new UndefNode();
 			constant.setValue(ctx.UNDEF().getText());
 		}
+		constant.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		return constant;
 	}
 	
 	public FunctionNode visitFunction(FunctionContext ctx) {
 		FunctionNode function = new FunctionNode();
+		scopes.push(function);
 		function.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		function.setType(Type.FUNCTION);
-		function.setValue("function");
+		function.setValue("function"); // maybe later I will upgrade this
 		if (ctx.functionParams() != null) {
 			for (TerminalNode paramName : ctx.functionParams().ID()) {
 				FunctionParameterNode param = new FunctionParameterNode();
 				param.setName(paramName.getText());
+				scopes.peek().addVariable(param.getName());
 				function.addParameter(param);
 			}
 		}
 		for (StatContext statement : ctx.blockStat().stat()) {
 			function.addStatement((StatementNode) visit(statement)); 
 		}
+		scopes.pop();
 		return function;
 	}
 }

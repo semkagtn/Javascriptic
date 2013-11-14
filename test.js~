@@ -23,15 +23,15 @@ g2();
 print("Print numbers from 5 to 0:\n");
 var x = 5;
 while (x >= 0) {
-    (function(x) {
+    function(x) {
         print(x + "\n");
-    })(); // create anonymous function and call it
+    }(); // create anonymous function and call it
     x = x - 1;
 }
 
 
 print("Input command: ");
-var command = input();
+command = input();
 if (command == "exit") {
     print("OK. Bye bye");
 } else if (command == "2+2*2") {
@@ -40,4 +40,15 @@ if (command == "exit") {
     print("???");
 }
 
+var command;
+
+
+var factorial = function(n) {
+    if (n > 0) {
+        return n * factorial(n - 1);
+    }
+    return 1;
+};
+
+var lol = lol + 1;
 
