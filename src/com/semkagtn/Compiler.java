@@ -7,8 +7,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import com.semkagtn.generated.JavascripticLexer;
 import com.semkagtn.generated.JavascripticParser;
-import com.semkagtn.tree.AstBuilder;
 import com.semkagtn.tree.ProgramNode;
+import com.semkagtn.visitor.AstBuilder;
 import com.semkagtn.visitor.Checker;
 
 public class Compiler {
@@ -29,15 +29,15 @@ public class Compiler {
 			JavascripticLexer lexer = new JavascripticLexer(cs);
 			CommonTokenStream tokens = new CommonTokenStream(lexer);
 			JavascripticParser parser = new JavascripticParser(tokens);
-			// Generate parse tree
+			// Generating parse tree
 			ParseTree tree = parser.program();
-			// Generate Abstract syntax tree
+			// Generating Abstract syntax tree
 			AstBuilder astBuilder = new AstBuilder();
 			ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
 			// Checking
 			Checker checker = new Checker();
 			checker.visit(ast);
-			// Generate code
+			// Generating code
 			//CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
 			//codeGenerator.visit(ast);
 		} catch (Exception e) {

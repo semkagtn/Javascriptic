@@ -2,6 +2,9 @@ package com.semkagtn.tree;
 
 import com.semkagtn.visitor.AstVisitor;
 
+// ExprStat : expr ';'
+//          ;
+
 public class ExpressionStatementNode extends StatementNode {
 	private ExpressionNode expression;
 	

@@ -11,10 +11,9 @@ program
 // Unlike JavaScript, in this language we MUST put a semicolon after certain statements
 stat
     : blockStat       
-    | varDecl 
+    | varDeclStat
     | ifStat
     | whileStat 
-    | doWhileStat 
     | returnStat 
     | breakStat
     | continueStat
@@ -25,7 +24,7 @@ blockStat
     : '{' stat* '}'
     ;
 
-varDecl
+varDeclStat
     : 'var' ID ('=' expr)? ';'
     ;
 
@@ -55,9 +54,9 @@ exprStat
 
 // operations with priority
 expr
-    : '(' expr ')' # ParenExpr
+    : '(' expr ')' # Parens
     | expr '(' functionArgs? ')' # FunctionCall
-    | op=('!' | '-') expr # Unary
+    | op=('!' | '-') expr # UnaryExpr
     | expr op=('*' | '/' | '%') expr # MulDivMod
     | expr op=('+' | '-') expr # AddSub
     | expr op=('<' | '<=' | '>' | '>=') expr # Cmp
@@ -65,7 +64,7 @@ expr
     | expr '&&' expr # And
     | expr '||' expr # Or
     | ID '=' expr # Assign
-    | ID # Variable
+    | ID # Var
     | (NUM | STR | BOOL | NAN | UNDEF) # Constant
     | 'function' '(' functionParams? ')' blockStat # Function
     ;
@@ -94,7 +93,7 @@ EQ : '==' ;
 NE : '!=' ;
 
 NUM : DIGIT+ ('.' DIGIT+)? ; // we can get negative numbers using unary minus operator
-STR : '"' (ESC | . )*? '"' ; // unlike JavaScript only double quotes
+STR : '"' (ESC | . )*? '"' ; // unlike JavaScript, only double quotes
 BOOL : 'true' | 'false' ; 
 NAN : 'NaN' ;
 UNDEF : 'undefined' ; 

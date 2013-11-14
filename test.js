@@ -1,12 +1,12 @@
+var print = function(x) {
+    /* code */
+};
 
-function f(x, y, z) {
-    var a = x + y + z;
-    a = a + 1;
-    function g(a, b, c) {
-        x = x + 3;
-    }
-    continue;
-}
+var Greeter = function(name) {
+    return function() {
+        print("Hello " + name + "!\n");
+    };
+};
 
-f(1, 2, 2 + 2 * 2);
-        g();
+var g = Greeter("Artyom");
+g();

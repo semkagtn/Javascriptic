@@ -5,20 +5,20 @@ import java.util.ArrayList;
 import com.semkagtn.visitor.AstVisitor;
 
 public class FunctionCallNode extends ExpressionNode {
-	private String name;
+	private ExpressionNode function;
 	private final ArrayList<ExpressionNode> arguments;
 	
 	public FunctionCallNode() {
-		name = "";
+		function = null;
 		arguments = new ArrayList<ExpressionNode>();
 	}
 	
-	public String getName() {
-		return name;
+	public ExpressionNode getFunction() {
+		return function;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
+	public void setFunction(ExpressionNode function) {
+		this.function = function;
 	}
 	
 	public ArrayList<ExpressionNode> getArguments() {

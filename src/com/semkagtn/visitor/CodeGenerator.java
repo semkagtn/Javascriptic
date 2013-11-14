@@ -1,40 +1,9 @@
 package com.semkagtn.visitor;
 
-import com.semkagtn.tree.AddExpressionNode;
-import com.semkagtn.tree.AndExpressionNode;
-import com.semkagtn.tree.AssignmentNode;
-import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ConstantNode;
-import com.semkagtn.tree.ContinueNode;
-import com.semkagtn.tree.DivExpressionNode;
-import com.semkagtn.tree.DoWhileNode;
-import com.semkagtn.tree.EqExpressionNode;
-import com.semkagtn.tree.ExpressionStatementNode;
-import com.semkagtn.tree.FunctionCallNode;
-import com.semkagtn.tree.FunctionNode;
-import com.semkagtn.tree.FunctionParameterNode;
-import com.semkagtn.tree.GeExpressionNode;
-import com.semkagtn.tree.GtExpressionNode;
-import com.semkagtn.tree.IfElseNode;
-import com.semkagtn.tree.LeExpressionNode;
-import com.semkagtn.tree.LtExpressionNode;
-import com.semkagtn.tree.ModExpressionNode;
-import com.semkagtn.tree.MulExpressionNode;
-import com.semkagtn.tree.NeExpressionNode;
-import com.semkagtn.tree.NegExpressionNode;
-import com.semkagtn.tree.NotExpressionNode;
-import com.semkagtn.tree.OrExpressionNode;
-import com.semkagtn.tree.ProgramNode;
-import com.semkagtn.tree.ReturnNode;
-import com.semkagtn.tree.BlockNode;
-import com.semkagtn.tree.SubExpressionNode;
-import com.semkagtn.tree.VariableDeclarationNode;
-import com.semkagtn.tree.VariableNode;
-import com.semkagtn.tree.WhileNode;
 
-public class CodeGenerator implements AstVisitor<Object> {
+public class CodeGenerator /*implements AstVisitor<Object>*/ {
 
-	@Override
+	/*@Override
 	public Object visit(ProgramNode program) {
 		// TODO Auto-generated method stub
 		return null;
@@ -53,13 +22,13 @@ public class CodeGenerator implements AstVisitor<Object> {
 	}
 
 	@Override
-	public Object visit(VariableDeclarationNode variableDeclaration) {
+	public Object visit(VarDeclarationNode variableDeclaration) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(VariableNode variable) {
+	public Object visit(VarNode variable) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -107,91 +76,91 @@ public class CodeGenerator implements AstVisitor<Object> {
 	}
 
 	@Override
-	public Object visit(NotExpressionNode not) {
+	public Object visit(NotNode not) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(NegExpressionNode negation) {
+	public Object visit(NegNode negation) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(AddExpressionNode add) {
+	public Object visit(AddNode add) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(SubExpressionNode sub) {
+	public Object visit(SubNode sub) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(MulExpressionNode mul) {
+	public Object visit(MulNode mul) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(DivExpressionNode div) {
+	public Object visit(DivNode div) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(ModExpressionNode mod) {
+	public Object visit(ModNode mod) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(LtExpressionNode lt) {
+	public Object visit(LtNode lt) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(LeExpressionNode le) {
+	public Object visit(LeNode le) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(GtExpressionNode gt) {
+	public Object visit(GtNode gt) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(GeExpressionNode ge) {
+	public Object visit(GeNode ge) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(EqExpressionNode eq) {
+	public Object visit(EqNode eq) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(NeExpressionNode ne) {
+	public Object visit(NeNode ne) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(AndExpressionNode and) {
+	public Object visit(AndNode and) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Object visit(OrExpressionNode or) {
+	public Object visit(OrNode or) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -218,5 +187,5 @@ public class CodeGenerator implements AstVisitor<Object> {
 	public Object visit(AssignmentNode assign) {
 		// TODO Auto-generated method stub
 		return null;
-	}
+	}*/
 }

@@ -1,5 +1,5 @@
 package com.semkagtn.tree;
 
 public enum Type {
-	NUM, STR, BOOL, UNDEF 
+	FUNCTION, NUM, STR, BOOL, NAN, UNDEF 
 }

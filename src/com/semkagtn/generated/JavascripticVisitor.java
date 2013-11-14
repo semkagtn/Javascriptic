@@ -14,13 +14,6 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#param}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParam(@NotNull JavascripticParser.ParamContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#functionArgs}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -33,13 +26,6 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitFunctionParams(@NotNull JavascripticParser.FunctionParamsContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#varDecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVarDecl(@NotNull JavascripticParser.VarDeclContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#exprStat}.
@@ -56,25 +42,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitConstant(@NotNull JavascripticParser.ConstantContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#AssignExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#Eq}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAssignExpr(@NotNull JavascripticParser.AssignExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#AndExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAndExpr(@NotNull JavascripticParser.AndExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#EqExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitEqExpr(@NotNull JavascripticParser.EqExprContext ctx);
+	T visitEq(@NotNull JavascripticParser.EqContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#blockStat}.
@@ -84,18 +56,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitBlockStat(@NotNull JavascripticParser.BlockStatContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#CmpExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#MulDivMod}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitCmpExpr(@NotNull JavascripticParser.CmpExprContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#FunctionCallExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionCallExpr(@NotNull JavascripticParser.FunctionCallExprContext ctx);
+	T visitMulDivMod(@NotNull JavascripticParser.MulDivModContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#returnStat}.
@@ -105,6 +70,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitReturnStat(@NotNull JavascripticParser.ReturnStatContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#Parens}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParens(@NotNull JavascripticParser.ParensContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#continueStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -112,32 +84,32 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitContinueStat(@NotNull JavascripticParser.ContinueStatContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#Variable}.
+	 * Visit a parse tree produced by {@link JavascripticParser#Assign}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariable(@NotNull JavascripticParser.VariableContext ctx);
+	T visitAssign(@NotNull JavascripticParser.AssignContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#AddSubExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#varDeclStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitAddSubExpr(@NotNull JavascripticParser.AddSubExprContext ctx);
+	T visitVarDeclStat(@NotNull JavascripticParser.VarDeclStatContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#ParenExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#Function}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParenExpr(@NotNull JavascripticParser.ParenExprContext ctx);
+	T visitFunction(@NotNull JavascripticParser.FunctionContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#MulDivModExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#AddSub}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMulDivModExpr(@NotNull JavascripticParser.MulDivModExprContext ctx);
+	T visitAddSub(@NotNull JavascripticParser.AddSubContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#UnaryExpr}.
@@ -147,11 +119,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitUnaryExpr(@NotNull JavascripticParser.UnaryExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#constantExpr}.
+	 * Visit a parse tree produced by {@link JavascripticParser#FunctionCall}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitConstantExpr(@NotNull JavascripticParser.ConstantExprContext ctx);
+	T visitFunctionCall(@NotNull JavascripticParser.FunctionCallContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#stat}.
@@ -161,32 +133,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStat(@NotNull JavascripticParser.StatContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#functionDecl}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFunctionDecl(@NotNull JavascripticParser.FunctionDeclContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#doWhileStat}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDoWhileStat(@NotNull JavascripticParser.DoWhileStatContext ctx);
-
-	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#whileStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#OrExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOrExpr(@NotNull JavascripticParser.OrExprContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#ifStat}.
@@ -203,9 +154,37 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitProgram(@NotNull JavascripticParser.ProgramContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#Cmp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCmp(@NotNull JavascripticParser.CmpContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#Or}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOr(@NotNull JavascripticParser.OrContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#Var}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVar(@NotNull JavascripticParser.VarContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#breakStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBreakStat(@NotNull JavascripticParser.BreakStatContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#And}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAnd(@NotNull JavascripticParser.AndContext ctx);
 }

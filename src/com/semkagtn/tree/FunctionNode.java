@@ -4,23 +4,15 @@ import java.util.ArrayList;
 
 import com.semkagtn.visitor.AstVisitor;
 
-public class FunctionNode extends StatementNode {
-	private String name;
+
+// Anonymous function is a constant!
+public class FunctionNode extends ConstantNode {
 	private final ArrayList<FunctionParameterNode> parameters;
 	private final ArrayList<StatementNode> body;
 	
 	public FunctionNode() {
-		name = "";
 		parameters = new ArrayList<>();
 		body = new ArrayList<>();
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public ArrayList<FunctionParameterNode> getParameters() {

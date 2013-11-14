@@ -1,28 +1,30 @@
 package com.semkagtn.visitor;
 
+import com.semkagtn.tree.AstNode;
+
 public class ErrorHandler {	
-	private static void error(int line, int symbol, String what) {
-		System.err.println(line + ":" + symbol + ": " + what);
+	private static void error(AstNode.Position pos, String what) {
+		System.err.println(pos + ": " + what);
 		System.exit(1);
 	}
 	
-	public static void alreadyDefined(int line, int symbol, String label) {
-		error(line, symbol, "'" + label + "' - variable already defined.");
+	public static void alreadyDefined(AstNode.Position pos, String label) {
+		error(pos, "'" + label + "' - variable already defined.");
 	}
 	
-	public static void notDefined(int line, int symbol, String label) {
-		error(line, symbol, "'" + label + "' - variable not defined.");
+	public static void notDefined(AstNode.Position pos, String label) {
+		error(pos, "'" + label + "' - variable not defined.");
 	}
 	
-	public static void returnNotInFunction(int line, int symbol) {
-		error(line, symbol, "'return' statement not in function.");
+	public static void returnNotInFunction(AstNode.Position pos) {
+		error(pos, "'return' statement not in function.");
 	}
 	
-	public static void breakNotInLoop(int line, int symbol) {
-		error(line, symbol, "'break' statement not in function");
+	public static void breakNotInLoop(AstNode.Position pos) {
+		error(pos, "'break' statement not in function");
 	}
 	
-	public static void continueNotInLoop(int line, int symbol) {
-		error(line, symbol, "'continue' statement not in function");
+	public static void continueNotInLoop(AstNode.Position pos) {
+		error(pos, "'continue' statement not in function");
 	}
 }
