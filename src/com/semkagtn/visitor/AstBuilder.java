@@ -71,7 +71,6 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		program.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		for (StatContext stat : ctx.stat()) {
 			program.addStatement((StatementNode) visit(stat));
-//			System.out.println(program.getBody().get(program.getBody().size() - 1));
 		}
 		return program;
 	}
@@ -279,9 +278,6 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		} else if (ctx.BOOL() != null) {
 			constant.setType(Type.BOOL);
 			constant.setValue(ctx.BOOL().getText());
-		} else if (ctx.NAN() != null) {
-			constant.setType(Type.NAN);
-			constant.setValue(ctx.NAN().getText());
 		} else {
 			constant.setType(Type.UNDEF);
 			constant.setValue(ctx.UNDEF().getText());

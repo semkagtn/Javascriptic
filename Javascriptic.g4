@@ -65,7 +65,7 @@ expr
     | expr '||' expr # Or
     | ID '=' expr # Assign
     | ID # Var
-    | (NUM | STR | BOOL | NAN | UNDEF) # Constant
+    | (NUM | STR | BOOL | UNDEF) # Constant
     | 'function' '(' functionParams? ')' blockStat # Function
     ;
 
@@ -92,10 +92,9 @@ GE : '>=' ;
 EQ : '==' ;
 NE : '!=' ;
 
-NUM : DIGIT+ ('.' DIGIT+)? ; // we can get negative numbers using unary minus operator
+NUM : (DIGIT+ ('.' DIGIT+)?) | 'NaN' ; // we can get negative numbers using unary minus operator
 STR : '"' (ESC | . )*? '"' ; // unlike JavaScript, only double quotes
 BOOL : 'true' | 'false' ; 
-NAN : 'NaN' ;
 UNDEF : 'undefined' ; 
 
 ID : ID_LETTER (ID_LETTER | DIGIT)* ;
