@@ -53,7 +53,7 @@ exprStat
     : expr ';'
     ;
 
-// operators with priority
+// operations with priority
 expr
     : '(' expr ')' # ParenExpr
     | expr '(' functionArgs? ')' # FunctionCall
