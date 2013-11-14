@@ -31,7 +31,7 @@ import com.semkagtn.tree.NotExpressionNode;
 import com.semkagtn.tree.OrExpressionNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
-import com.semkagtn.tree.ScopeNode;
+import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.StatementNode;
 import com.semkagtn.tree.SubExpressionNode;
 import com.semkagtn.tree.UnaryExpressionNode;
@@ -88,7 +88,7 @@ public class Checker implements AstVisitor<Object> {
 		return null;
 	}
 
-	public Object visit(ScopeNode scope) {
+	public Object visit(BlockNode scope) {
 		for (StatementNode stat : scope.getBody()) {
 			stat.accept(this);
 		}

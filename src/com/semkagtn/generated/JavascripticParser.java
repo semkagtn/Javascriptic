@@ -30,13 +30,13 @@ public class JavascripticParser extends Parser {
 		"ID", "COMMENT", "LINE_COMMENT", "WS"
 	};
 	public static final int
-		RULE_program = 0, RULE_stat = 1, RULE_scopeStat = 2, RULE_functionDecl = 3, 
+		RULE_program = 0, RULE_stat = 1, RULE_blockStat = 2, RULE_functionDecl = 3, 
 		RULE_varDecl = 4, RULE_ifStat = 5, RULE_whileStat = 6, RULE_doWhileStat = 7, 
 		RULE_expr = 8, RULE_constantExpr = 9, RULE_returnStat = 10, RULE_breakStat = 11, 
 		RULE_continueStat = 12, RULE_exprStat = 13, RULE_functionParams = 14, 
 		RULE_param = 15, RULE_functionArgs = 16;
 	public static final String[] ruleNames = {
-		"program", "stat", "scopeStat", "functionDecl", "varDecl", "ifStat", "whileStat", 
+		"program", "stat", "blockStat", "functionDecl", "varDecl", "ifStat", "whileStat", 
 		"doWhileStat", "expr", "constantExpr", "returnStat", "breakStat", "continueStat", 
 		"exprStat", "functionParams", "param", "functionArgs"
 	};
@@ -115,6 +115,9 @@ public class JavascripticParser extends Parser {
 		public WhileStatContext whileStat() {
 			return getRuleContext(WhileStatContext.class,0);
 		}
+		public BlockStatContext blockStat() {
+			return getRuleContext(BlockStatContext.class,0);
+		}
 		public ReturnStatContext returnStat() {
 			return getRuleContext(ReturnStatContext.class,0);
 		}
@@ -132,9 +135,6 @@ public class JavascripticParser extends Parser {
 		}
 		public IfStatContext ifStat() {
 			return getRuleContext(IfStatContext.class,0);
-		}
-		public ScopeStatContext scopeStat() {
-			return getRuleContext(ScopeStatContext.class,0);
 		}
 		public BreakStatContext breakStat() {
 			return getRuleContext(BreakStatContext.class,0);
@@ -159,7 +159,7 @@ public class JavascripticParser extends Parser {
 			case 7:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(40); scopeStat();
+				setState(40); blockStat();
 				}
 				break;
 			case 12:
@@ -238,27 +238,27 @@ public class JavascripticParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ScopeStatContext extends ParserRuleContext {
+	public static class BlockStatContext extends ParserRuleContext {
 		public StatContext stat(int i) {
 			return getRuleContext(StatContext.class,i);
 		}
 		public List<StatContext> stat() {
 			return getRuleContexts(StatContext.class);
 		}
-		public ScopeStatContext(ParserRuleContext parent, int invokingState) {
+		public BlockStatContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_scopeStat; }
+		@Override public int getRuleIndex() { return RULE_blockStat; }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitScopeStat(this);
+			if ( visitor instanceof JavascripticVisitor ) return ((JavascripticVisitor<? extends T>)visitor).visitBlockStat(this);
 			else return visitor.visitChildren(this);
 		}
 	}
 
-	public final ScopeStatContext scopeStat() throws RecognitionException {
-		ScopeStatContext _localctx = new ScopeStatContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_scopeStat);
+	public final BlockStatContext blockStat() throws RecognitionException {
+		BlockStatContext _localctx = new BlockStatContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_blockStat);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
@@ -292,10 +292,10 @@ public class JavascripticParser extends Parser {
 	}
 
 	public static class FunctionDeclContext extends ParserRuleContext {
-		public TerminalNode ID() { return getToken(JavascripticParser.ID, 0); }
-		public ScopeStatContext scopeStat() {
-			return getRuleContext(ScopeStatContext.class,0);
+		public BlockStatContext blockStat() {
+			return getRuleContext(BlockStatContext.class,0);
 		}
+		public TerminalNode ID() { return getToken(JavascripticParser.ID, 0); }
 		public FunctionParamsContext functionParams() {
 			return getRuleContext(FunctionParamsContext.class,0);
 		}
@@ -329,7 +329,7 @@ public class JavascripticParser extends Parser {
 			}
 
 			setState(67); match(13);
-			setState(68); scopeStat();
+			setState(68); blockStat();
 			}
 		}
 		catch (RecognitionException re) {

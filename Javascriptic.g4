@@ -8,10 +8,9 @@ program
     : stat*
     ; 
 
-// unlike JavaScript in this language we MUST type ';' after statements which are expressions
+// Unlike JavaScript, in this language we MUST put a semicolon after certain statements
 stat
-    : scopeStat        // { ... }
-    | functionDecl
+    : blockStat       
     | varDecl 
     | ifStat
     | whileStat 
@@ -22,12 +21,8 @@ stat
     | exprStat
     ;
 
-scopeStat
+blockStat
     : '{' stat* '}'
-    ;
-
-functionDecl
-    : 'function' ID '(' functionParams? ')' scopeStat
     ;
 
 varDecl
@@ -40,33 +35,6 @@ ifStat
 
 whileStat
     : 'while' '(' expr ')' stat
-    ;
-
-doWhileStat
-    : 'do' stat 'while' '(' expr ')' ';'
-    ;
-
-// operators with priority
-expr
-    : op=('!' | '-') expr # UnaryExpr
-    | expr op=('*' | '/' | '%') expr # MulDivModExpr
-    | expr op=('+' | '-') expr # AddSubExpr
-    | expr op=('<' | '<=' | '>' | '>=') expr # CmpExpr
-    | expr op=('==' | '!=') expr # EqExpr
-    | expr '&&' expr # AndExpr
-    | expr '||' expr # OrExpr
-    | ID '=' expr # AssignExpr
-    | '(' expr ')' # ParenExpr
-    | ID # Variable
-    | constantExpr # Constant
-    | ID '(' functionArgs? ')' # FunctionCallExpr 
-    ;
-
-constantExpr
-    : NUM
-    | STR
-    | BOOL
-    | UNDEF
     ;
 
 returnStat
@@ -85,18 +53,31 @@ exprStat
     : expr ';'
     ;
 
-// abstract values
-functionParams
-    : param (',' param)* 
-    ;
-
-param
-    : ID
+// operators with priority
+expr
+    : '(' expr ')' # ParenExpr
+    | expr '(' functionArgs? ')' # FunctionCall
+    | op=('!' | '-') expr # Unary
+    | expr op=('*' | '/' | '%') expr # MulDivMod
+    | expr op=('+' | '-') expr # AddSub
+    | expr op=('<' | '<=' | '>' | '>=') expr # Cmp
+    | expr op=('==' | '!=') expr # Eq
+    | expr '&&' expr # And
+    | expr '||' expr # Or
+    | ID '=' expr # Assign
+    | ID # Variable
+    | (NUM | STR | BOOL | NAN | UNDEF) # Constant
+    | 'function' '(' functionParams? ')' blockStat # Function
     ;
 
 // concrete values
 functionArgs
     : expr (',' expr)*
+    ;
+
+// abstract values
+functionParams
+    : ID (',' ID)* 
     ;
 
 NOT : '!' ;
@@ -112,9 +93,10 @@ GE : '>=' ;
 EQ : '==' ;
 NE : '!=' ;
 
-NUM : DIGIT+ ; // we can get negative numbers using unary minus operator
+NUM : DIGIT+ ('.' DIGIT+)? ; // we can get negative numbers using unary minus operator
 STR : '"' (ESC | . )*? '"' ; // unlike JavaScript only double quotes
 BOOL : 'true' | 'false' ; 
+NAN : 'NaN' ;
 UNDEF : 'undefined' ; 
 
 ID : ID_LETTER (ID_LETTER | DIGIT)* ;

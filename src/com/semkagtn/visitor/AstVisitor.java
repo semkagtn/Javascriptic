@@ -26,7 +26,7 @@ import com.semkagtn.tree.NotExpressionNode;
 import com.semkagtn.tree.OrExpressionNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
-import com.semkagtn.tree.ScopeNode;
+import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.SubExpressionNode;
 import com.semkagtn.tree.VariableDeclarationNode;
 import com.semkagtn.tree.VariableNode;
@@ -34,7 +34,7 @@ import com.semkagtn.tree.WhileNode;
 
 public interface AstVisitor<T> {
 	T visit(ProgramNode program);
-	T visit(ScopeNode scope);
+	T visit(BlockNode scope);
 	T visit(FunctionNode function);
 	T visit(VariableDeclarationNode variableDeclaration);
 	T visit(VariableNode variable);

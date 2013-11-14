@@ -92,7 +92,7 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitScopeStat(@NotNull JavascripticParser.ScopeStatContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBlockStat(@NotNull JavascripticParser.BlockStatContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

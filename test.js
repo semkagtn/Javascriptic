@@ -1,9 +1,7 @@
-f();
 
 function f(x, y, z) {
     var a = x + y + z;
     a = a + 1;
-    var a;
     function g(a, b, c) {
         x = x + 3;
     }

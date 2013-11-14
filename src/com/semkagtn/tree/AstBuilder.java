@@ -5,6 +5,7 @@ import com.semkagtn.generated.JavascripticParser;
 import com.semkagtn.generated.JavascripticParser.AddSubExprContext;
 import com.semkagtn.generated.JavascripticParser.AndExprContext;
 import com.semkagtn.generated.JavascripticParser.AssignExprContext;
+import com.semkagtn.generated.JavascripticParser.BlockStatContext;
 import com.semkagtn.generated.JavascripticParser.BreakStatContext;
 import com.semkagtn.generated.JavascripticParser.CmpExprContext;
 import com.semkagtn.generated.JavascripticParser.ConstantContext;
@@ -22,7 +23,6 @@ import com.semkagtn.generated.JavascripticParser.ParamContext;
 import com.semkagtn.generated.JavascripticParser.ParenExprContext;
 import com.semkagtn.generated.JavascripticParser.ProgramContext;
 import com.semkagtn.generated.JavascripticParser.ReturnStatContext;
-import com.semkagtn.generated.JavascripticParser.ScopeStatContext;
 import com.semkagtn.generated.JavascripticParser.StatContext;
 import com.semkagtn.generated.JavascripticParser.UnaryExprContext;
 import com.semkagtn.generated.JavascripticParser.VarDeclContext;
@@ -45,8 +45,8 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		return visitChildren(ctx);
 	}
 	
-	public ScopeNode visitScopeStat(ScopeStatContext ctx) {
-		ScopeNode scope = new ScopeNode();
+	public BlockNode visitScopeStat(BlockStatContext ctx) {
+		BlockNode scope = new BlockNode();
 		scope.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		for (StatContext statement : ctx.stat()) {
 			scope.addStatement((StatementNode) visit(statement));
@@ -63,7 +63,7 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 				function.addParameter((FunctionParameterNode) visit(param));
 			}
 		}
-		for (StatContext statement : ctx.scopeStat().stat()) {
+		for (StatContext statement : ctx.blockStat().stat()) {
 			function.addStatement((StatementNode) visit(statement)); 
 		}
 		return function;
@@ -83,18 +83,18 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		IfElseNode ifElse = new IfElseNode();
 		ifElse.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		ifElse.setCondition((ExpressionNode) visit(ctx.expr()));
-		if (ctx.stat(0).scopeStat() == null) {
+		if (ctx.stat(0).blockStat() == null) {
 			ifElse.addIfStatement((StatementNode) visit(ctx.stat(0)));
 		} else {
-			for (StatContext statement : ctx.stat(0).scopeStat().stat()) {
+			for (StatContext statement : ctx.stat(0).blockStat().stat()) {
 				ifElse.addIfStatement((StatementNode) visit(statement));
 			}
 		}
 		if (ctx.stat(1) != null) {
-			if (ctx.stat(1).scopeStat() == null) {
+			if (ctx.stat(1).blockStat() == null) {
 				ifElse.addElseStatement((StatementNode) visit(ctx.stat(1)));
 			} else {
-				for (StatContext statement : ctx.stat(1).scopeStat().stat()) {
+				for (StatContext statement : ctx.stat(1).blockStat().stat()) {
 					ifElse.addElseStatement((StatementNode) visit(statement));
 				}
 			}
@@ -106,10 +106,10 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		WhileNode whileNode = new WhileNode();
 		whileNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		whileNode.setCondition((ExpressionNode) visit(ctx.expr()));
-		if (ctx.stat().scopeStat() == null) {
+		if (ctx.stat().blockStat() == null) {
 			whileNode.addStatement((StatementNode) visit(ctx.stat()));
 		} else {
-			for (StatContext statement : ctx.stat().scopeStat().stat()) {
+			for (StatContext statement : ctx.stat().blockStat().stat()) {
 				whileNode.addStatement((StatementNode) visit(statement));
 			}
 		}
@@ -120,10 +120,10 @@ public class AstBuilder extends JavascripticBaseVisitor<Node> {
 		DoWhileNode doWhileNode = new DoWhileNode();
 		doWhileNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		doWhileNode.setCondition((ExpressionNode) visit(ctx.expr()));
-		if (ctx.stat().scopeStat() == null) {
+		if (ctx.stat().blockStat() == null) {
 			doWhileNode.addStatement((StatementNode) visit(ctx.stat()));
 		} else {
-			for (StatContext statement : ctx.stat().scopeStat().stat()) {
+			for (StatContext statement : ctx.stat().blockStat().stat()) {
 				doWhileNode.addStatement((StatementNode) visit(statement));
 			}
 		}

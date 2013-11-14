@@ -77,11 +77,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEqExpr(@NotNull JavascripticParser.EqExprContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#scopeStat}.
+	 * Visit a parse tree produced by {@link JavascripticParser#blockStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitScopeStat(@NotNull JavascripticParser.ScopeStatContext ctx);
+	T visitBlockStat(@NotNull JavascripticParser.BlockStatContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#CmpExpr}.
