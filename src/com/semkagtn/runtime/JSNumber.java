@@ -7,7 +7,7 @@ public class JSNumber extends JSPrimitive {
 		this.value = value;
 	}
 	
-	public JSNumber add(JSNumber rhs) {
+	public JSNumber add(JSObject rhs) {
 		double res = Double.parseDouble(value) + Double.parseDouble(rhs.value);
 		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
 				|| res == Double.NaN) {
@@ -16,7 +16,7 @@ public class JSNumber extends JSPrimitive {
 		return new JSNumber(Double.toString(res));
 	}
 	
-	public JSNumber sub(JSNumber rhs) {
+	public JSNumber sub(JSObject rhs) {
 		double res = Double.parseDouble(value) - Double.parseDouble(rhs.value);
 		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
 				|| res == Double.NaN) {
@@ -25,7 +25,7 @@ public class JSNumber extends JSPrimitive {
 		return new JSNumber(Double.toString(res));
 	}
 	
-	public JSNumber mul(JSNumber rhs) {
+	public JSNumber mul(JSObject rhs) {
 		double res = Double.parseDouble(value) * Double.parseDouble(rhs.value);
 		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
 				|| res == Double.NaN) {
@@ -34,7 +34,7 @@ public class JSNumber extends JSPrimitive {
 		return new JSNumber(Double.toString(res));
 	}
 	
-	public JSNumber div(JSNumber rhs) {
+	public JSNumber div(JSObject rhs) {
 		double res = Double.parseDouble(value) / Double.parseDouble(rhs.value);
 		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
 				|| res == Double.NaN) {
@@ -48,43 +48,22 @@ public class JSNumber extends JSPrimitive {
 		return new JSNumber(Double.toString(res));
 	}
 	
-	public JSBool lt(JSNumber rhs) {
+	public JSBool lt(JSObject rhs) {
 		if (Double.parseDouble(value) < Double.parseDouble(rhs.value)) {
 			return JSBool.TRUE;
 		}
 		return JSBool.FALSE;
 	}
 	
-	public JSBool le(JSNumber rhs) {
-		if (Double.parseDouble(value) <= Double.parseDouble(rhs.value)) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
-	}
-	
-	public JSBool ge(JSNumber rhs) {
-		if (Double.parseDouble(value) >= Double.parseDouble(rhs.value)) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
-	}
-	
-	public JSBool gt(JSNumber rhs) {
+	public JSBool gt(JSObject rhs) {
 		if (Double.parseDouble(value) > Double.parseDouble(rhs.value)) {
 			return JSBool.TRUE;
 		}
 		return JSBool.FALSE;
 	}
 	
-	public JSBool eq(JSNumber rhs) {
+	public JSBool eq(JSObject rhs) {
 		if (Double.parseDouble(value) == Double.parseDouble(rhs.value)) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
-	}
-	
-	public JSBool ne(JSNumber rhs) {
-		if (Double.parseDouble(value) != Double.parseDouble(rhs.value)) {
 			return JSBool.TRUE;
 		}
 		return JSBool.FALSE;

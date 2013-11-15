@@ -108,7 +108,9 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		if (ctx.expr() != null) {
 			assign.setExpression((ExpressionNode) visit(ctx.expr()));
 		} else {
-			assign.setExpression(new UndefNode());
+			VarNode var = new VarNode();
+			var.setName(ctx.ID().getText());
+			assign.setExpression(var);
 		}
 		ExpressionStatementNode exprStat = new ExpressionStatementNode();
 		exprStat.setExpression(assign);
@@ -290,7 +292,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 			constant.setValue(ctx.NUM().getText());
 		} else if (ctx.STR() != null) {
 			constant = new StringNode();
-			constant.setValue(ctx.STR().getText().replace("\"", ""));
+			constant.setValue(ctx.STR().getText());
 		} else if (ctx.BOOL() != null) {
 			constant = new BoolNode();
 			constant.setValue(ctx.BOOL().getText());
@@ -306,7 +308,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		FunctionNode function = new FunctionNode();
 		scopes.push(function);
 		function.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		function.setValue("function"); // maybe later I will upgrade this
+		function.setValue(ctx.getText()); // Without pretty-printing
 		if (ctx.functionParams() != null) {
 			for (TerminalNode paramName : ctx.functionParams().ID()) {
 				FunctionParameterNode param = new FunctionParameterNode();

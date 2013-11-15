@@ -1,7 +1,8 @@
 package com.semkagtn.runtime;
 
 public class JSString extends JSPrimitive {
-
+	public static final JSString EMPTY = new JSString("");
+	
 	public JSString(String value) {
 		this.value = value;
 	}
@@ -10,56 +11,53 @@ public class JSString extends JSPrimitive {
 		return new JSString(value + rhs.value);
 	}
 	
-	public JSBool lt(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res == -1) {
-			return JSBool.TRUE;
+	public JSBool lt(JSObject rhs) {
+		if (rhs instanceof JSString) {
+			int res = value.compareTo(rhs.value);
+			if (res == -1) {
+				return JSBool.TRUE;
+			}
+			return JSBool.FALSE;
 		}
-		return JSBool.FALSE;
+		return super.lt(rhs);
 	}
 	
-	public JSBool le(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res == -1 || res == 0) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
+	public JSBool le(JSObject rhs) {
+		return gt(rhs).not();
 	}
 	
-	public JSBool ge(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res == 1 || res == 0) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
+	public JSBool ge(JSObject rhs) {
+		return lt(rhs).not();
 	}
 	
-	public JSBool gt(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res == 1) {
-			return JSBool.TRUE;
+	public JSBool gt(JSObject rhs) {
+		if (rhs instanceof JSString) {
+			int res = value.compareTo(rhs.value);
+			if (res == 1) {
+				return JSBool.TRUE;
+			}
+			return JSBool.FALSE;
 		}
-		return JSBool.FALSE;
+		return super.gt(rhs);
 	}
 	
-	public JSBool eq(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res == 0) {
-			return JSBool.TRUE;
+	public JSBool eq(JSObject rhs) {
+		if (rhs instanceof JSString) {
+			int res = value.compareTo(rhs.value);
+			if (res == 0) {
+				return JSBool.TRUE;
+			}
+			return JSBool.FALSE;
 		}
-		return JSBool.FALSE;
+		return super.eq(rhs);
 	}
 	
-	public JSBool ne(JSString rhs) {
-		int res = value.compareTo(rhs.value);
-		if (res != 0) {
-			return JSBool.TRUE;
-		}
-		return JSBool.FALSE;
+	public JSBool ne(JSObject rhs) {
+		return eq(rhs).not();
 	}
 	
 	protected JSBool toJSBool() {
-		if (value.equals("")) {
+		if (value.equals(EMPTY)) {
 			return JSBool.FALSE;
 		}
 		return JSBool.TRUE;

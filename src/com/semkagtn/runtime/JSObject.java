@@ -5,16 +5,16 @@ public abstract class JSObject {
 
 	protected abstract JSBool toJSBool();
 	protected abstract JSNumber toJSNumber();
-	public abstract JSObject call();
+	public abstract JSObject call(JSObject... objects);
 	
 	public String toString() {
 		return value;
 	}
 	
 	public JSObject add(JSObject rhs) {
-		/*if (rhs instanceof JSString) {
+		if (rhs instanceof JSString) {
 			return new JSString(value + rhs.value);
-		}*/
+		}
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		return l.add(r);
@@ -42,9 +42,7 @@ public abstract class JSObject {
 	}
 
 	public JSBool ge(JSObject rhs) {
-		JSNumber l = this.toJSNumber();
-		JSNumber r = rhs.toJSNumber();
-		return l.ge(r);
+		return lt(rhs).not();
 	}
 
 	public JSBool gt(JSObject rhs) {
@@ -54,9 +52,7 @@ public abstract class JSObject {
 	}
 
 	public JSBool le(JSObject rhs) {
-		JSNumber l = this.toJSNumber();
-		JSNumber r = rhs.toJSNumber();
-		return l.le(r);
+		return gt(rhs).not();
 	}
 	
 	public JSBool lt(JSObject rhs) {
@@ -83,9 +79,7 @@ public abstract class JSObject {
 	}
 
 	public JSBool ne(JSObject rhs) {
-		JSNumber l = this.toJSNumber();
-		JSNumber r = rhs.toJSNumber();
-		return l.ne(r);
+		return eq(rhs).not();
 	}
 
 	public JSBool not() {
