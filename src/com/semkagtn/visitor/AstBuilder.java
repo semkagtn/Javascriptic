@@ -310,7 +310,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		FunctionNode function = new FunctionNode();
 		scopes.push(function);
 		function.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		function.setValue(ctx.getText()); // Without pretty-printing
+		function.setValue(ctx.getText()); // No pretty-printing :(
 		if (ctx.functionParams() != null) {
 			for (TerminalNode paramName : ctx.functionParams().ID()) {
 				FunctionParameterNode param = new FunctionParameterNode();
