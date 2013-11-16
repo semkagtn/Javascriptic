@@ -3,6 +3,7 @@ package com.semkagtn.visitor;
 import com.semkagtn.tree.AddNode;
 import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
+import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.BoolNode;
 import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ContinueNode;
@@ -39,6 +40,8 @@ public interface AstVisitor<T> {
 
 	T visit(AssignmentNode assign);
 
+	T visit(BlockNode block);
+	
 	T visit(BoolNode bool);
 	
 	T visit(BreakNode breakStat);

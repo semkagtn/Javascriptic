@@ -20,6 +20,6 @@ public class BlockNode extends StatementNode {
 	}	
 	
 	public <T> T accept(AstVisitor<T> v) {
-		return null;
+		return v.visit(this);
 	}
 }

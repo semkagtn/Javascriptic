@@ -103,13 +103,13 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 	public ExpressionStatementNode visitVarDeclStat(VarDeclStatContext ctx) {
 		AssignmentNode assign = new AssignmentNode();
 		assign.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		assign.setVariableName(ctx.ID().getText());
-		scopes.peek().addVariable(assign.getVariableName());
+		VarNode var = new VarNode();
+		var.setName(ctx.ID().getText());
+		assign.setVariable(var);
+		scopes.peek().addVariable(var.getName());
 		if (ctx.expr() != null) {
 			assign.setExpression((ExpressionNode) visit(ctx.expr()));
 		} else {
-			VarNode var = new VarNode();
-			var.setName(ctx.ID().getText());
 			assign.setExpression(var);
 		}
 		ExpressionStatementNode exprStat = new ExpressionStatementNode();
@@ -273,7 +273,9 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 	public AssignmentNode visitAssign(AssignContext ctx) {
 		AssignmentNode assignment = new AssignmentNode();
 		assignment.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		assignment.setVariableName(ctx.ID().getText());
+		VarNode var = new VarNode();
+		var.setName(ctx.ID().getText());
+		assignment.setVariable(var);
 		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
 		return assignment;
 	}

@@ -226,10 +226,7 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(AssignmentNode assign) {
 		assign.getExpression().accept(this);
-		if (findVariable(assign.getVariableName())) {
-			return null;
-		}
-		ErrorHandler.notDefined(assign.getPosition(), assign.getVariableName());
+		assign.getVariable().accept(this);
 		return null;
 	}
 
