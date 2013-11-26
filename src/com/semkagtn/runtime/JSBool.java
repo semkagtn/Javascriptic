@@ -1,6 +1,6 @@
 package com.semkagtn.runtime;
 
-public class JSBool extends JSPrimitive {
+public class JSBool extends JSObject {
 	public static final JSBool TRUE = new JSBool("true");
 	public static final JSBool FALSE = new JSBool("false");
 	

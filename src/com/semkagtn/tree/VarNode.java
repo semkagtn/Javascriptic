@@ -14,7 +14,7 @@ public class VarNode extends ExpressionNode {
 	}
 	
 	public void setName(String name) {
-		this.name = name;
+		this.name = "_" + name; // for non-conflicting names
 	}
 	
 	public <T> T accept(AstVisitor<T> v) {

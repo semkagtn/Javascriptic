@@ -9,7 +9,7 @@ public class ErrorHandler {
 	}
 	
 	public static void notDefined(AstNode.Position pos, String label) {
-		error(pos, "'" + label + "' - variable not defined.");
+		error(pos, "'" + label.substring(1) + "' - variable not defined.");
 	}
 	
 	public static void returnNotInFunction(AstNode.Position pos) {

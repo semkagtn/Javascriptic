@@ -1,19 +1,10 @@
 package com.semkagtn.runtime;
 
-public class JSNumber extends JSPrimitive { 
+public class JSNumber extends JSObject { 
 	public static final JSNumber NAN = new JSNumber("NaN");
 	
 	public JSNumber(String value) {
 		this.value = value;
-	}
-	
-	public JSNumber add(JSObject rhs) {
-		double res = Double.parseDouble(value) + Double.parseDouble(rhs.value);
-		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
-				|| res == Double.NaN) {
-			return NAN;
-		}
-		return new JSNumber(Double.toString(res));
 	}
 	
 	public JSNumber sub(JSObject rhs) {

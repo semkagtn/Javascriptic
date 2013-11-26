@@ -10,6 +10,7 @@ import com.semkagtn.generated.JavascripticParser;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.visitor.AstBuilder;
 import com.semkagtn.visitor.Checker;
+import com.semkagtn.visitor.CodeGenerator;
 
 public class Compiler {
 	private String inputFileName;
@@ -38,8 +39,8 @@ public class Compiler {
 			Checker checker = new Checker();
 			checker.visit(ast);
 			// Generating code
-			//CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
-			//codeGenerator.visit(ast);
+			CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
+			codeGenerator.visit(ast);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

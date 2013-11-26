@@ -5,10 +5,15 @@ public abstract class JSObject {
 
 	protected abstract JSBool toJSBool();
 	protected abstract JSNumber toJSNumber();
-	public abstract JSObject call(JSObject... objects);
 	
 	public String toString() {
 		return value;
+	}
+	
+	public JSObject call(JSObject... objects) {
+		System.err.println("Runtime error");
+		System.exit(1);
+		return null;
 	}
 	
 	public JSObject add(JSObject rhs) {
@@ -17,7 +22,12 @@ public abstract class JSObject {
 		}
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
-		return l.add(r);
+		double res = Double.parseDouble(l.value) + Double.parseDouble(r.value);
+		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
+				|| res == Double.NaN) {
+			return JSNumber.NAN;
+		}
+		return new JSNumber(Double.toString(res));
 	}
 	
 	public JSObject and(JSObject rhs) {

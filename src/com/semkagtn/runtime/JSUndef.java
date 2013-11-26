@@ -1,6 +1,6 @@
 package com.semkagtn.runtime;
 
-public class JSUndef extends JSPrimitive {
+public class JSUndef extends JSObject {
 	public static final JSUndef UNDEF = new JSUndef();
 	
 	private JSUndef() {

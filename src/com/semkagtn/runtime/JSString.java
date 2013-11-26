@@ -1,6 +1,6 @@
 package com.semkagtn.runtime;
 
-public class JSString extends JSPrimitive {
+public class JSString extends JSObject {
 	public static final JSString EMPTY = new JSString("");
 	
 	public JSString(String value) {

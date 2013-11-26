@@ -1,5 +1,14 @@
 package com.semkagtn.visitor;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.LinkedList;
+
+import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
+import com.semkagtn.runtime.JSUndef;
 import com.semkagtn.tree.AddNode;
 import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
@@ -33,8 +42,107 @@ import com.semkagtn.tree.UndefNode;
 import com.semkagtn.tree.VarNode;
 import com.semkagtn.tree.WhileNode;
 
-public class CodeGenerator implements AstVisitor<Object> {
+public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 
+	private int functionCounter;
+	private String fileName;
+	private LinkedList<FunctionWriter> writers;
+	
+	private static final String RUNTIME_PACKAGE = "com/semkagtn/runtime/";
+	
+	private class Type {
+		public static final String OBJECT = RUNTIME_PACKAGE + "JSObject";
+		public static final String BOOL = RUNTIME_PACKAGE + "JSBool";
+		public static final String UNDEF = RUNTIME_PACKAGE + "JSOUndef";
+		public static final String STRING = RUNTIME_PACKAGE + "JSString";
+		public static final String NUMBER = RUNTIME_PACKAGE + "JSNumber";
+		public static final String FUNCTION = RUNTIME_PACKAGE + "JSFunction";
+	}
+	
+	private class LType {
+		public static final String OBJECT = "L" + Type.OBJECT + ';';
+		public static final String BOOL = "L" + Type.BOOL + ';';
+		public static final String UNDEF = "L" + Type.UNDEF + ';';
+		public static final String STRING = "L" + Type.STRING + ';';
+		public static final String NUMBER = "L" + Type.NUMBER + ';';
+		public static final String FUNCTION = "L" + Type.NUMBER + ';';
+	}
+	
+	public static final String CALL_SIG = "([" + LType.OBJECT + ")" +  LType.OBJECT; 
+	
+	private class FunctionWriter {
+		private ClassWriter cw;
+		private MethodVisitor mv;
+		private FunctionNode function;
+		private int number;
+		
+		public String functionName() {
+			return fileName + "$Function" + number;
+		}
+		
+		private String scopeClassName() {
+			return fileName + "$Scope" + number;
+		}
+		
+		private void generateScopeClass() {
+			ClassWriter cw = new ClassWriter(0);
+			cw.visit(V1_1, ACC_PUBLIC, scopeClassName(), null, "java/lang/Object", null);
+			for (String var : function.getVariables()) {
+				cw.visitField(ACC_PUBLIC, var, LType.OBJECT, null, null);
+			}
+			
+			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+			mv.visitVarInsn(ALOAD, 0);
+			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+			for (String var : function.getVariables()) {
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Type.UNDEF, "UNDEF", LType.UNDEF);
+				mv.visitFieldInsn(PUTFIELD, scopeClassName(), var, LType.UNDEF);
+			}
+			mv.visitInsn(RETURN);
+			mv.visitMaxs(2, 2); // ??
+			mv.visitEnd();
+			
+			cw.visitEnd();
+			
+			try {
+				byte[] code = cw.toByteArray();
+				FileOutputStream fos = new FileOutputStream(scopeClassName() + ".class");
+				fos.write(code);
+				fos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public FunctionWriter(FunctionNode function) {
+			this.function = function;
+			number = functionCounter;
+			++functionCounter;
+			cw = new ClassWriter(0);
+		}
+		
+		public void visit() {
+			// Constructor
+			generateScopeClass();
+			cw.visit(V1_1, ACC_PUBLIC, functionName(), null, Type.FUNCTION, null);
+			mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+			mv.visitVarInsn(ALOAD, 0);
+			mv.visitVarInsn(ALOAD, 1);
+			mv.visitMethodInsn(INVOKESPECIAL, Type.FUNCTION, "<init>", "(Ljava/lang/String;)V");
+			mv.visitInsn(RETURN);
+			mv.visitMaxs(2, 2); // ?
+			mv.visitEnd();
+			
+			// Method call
+		}
+	}
+	
+	public CodeGenerator(String fileName) {
+		functionCounter = 0;
+		this.fileName = fileName;
+	}
+	
 	@Override
 	public Object visit(AddNode add) {
 		// TODO Auto-generated method stub
@@ -185,9 +293,37 @@ public class CodeGenerator implements AstVisitor<Object> {
 		return null;
 	}
 
-	@Override
 	public Object visit(ProgramNode program) {
-		// TODO Auto-generated method stub
+		ClassWriter cw = new ClassWriter(0);
+		cw.visit(V1_1, ACC_PUBLIC, fileName, null, "java/lang/Object", null);
+		
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(2, 2); // ??
+		mv.visitEnd();
+		
+		mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", 
+				"([Ljava/lang/String;)V", null, null);
+		
+		writers.push(new FunctionWriter(program));
+		// ... call 'call()' method of main function (Function0)
+		writers.pop();
+		
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(10, 10); // ??
+		mv.visitEnd();
+		
+		cw.visitEnd();
+		try {
+			byte[] code = cw.toByteArray();
+			FileOutputStream fos = new FileOutputStream(fileName + ".class");
+			fos.write(code);
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 

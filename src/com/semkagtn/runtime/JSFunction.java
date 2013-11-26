@@ -1,9 +1,13 @@
 package com.semkagtn.runtime;
 
-public abstract class JSFunction extends JSObject {
+public abstract class JSFunction extends JSString {
 	
 	public JSFunction(String text) {
-		value = text;
+		super(text);
+	}
+	
+	public JSString add(JSObject rhs) {
+		return new JSString(value + rhs.value);
 	}
 	
 	protected JSBool toJSBool() {

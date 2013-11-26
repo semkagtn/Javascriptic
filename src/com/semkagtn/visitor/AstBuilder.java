@@ -104,6 +104,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		AssignmentNode assign = new AssignmentNode();
 		assign.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		VarNode var = new VarNode();
+		var.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		var.setName(ctx.ID().getText());
 		assign.setVariable(var);
 		scopes.peek().addVariable(var.getName());
@@ -274,6 +275,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		AssignmentNode assignment = new AssignmentNode();
 		assignment.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		VarNode var = new VarNode();
+		var.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		var.setName(ctx.ID().getText());
 		assignment.setVariable(var);
 		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
