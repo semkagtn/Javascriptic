@@ -2,13 +2,12 @@ package com.semkagtn.visitor;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
 
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import com.semkagtn.runtime.JSUndef;
 import com.semkagtn.tree.AddNode;
 import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
@@ -18,6 +17,7 @@ import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
+import com.semkagtn.tree.ExpressionNode;
 import com.semkagtn.tree.ExpressionStatementNode;
 import com.semkagtn.tree.FunctionCallNode;
 import com.semkagtn.tree.FunctionNode;
@@ -36,6 +36,7 @@ import com.semkagtn.tree.NumberNode;
 import com.semkagtn.tree.OrNode;
 import com.semkagtn.tree.ProgramNode;
 import com.semkagtn.tree.ReturnNode;
+import com.semkagtn.tree.StatementNode;
 import com.semkagtn.tree.StringNode;
 import com.semkagtn.tree.SubNode;
 import com.semkagtn.tree.UndefNode;
@@ -44,16 +45,17 @@ import com.semkagtn.tree.WhileNode;
 
 public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 
-	private int functionCounter;
+	//private int functionCounter;
 	private String fileName;
-	private LinkedList<FunctionWriter> writers;
+	//private LinkedList<FunctionWriter> writers;
+	private MethodVisitor mv;
 	
 	private static final String RUNTIME_PACKAGE = "com/semkagtn/runtime/";
 	
 	private class Type {
 		public static final String OBJECT = RUNTIME_PACKAGE + "JSObject";
 		public static final String BOOL = RUNTIME_PACKAGE + "JSBool";
-		public static final String UNDEF = RUNTIME_PACKAGE + "JSOUndef";
+		public static final String UNDEF = RUNTIME_PACKAGE + "JSUndef";
 		public static final String STRING = RUNTIME_PACKAGE + "JSString";
 		public static final String NUMBER = RUNTIME_PACKAGE + "JSNumber";
 		public static final String FUNCTION = RUNTIME_PACKAGE + "JSFunction";
@@ -68,8 +70,10 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String FUNCTION = "L" + Type.NUMBER + ';';
 	}
 	
-	public static final String CALL_SIG = "([" + LType.OBJECT + ")" +  LType.OBJECT; 
-	
+	public static final String CALL_SIGNATURE = "([" + LType.OBJECT + ")" +  LType.OBJECT;
+	public static final String BINARY_SIGNATURE  = "(" + LType.OBJECT + ")" + LType.OBJECT;
+	public static final String UNARY_SIGNATURE  = "()" + LType.OBJECT;
+	/*
 	private class FunctionWriter {
 		private ClassWriter cw;
 		private MethodVisitor mv;
@@ -136,40 +140,84 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			
 			// Method call
 		}
+	}*/
+	
+	
+	// test
+	private void generateScopeClass(FunctionNode function) {
+		ClassWriter cw = new ClassWriter(0);
+		cw.visit(V1_1, ACC_PUBLIC, "JSScope", null, "java/lang/Object", null);
+		for (String var : function.getVariables()) {
+			cw.visitField(ACC_PUBLIC, var, LType.OBJECT, null, null);
+		}
+		
+		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+		mv.visitVarInsn(ALOAD, 0);
+		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
+		for (String var : function.getVariables()) {
+			mv.visitVarInsn(ALOAD, 0);
+			mv.visitFieldInsn(GETSTATIC, Type.UNDEF, "UNDEF", LType.UNDEF);
+			mv.visitFieldInsn(PUTFIELD, "JSScope", var, LType.OBJECT);
+		}
+		mv.visitInsn(RETURN);
+		mv.visitMaxs(2, 2); // ??
+		mv.visitEnd();
+		
+		cw.visitEnd();
+		
+		try {
+			byte[] code = cw.toByteArray();
+			FileOutputStream fos = new FileOutputStream("JSScope" + ".class");
+			fos.write(code);
+			fos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
+	// test
 	
 	public CodeGenerator(String fileName) {
-		functionCounter = 0;
+		//functionCounter = 0;
 		this.fileName = fileName;
 	}
 	
-	@Override
 	public Object visit(AddNode add) {
-		// TODO Auto-generated method stub
+		add.getLhs().accept(this);
+		add.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "add", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(AndNode and) {
-		// TODO Auto-generated method stub
+		and.getLhs().accept(this);
+		and.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "and", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(AssignmentNode assign) {
-		// TODO Auto-generated method stub
+		System.out.println("AssignmentNode");
+		mv.visitVarInsn(ALOAD, 1);
+		assign.getExpression().accept(this);
+		mv.visitFieldInsn(PUTFIELD, "JSScope",
+				assign.getVariable().getName(), LType.OBJECT);
+		mv.visitVarInsn(ALOAD, 1);
+		mv.visitFieldInsn(GETFIELD, "JSScope",
+				assign.getVariable().getName(), LType.OBJECT);
 		return null;
 	}
 
-	@Override
 	public Object visit(BlockNode block) {
-		// TODO Auto-generated method stub
+		for (StatementNode stat: block.getBody()) {
+			stat.accept(this);
+		}
 		return null;
 	}
 
-	@Override
+
 	public Object visit(BoolNode bool) {
-		// TODO Auto-generated method stub
+		mv.visitFieldInsn(GETSTATIC, Type.BOOL,
+				bool.getValue().toUpperCase(), LType.BOOL);
 		return null;
 	}
 
@@ -185,27 +233,33 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		return null;
 	}
 
-	@Override
 	public Object visit(DivNode div) {
-		// TODO Auto-generated method stub
+		div.getLhs().accept(this);
+		div.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "div", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(EqNode eq) {
-		// TODO Auto-generated method stub
+		eq.getLhs().accept(this);
+		eq.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "eq", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(ExpressionStatementNode exprStat) {
-		// TODO Auto-generated method stub
+		System.out.println("ExpressionStatementNode");
+		exprStat.getExpression().accept(this);
+		mv.visitInsn(POP);
 		return null;
 	}
 
-	@Override
 	public Object visit(FunctionCallNode functionCall) {
-		// TODO Auto-generated method stub
+		ExpressionNode arg = functionCall.getArguments().get(0);
+		mv.visitFieldInsn(GETSTATIC, "java/lang/System", "out", "Ljava/io/PrintStream;");
+		arg.accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, "java/io/PrintStream", "print", "(Ljava/lang/Object;)V");
+		mv.visitFieldInsn(GETSTATIC, Type.UNDEF, "UNDEF", LType.UNDEF);
 		return null;
 	}
 
@@ -221,83 +275,106 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		return null;
 	}
 
-	@Override
 	public Object visit(GeNode ge) {
-		// TODO Auto-generated method stub
+		ge.getLhs().accept(this);
+		ge.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "ge", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(GtNode gt) {
-		// TODO Auto-generated method stub
+		gt.getLhs().accept(this);
+		gt.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "gt", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(IfElseNode ifElse) {
-		// TODO Auto-generated method stub
+		Label elseBlock = new Label();
+		Label end = new Label();;
+		ifElse.getCondition().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "toInt", "()I");
+		mv.visitJumpInsn(IFEQ, elseBlock);
+		ifElse.getIfStatement().accept(this);
+		mv.visitJumpInsn(GOTO, end);
+		mv.visitLabel(elseBlock);
+		if (ifElse.getElseStatement() != null) {
+			ifElse.getElseStatement().accept(this);
+		}
+		mv.visitLabel(end);
 		return null;
 	}
 
-	@Override
 	public Object visit(LeNode le) {
-		// TODO Auto-generated method stub
+		le.getLhs().accept(this);
+		le.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "le", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(LtNode lt) {
-		// TODO Auto-generated method stub
+		lt.getLhs().accept(this);
+		lt.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "lt", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(ModNode mod) {
-		// TODO Auto-generated method stub
+		mod.getLhs().accept(this);
+		mod.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "mod", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(MulNode mul) {
-		// TODO Auto-generated method stub
+		mul.getLhs().accept(this);
+		mul.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "mul", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(NegNode neg) {
-		// TODO Auto-generated method stub
+		neg.getExpression().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "neg", UNARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(NeNode ne) {
-		// TODO Auto-generated method stub
+		ne.getLhs().accept(this);
+		ne.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "ne", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(NotNode not) {
-		// TODO Auto-generated method stub
+		not.getExpression().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "not", UNARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(NumberNode number) {
-		// TODO Auto-generated method stub
+		mv.visitTypeInsn(NEW, Type.NUMBER);
+		mv.visitInsn(DUP);
+		mv.visitLdcInsn(number.getValue());
+		mv.visitMethodInsn(INVOKESPECIAL, Type.NUMBER, "<init>", "(Ljava/lang/String;)V");
 		return null;
 	}
 
-	@Override
 	public Object visit(OrNode or) {
-		// TODO Auto-generated method stub
+		or.getLhs().accept(this);
+		or.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "or", BINARY_SIGNATURE);
 		return null;
 	}
 
 	public Object visit(ProgramNode program) {
+		// test
+		generateScopeClass(program);
+		// test
 		ClassWriter cw = new ClassWriter(0);
 		cw.visit(V1_1, ACC_PUBLIC, fileName, null, "java/lang/Object", null);
 		
-		MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
+		mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 		mv.visitVarInsn(ALOAD, 0);
 		mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
 		mv.visitInsn(RETURN);
@@ -306,11 +383,15 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		
 		mv = cw.visitMethod(ACC_PUBLIC + ACC_STATIC, "main", 
 				"([Ljava/lang/String;)V", null, null);
-		
-		writers.push(new FunctionWriter(program));
-		// ... call 'call()' method of main function (Function0)
-		writers.pop();
-		
+		// test
+		mv.visitTypeInsn(NEW, "JSScope");
+		mv.visitInsn(DUP);
+		mv.visitMethodInsn(INVOKESPECIAL, "JSScope", "<init>", "()V");
+		mv.visitVarInsn(ASTORE, 1);
+		for (StatementNode stat : program.getBody()) {
+			stat.accept(this);
+		}
+		// test
 		mv.visitInsn(RETURN);
 		mv.visitMaxs(10, 10); // ??
 		mv.visitEnd();
@@ -333,33 +414,43 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		return null;
 	}
 
-	@Override
 	public Object visit(StringNode string) {
-		// TODO Auto-generated method stub
+		mv.visitTypeInsn(NEW, Type.STRING);
+		mv.visitInsn(DUP);
+		mv.visitLdcInsn(string.getValue());
+		mv.visitMethodInsn(INVOKESPECIAL, Type.STRING, "<init>", "(Ljava/lang/String;)V");
 		return null;
 	}
 
-	@Override
 	public Object visit(SubNode sub) {
-		// TODO Auto-generated method stub
+		sub.getLhs().accept(this);
+		sub.getRhs().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "sub", BINARY_SIGNATURE);
 		return null;
 	}
 
-	@Override
 	public Object visit(UndefNode undef) {
-		// TODO Auto-generated method stub
+		mv.visitFieldInsn(GETSTATIC, Type.UNDEF, "UNDEF", LType.UNDEF);
 		return null;
 	}
 
-	@Override
 	public Object visit(VarNode var) {
-		// TODO Auto-generated method stub
+		System.out.println("VarNode");
+		mv.visitVarInsn(ALOAD, 1);
+		mv.visitFieldInsn(GETFIELD, "JSScope", var.getName(), LType.OBJECT);
 		return null;
 	}
 
-	@Override
 	public Object visit(WhileNode whileStat) {
-		// TODO Auto-generated method stub
+		Label loopStart = new Label();
+		Label loopEnd = new Label();
+		mv.visitLabel(loopStart);
+		whileStat.getCondition().accept(this);
+		mv.visitMethodInsn(INVOKEVIRTUAL, Type.OBJECT, "toInt", "()I");
+		mv.visitJumpInsn(IFEQ, loopEnd);
+		whileStat.getStatement().accept(this);
+		mv.visitJumpInsn(GOTO, loopStart);
+		mv.visitLabel(loopEnd);
 		return null;
 	}
 

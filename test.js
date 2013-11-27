@@ -1,5 +1,5 @@
-var x = 0;
-var y;
-var z = 4;
-y = 5;
+var print;
 
+if (1 > 0) 
+    print("OK");
+print("   end of program");

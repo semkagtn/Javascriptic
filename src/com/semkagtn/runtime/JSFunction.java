@@ -6,7 +6,7 @@ public abstract class JSFunction extends JSString {
 		super(text);
 	}
 	
-	public JSString add(JSObject rhs) {
+	public JSObject add(JSObject rhs) {
 		return new JSString(value + rhs.value);
 	}
 	

@@ -10,6 +10,11 @@ public abstract class JSObject {
 		return value;
 	}
 	
+	public int toInt() {
+		JSBool b = this.toJSBool();
+		return b.toInt();
+	}
+	
 	public JSObject call(JSObject... objects) {
 		System.err.println("Runtime error");
 		System.exit(1);
@@ -38,34 +43,34 @@ public abstract class JSObject {
 		return rhs;
 	}
 	
-	public JSNumber div(JSObject rhs) {
+	public JSObject div(JSObject rhs) {
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		
 		return l.div(r);
 	}
 
-	public JSBool eq(JSObject rhs) {
+	public JSObject eq(JSObject rhs) {
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		return l.eq(r);
 	}
 
-	public JSBool ge(JSObject rhs) {
+	public JSObject ge(JSObject rhs) {
 		return lt(rhs).not();
 	}
 
-	public JSBool gt(JSObject rhs) {
+	public JSObject gt(JSObject rhs) {
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		return l.gt(r);
 	}
 
-	public JSBool le(JSObject rhs) {
+	public JSObject le(JSObject rhs) {
 		return gt(rhs).not();
 	}
 	
-	public JSBool lt(JSObject rhs) {
+	public JSObject lt(JSObject rhs) {
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		return l.lt(r);
@@ -83,16 +88,16 @@ public abstract class JSObject {
 		return l.mul(r);
 	}
 
-	public JSNumber neg() {
+	public JSObject neg() {
 		JSNumber t = this.toJSNumber();
 		return t.neg();
 	}
 
-	public JSBool ne(JSObject rhs) {
+	public JSObject ne(JSObject rhs) {
 		return eq(rhs).not();
 	}
 
-	public JSBool not() {
+	public JSObject not() {
 		JSBool t = this.toJSBool();
 		return t.not();
 	}
@@ -105,7 +110,7 @@ public abstract class JSObject {
 		return rhs;
 	}
 
-	public JSNumber sub(JSObject rhs) {
+	public JSObject sub(JSObject rhs) {
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();
 		return l.sub(r);

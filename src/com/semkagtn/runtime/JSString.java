@@ -7,11 +7,11 @@ public class JSString extends JSObject {
 		this.value = value;
 	}
 	
-	public JSString add(JSObject rhs) {
+	public JSObject add(JSObject rhs) {
 		return new JSString(value + rhs.value);
 	}
 	
-	public JSBool lt(JSObject rhs) {
+	public JSObject lt(JSObject rhs) {
 		if (rhs instanceof JSString) {
 			int res = value.compareTo(rhs.value);
 			if (res == -1) {
@@ -22,15 +22,15 @@ public class JSString extends JSObject {
 		return super.lt(rhs);
 	}
 	
-	public JSBool le(JSObject rhs) {
+	public JSObject le(JSObject rhs) {
 		return gt(rhs).not();
 	}
 	
-	public JSBool ge(JSObject rhs) {
+	public JSObject ge(JSObject rhs) {
 		return lt(rhs).not();
 	}
 	
-	public JSBool gt(JSObject rhs) {
+	public JSObject gt(JSObject rhs) {
 		if (rhs instanceof JSString) {
 			int res = value.compareTo(rhs.value);
 			if (res == 1) {
@@ -41,7 +41,7 @@ public class JSString extends JSObject {
 		return super.gt(rhs);
 	}
 	
-	public JSBool eq(JSObject rhs) {
+	public JSObject eq(JSObject rhs) {
 		if (rhs instanceof JSString) {
 			int res = value.compareTo(rhs.value);
 			if (res == 0) {
@@ -52,7 +52,7 @@ public class JSString extends JSObject {
 		return super.eq(rhs);
 	}
 	
-	public JSBool ne(JSObject rhs) {
+	public JSObject ne(JSObject rhs) {
 		return eq(rhs).not();
 	}
 	
