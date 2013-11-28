@@ -10,10 +10,8 @@ import com.semkagtn.generated.JavascripticParser.AddSubContext;
 import com.semkagtn.generated.JavascripticParser.AndContext;
 import com.semkagtn.generated.JavascripticParser.AssignContext;
 import com.semkagtn.generated.JavascripticParser.BlockStatContext;
-import com.semkagtn.generated.JavascripticParser.BreakStatContext;
 import com.semkagtn.generated.JavascripticParser.CmpContext;
 import com.semkagtn.generated.JavascripticParser.ConstantContext;
-import com.semkagtn.generated.JavascripticParser.ContinueStatContext;
 import com.semkagtn.generated.JavascripticParser.EqContext;
 import com.semkagtn.generated.JavascripticParser.ExprContext;
 import com.semkagtn.generated.JavascripticParser.ExprStatContext;
@@ -37,9 +35,7 @@ import com.semkagtn.tree.AstNode;
 import com.semkagtn.tree.BinaryExpressionNode;
 import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.BoolNode;
-import com.semkagtn.tree.BreakNode;
 import com.semkagtn.tree.ConstantNode;
-import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
 import com.semkagtn.tree.ExpressionNode;
@@ -144,18 +140,6 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 			returnNode.setValue((ExpressionNode) visit(ctx.expr()));
 		}
 		return returnNode;
-	}
-	
-	public BreakNode visitBreakStat(BreakStatContext ctx) {
-		BreakNode breakNode = new BreakNode();
-		breakNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		return breakNode;
-	}
-	
-	public ContinueNode visitContinueStat(ContinueStatContext ctx) {
-		ContinueNode continueNode = new ContinueNode();
-		continueNode.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
-		return continueNode;
 	}
 	
 	public ExpressionStatementNode visitExprStat(ExprStatContext ctx) {

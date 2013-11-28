@@ -15,12 +15,4 @@ public class ErrorHandler {
 	public static void returnNotInFunction(AstNode.Position pos) {
 		error(pos, "'return' statement not in function.");
 	}
-	
-	public static void breakNotInLoop(AstNode.Position pos) {
-		error(pos, "'break' statement not in function");
-	}
-	
-	public static void continueNotInLoop(AstNode.Position pos) {
-		error(pos, "'continue' statement not in function");
-	}
 }

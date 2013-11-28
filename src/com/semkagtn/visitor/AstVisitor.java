@@ -5,8 +5,6 @@ import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.BoolNode;
-import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
 import com.semkagtn.tree.ExpressionStatementNode;
@@ -43,10 +41,6 @@ public interface AstVisitor<T> {
 	T visit(BlockNode block);
 	
 	T visit(BoolNode bool);
-	
-	T visit(BreakNode breakStat);
-
-	T visit(ContinueNode continueStat);
 
 	T visit(DivNode div);
 

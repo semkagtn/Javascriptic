@@ -13,8 +13,6 @@ import com.semkagtn.tree.AndNode;
 import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.BoolNode;
-import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
 import com.semkagtn.tree.ExpressionNode;
@@ -196,7 +194,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(AssignmentNode assign) {
-		System.out.println("AssignmentNode");
 		mv.visitVarInsn(ALOAD, 1);
 		assign.getExpression().accept(this);
 		mv.visitFieldInsn(PUTFIELD, "JSScope",
@@ -221,18 +218,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		return null;
 	}
 
-	@Override
-	public Object visit(BreakNode breakStat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object visit(ContinueNode continueStat) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Object visit(DivNode div) {
 		div.getLhs().accept(this);
 		div.getRhs().accept(this);
@@ -248,7 +233,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(ExpressionStatementNode exprStat) {
-		System.out.println("ExpressionStatementNode");
 		exprStat.getExpression().accept(this);
 		mv.visitInsn(POP);
 		return null;
@@ -435,7 +419,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(VarNode var) {
-		System.out.println("VarNode");
 		mv.visitVarInsn(ALOAD, 1);
 		mv.visitFieldInsn(GETFIELD, "JSScope", var.getName(), LType.OBJECT);
 		return null;

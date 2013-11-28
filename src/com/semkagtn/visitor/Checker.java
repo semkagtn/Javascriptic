@@ -8,8 +8,6 @@ import com.semkagtn.tree.AssignmentNode;
 import com.semkagtn.tree.BinaryExpressionNode;
 import com.semkagtn.tree.BlockNode;
 import com.semkagtn.tree.BoolNode;
-import com.semkagtn.tree.BreakNode;
-import com.semkagtn.tree.ContinueNode;
 import com.semkagtn.tree.DivNode;
 import com.semkagtn.tree.EqNode;
 import com.semkagtn.tree.ExpressionNode;
@@ -42,7 +40,6 @@ import com.semkagtn.tree.WhileNode;
 
 public class Checker implements AstVisitor<Object> {
 	private int functionCount; // for checking return statements
-	private int loopCount; // for checking break and continue statements
 	private LinkedList<FunctionNode> scopes; // for checking variable declarations
 	
 	private boolean findVariable(String name) {
@@ -65,7 +62,6 @@ public class Checker implements AstVisitor<Object> {
 	
 	public Checker() {
 		functionCount = 0;
-		loopCount = 0;
 		scopes = new LinkedList<>();
 	}
 	
@@ -103,10 +99,8 @@ public class Checker implements AstVisitor<Object> {
 	}
 
 	public Object visit(WhileNode whileStat) {
-		++loopCount;
 		whileStat.getCondition().accept(this);
 		whileStat.getStatement().accept(this);
-		--loopCount;
 		return null;
 	}
 
@@ -202,20 +196,6 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(OrNode or) {
 		visitBinary(or);
-		return null;
-	}
-
-	public Object visit(BreakNode breakStat) {
-		if (loopCount == 0) {
-			ErrorHandler.breakNotInLoop(breakStat.getPosition());
-		}
-		return null;
-	}
-
-	public Object visit(ContinueNode continueNode) {
-		if (loopCount == 0) {
-			ErrorHandler.continueNotInLoop(continueNode.getPosition());
-		}
 		return null;
 	}
 

@@ -15,8 +15,6 @@ stat
     | ifStat
     | whileStat 
     | returnStat 
-    | breakStat
-    | continueStat
     | exprStat
     ;
 
@@ -38,14 +36,6 @@ whileStat
 
 returnStat
     : 'return' expr? ';'
-    ;
-
-breakStat
-    : 'break' ';'
-    ;
-
-continueStat
-    : 'continue' ';'
     ;
 
 exprStat
@@ -93,7 +83,7 @@ EQ : '==' ;
 NE : '!=' ;
 
 NUM : (DIGIT+ ('.' DIGIT+)?) | 'NaN' ; // we can get negative numbers using unary minus operator
-STR : '"' (ESC | . )*? '"' ; // unlike JavaScript, only double quotes
+STR : '"' (ESC | ~["\\] )*? '"' ; // unlike JavaScript, only double quotes
 BOOL : 'true' | 'false' ; 
 UNDEF : 'undefined' ; 
 
@@ -105,4 +95,4 @@ WS : [ \t\r\n]+ -> skip ;
 
 fragment DIGIT : [0-9] ;
 fragment ID_LETTER : [a-zA-Z_$] ;
-fragment ESC : '\\' [btnr"\\] ; 
+fragment ESC : '\\' ["\\/bfnrt] ; 
