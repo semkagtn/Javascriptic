@@ -1,3 +1,16 @@
+/*
+ * Вызов функций.
+ * Аргументы функции.
+ * Добавить стандартные функции
+ */
+
 var print;
 
-print("/Hello \tworld! \n");
+var Greeter = function(name) {
+    return function() {
+        print("Hello " + name + "!");
+    };
+};
+
+var greeter = Greeter();
+greeter();
