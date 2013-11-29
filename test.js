@@ -63,8 +63,17 @@ var fact = function(n) {
 };
 print("10. 5! = " + fact(5) + "\n\n");
 
-// 11. Input
-print("11. Input your name: ");
+// 11. Too much (too few) arguments
+print("11.\n");
+var f = function(a, b) {
+    print(a + " " + b + "\n");
+};
+f(1, 2, 3); // 1 2
+f(1); // 1 undefined
+print("\n");
+
+// 12. Input
+print("12. Input your name: ");
 var Greeter = function(name) {
     return function() {
         print("Hello " + name + "!\n");
