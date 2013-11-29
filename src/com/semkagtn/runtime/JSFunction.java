@@ -20,7 +20,7 @@ public abstract class JSFunction extends JSString {
 	public static final JSFunction READ = new JSFunction(DEFAULT_TEXT) {
 		private Scanner scanner = new Scanner(System.in);
 		
-		public JSObject call(JSObject... objects) {
+		public JSObject call(JSObject[] objects) {
 			return new JSString(scanner.nextLine());
 		}
 	};

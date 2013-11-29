@@ -59,8 +59,8 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String OBJECT = "L" + Class.OBJECT + ';';
 		public static final String BOOL = "L" + Class.BOOL + ';';
 		public static final String UNDEF = "L" + Class.UNDEF + ';';
-		public static final String STRING = "L" + Class.STRING + ';';
-		public static final String NUMBER = "L" + Class.NUMBER + ';';
+		//public static final String STRING = "L" + Class.STRING + ';';
+		//public static final String NUMBER = "L" + Class.NUMBER + ';';
 		public static final String FUNCTION = "L" + Class.FUNCTION + ';';
 	}
 	
@@ -156,16 +156,29 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			mv.visitFieldInsn(PUTFIELD, functionClass(number),
 					scopeName(number), scopeType(number));
 			
-			i = 0;
-			for (FunctionParameterNode param : function.getParameters()) {
-				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETFIELD, functionClass(number),
-						scopeName(number), scopeType(number));
-				mv.visitVarInsn(ALOAD, 1);
-				mv.visitLdcInsn(i);
-				++i;
-				mv.visitInsn(AALOAD);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), param.getName(), Type.OBJECT);
+			if (function.getParameters().size() > 0) {
+				Label tryStart = new Label();
+				Label tryEnd = new Label();
+				Label catchStart = new Label();
+				Label catchEnd = new Label();
+				mv.visitTryCatchBlock(tryStart, tryEnd, catchStart, "java/lang/Exception");
+				mv.visitLabel(tryStart);
+				i = 0;
+				for (FunctionParameterNode param : function.getParameters()) {
+					mv.visitVarInsn(ALOAD, 0);
+					mv.visitFieldInsn(GETFIELD, functionClass(number),
+							scopeName(number), scopeType(number));
+					mv.visitVarInsn(ALOAD, 1);
+					mv.visitLdcInsn(i);
+					++i;
+					mv.visitInsn(AALOAD);
+					mv.visitFieldInsn(PUTFIELD, scopeClass(number), param.getName(), Type.OBJECT);
+				}
+				mv.visitLabel(tryEnd);
+				mv.visitJumpInsn(GOTO, catchEnd);
+				mv.visitLabel(catchStart);
+				mv.visitVarInsn(ASTORE, 1);
+				mv.visitLabel(catchEnd);
 			}
 			
 			for (StatementNode stat : this.getFunction().getBody()) {
