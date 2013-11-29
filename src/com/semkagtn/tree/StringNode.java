@@ -5,7 +5,8 @@ import com.semkagtn.visitor.AstVisitor;
 public class StringNode extends ConstantNode {
 	public void setValue(String value) {
 		super.setValue(value
-				.replace("\"", "")
+				.substring(1, value.length() - 1)
+				.replace("\\\"", "\"")
 				.replace("\\\\", "\\")
 				.replace("\\b", "\b")
 				.replace("\\f", "\f")

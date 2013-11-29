@@ -15,7 +15,7 @@ public abstract class JSObject {
 		return b.toInt();
 	}
 	
-	public JSObject call(JSObject... objects) {
+	public JSObject call(JSObject[] objects) {
 		System.err.println("Runtime error");
 		System.exit(1);
 		return null;
@@ -32,7 +32,8 @@ public abstract class JSObject {
 				|| res == Double.NaN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(res));
+		String str = (long) res == res ? "" + (long) res : "" + res;
+		return new JSNumber(str);
 	}
 	
 	public JSObject and(JSObject rhs) {

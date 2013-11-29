@@ -6,7 +6,8 @@ public class NumberNode extends ConstantNode {
 	public void setValue(String value) {
 		try {
 			double t = Double.parseDouble(value);
-			super.setValue(Double.toString(t));
+			String str = (long) t == t ? "" + (long) t : "" + t;
+			super.setValue(str);
 		} catch (NumberFormatException e) {
 			super.setValue(value); // NaN
 		}

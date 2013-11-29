@@ -13,7 +13,8 @@ public class JSNumber extends JSObject {
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		return new JSNumber(Double.toString(res));
+		String str = (long) res == res ? "" + (long) res : "" + res;
+		return new JSNumber(str);
 	}
 	
 	public JSObject mul(JSObject rhs) {
@@ -22,7 +23,8 @@ public class JSNumber extends JSObject {
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		return new JSNumber(Double.toString(res));
+		String str = (long) res == res ? "" + (long) res : "" + res;
+		return new JSNumber(str);
 	}
 	
 	public JSObject div(JSObject rhs) {
@@ -31,12 +33,14 @@ public class JSNumber extends JSObject {
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		return new JSNumber(Double.toString(res));
+		String str = (long) res == res ? "" + (long) res : "" + res;
+		return new JSNumber(str);
 	}
 	
 	public JSObject neg() {
 		double res = -Double.parseDouble(value);
-		return new JSNumber(Double.toString(res));
+		String str = (long) res == res ? "" + (long) res : "" + res;
+		return new JSNumber(str);
 	}
 	
 	public JSObject lt(JSObject rhs) {

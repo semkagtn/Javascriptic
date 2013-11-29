@@ -7,7 +7,7 @@ public abstract class JSFunction extends JSString {
 	private static final String DEFAULT_TEXT = "[native code]";
 	
 	public static final JSFunction PRINT = new JSFunction(DEFAULT_TEXT) {
-		public JSObject call(JSObject... objects) {
+		public JSObject call(JSObject[] objects) {
 			if (objects.length == 0) {
 				System.out.print(JSUndef.UNDEF);
 			} else {

@@ -8,11 +8,11 @@ print("\n\n");
 
 // 2. String comparing
 if ("abc" < "abd") {
-    print("2. 'abc' < 'abd'\n\n");
+    print("2. \"abc\" < \"abd\"\n\n");
 }
 
 // 3. NaN
-print("3. 'true' * 500 == ");
+print("3. \"true\" * 500 == ");
 print("true" * 500);
 print("\n\n");
 
@@ -28,7 +28,7 @@ print("5. " + f + "\n\n");
 
 // 6. Implicit type conversion
 if ("123" == 123)
-    print("6. Yes, '123' == 123\t O_O\n\n");
+    print("6. Yes, \"123\" == 123\t O_O\n\n");
 
 // 7. Oh my JavaScript!
 print("7.\n");
