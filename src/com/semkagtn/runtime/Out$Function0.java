@@ -10,8 +10,8 @@ public class Out$Function0 extends JSFunction {
 	
 	public JSObject call(JSObject... objects) {
 		scope0 = new Out$Scope0();
-		scope0.x = scope0.x;
-		scope0.x.add(new JSString("\n"));
+		scope0.f = new Out$Function1(scope0);
+		scope0.f.call();
 		return JSUndef.UNDEF;
 	}
 

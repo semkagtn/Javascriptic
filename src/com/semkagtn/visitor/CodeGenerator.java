@@ -136,6 +136,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				if (!functionClass(fw.getNumber()).equals(functionClass(number))) {
 					mv.visitVarInsn(ALOAD, 0);
 					mv.visitVarInsn(ALOAD, i);
+					++i;
 					mv.visitFieldInsn(PUTFIELD, functionClass(number),
 							scopeName(fw.getNumber()), scopeType(fw.getNumber()));
 				}
@@ -219,15 +220,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 	
 	private int findScopeNumber(VarNode var) {
-		int number = -1;
 		for (FunctionWriter fw : writers) {
 			for (String v : fw.getFunction().getVariables()) {
 				if (v.equals(var.getName())) {
-					number = fw.getNumber();
+					return fw.getNumber();
 				}
 			}
 		}
-		return number;
+		return -1;
 	}
 	
 	// Public methods
@@ -303,14 +303,22 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(FunctionCallNode functionCall) {
-		ExpressionNode arg = functionCall.getArguments().get(0);
-		writers.peek().get().visitFieldInsn(GETSTATIC,
-				"java/lang/System", "out", "Ljava/io/PrintStream;");
-		arg.accept(this);
-		writers.peek().get().visitMethodInsn(INVOKEVIRTUAL,
-				"java/io/PrintStream", "print", "(Ljava/lang/Object;)V");
-		writers.peek().get().visitFieldInsn(GETSTATIC,
-				Class.UNDEF, "UNDEF", Type.UNDEF);
+		if (functionCall.getArguments().size() > 0) {
+			ExpressionNode arg = functionCall.getArguments().get(0);
+			writers.peek().get().visitFieldInsn(GETSTATIC,
+					"java/lang/System", "out", "Ljava/io/PrintStream;");
+			arg.accept(this);
+			writers.peek().get().visitMethodInsn(INVOKEVIRTUAL,
+					"java/io/PrintStream", "print", "(Ljava/lang/Object;)V");
+			writers.peek().get().visitFieldInsn(GETSTATIC,
+					Class.UNDEF, "UNDEF", Type.UNDEF);
+		} else {
+			functionCall.getFunction().accept(this);
+			writers.peek().get().visitLdcInsn(0);
+			writers.peek().get().visitTypeInsn(ANEWARRAY, Class.OBJECT);
+			writers.peek().get().visitMethodInsn(
+					INVOKEVIRTUAL, Class.OBJECT, "call", CALL_SIGNATURE);
+		}
 		return null;
 	}
 
@@ -482,9 +490,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		return null;
 	}
 
-	@Override
 	public Object visit(ReturnNode returnStat) {
-		// TODO Auto-generated method stub
+		if (returnStat.getValue() != null) {
+			returnStat.getValue().accept(this);
+		} else {
+			writers.peek().get().visitFieldInsn(
+					GETSTATIC, Type.UNDEF, "UNDEF", Type.UNDEF);
+		}
+		writers.peek().get().visitInsn(ARETURN);
 		return null;
 	}
 

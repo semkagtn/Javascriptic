@@ -12,9 +12,6 @@ var Counter = function() {
 };
 
 var c1 = Counter();
-var c2 = Counter();
 c1();
 c1();
-c1();
-c2();
 c1();
