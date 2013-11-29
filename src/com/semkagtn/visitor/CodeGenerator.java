@@ -70,12 +70,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	
 	// Fields
 	private String fileName;
+	private boolean mainScope;
 	private int functionCounter;
 	private final LinkedList<FunctionWriter> writers;
 	
 	// Constructor
 	public CodeGenerator(String fileName) {
 		this.fileName = fileName;
+		mainScope = true;
 		functionCounter = 0;
 		writers = new LinkedList<>();
 	}
@@ -151,13 +153,27 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			mv.visitTypeInsn(NEW, scopeClass(number));
 			mv.visitInsn(DUP);
 			mv.visitMethodInsn(INVOKESPECIAL, scopeClass(number), "<init>", "()V");
-			mv.visitFieldInsn(PUTFIELD, functionClass(number), scopeName(number), scopeType(number));
+			mv.visitFieldInsn(PUTFIELD, functionClass(number),
+					scopeName(number), scopeType(number));
+			
+			i = 0;
+			for (FunctionParameterNode param : function.getParameters()) {
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETFIELD, functionClass(number),
+						scopeName(number), scopeType(number));
+				mv.visitVarInsn(ALOAD, 1);
+				mv.visitLdcInsn(i);
+				++i;
+				mv.visitInsn(AALOAD);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), param.getName(), Type.OBJECT);
+			}
+			
 			for (StatementNode stat : this.getFunction().getBody()) {
 				stat.accept(CodeGenerator.this);
 			}
 			mv.visitFieldInsn(GETSTATIC, Class.UNDEF, "UNDEF", Type.UNDEF);
 			mv.visitInsn(ARETURN);
-			mv.visitMaxs(10, 10);
+			mv.visitMaxs(20, 20);
 			mv.visitEnd();
 					
 			cw.visitEnd();
@@ -169,17 +185,38 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			ClassWriter cw = new ClassWriter(0);
 			cw.visit(V1_1, ACC_PUBLIC, scopeClass(number), null, "java/lang/Object", null);
 			
+			if (mainScope) {
+				for (String f : LIBRARY) {
+					function.getVariables().add(f);
+				}
+			}
+			
 			for (String var : function.getVariables()) {
 				cw.visitField(ACC_PUBLIC, var, Type.OBJECT, null, null);
 			}
+			
 			MethodVisitor mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
 			mv.visitVarInsn(ALOAD, 0);
 			mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
 			for (String var : function.getVariables()) {
 				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Type.UNDEF, "UNDEF", Type.UNDEF);
+				mv.visitFieldInsn(GETSTATIC, Class.UNDEF, "UNDEF", Type.UNDEF);
 				mv.visitFieldInsn(PUTFIELD, scopeClass(number), var, Type.OBJECT);
 			}
+			
+			// Initializing library functions
+			if (mainScope) {
+				mainScope = false;
+				
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "PRINT", Type.FUNCTION);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), PRINT_FUNCTION, Type.OBJECT);
+				
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "READ", Type.FUNCTION);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), READ_FUNCTION, Type.OBJECT);
+			}
+			
 			mv.visitInsn(RETURN);
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
@@ -303,22 +340,19 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(FunctionCallNode functionCall) {
-		if (functionCall.getArguments().size() > 0) {
-			ExpressionNode arg = functionCall.getArguments().get(0);
-			writers.peek().get().visitFieldInsn(GETSTATIC,
-					"java/lang/System", "out", "Ljava/io/PrintStream;");
+		functionCall.getFunction().accept(this);
+		writers.peek().get().visitLdcInsn(functionCall.getArguments().size());
+		writers.peek().get().visitTypeInsn(ANEWARRAY, Class.OBJECT);
+		int i = 0;
+		for (ExpressionNode arg : functionCall.getArguments()) {
+			writers.peek().get().visitInsn(DUP);
+			writers.peek().get().visitLdcInsn(i);
+			++i;
 			arg.accept(this);
-			writers.peek().get().visitMethodInsn(INVOKEVIRTUAL,
-					"java/io/PrintStream", "print", "(Ljava/lang/Object;)V");
-			writers.peek().get().visitFieldInsn(GETSTATIC,
-					Class.UNDEF, "UNDEF", Type.UNDEF);
-		} else {
-			functionCall.getFunction().accept(this);
-			writers.peek().get().visitLdcInsn(0);
-			writers.peek().get().visitTypeInsn(ANEWARRAY, Class.OBJECT);
-			writers.peek().get().visitMethodInsn(
-					INVOKEVIRTUAL, Class.OBJECT, "call", CALL_SIGNATURE);
+			writers.peek().get().visitInsn(AASTORE);
 		}
+		writers.peek().get().visitMethodInsn(
+				INVOKEVIRTUAL, Class.OBJECT, "call", CALL_SIGNATURE);
 		return null;
 	}
 
@@ -483,7 +517,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		mv.visitInsn(POP);
 		
 		mv.visitInsn(RETURN);
-		mv.visitMaxs(10, 10); // ??
+		mv.visitMaxs(20, 20); // ??
 		mv.visitEnd();
 		
 		writeFile(cw, fileName);

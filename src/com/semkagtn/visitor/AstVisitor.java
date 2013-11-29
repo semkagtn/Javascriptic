@@ -32,6 +32,11 @@ import com.semkagtn.tree.VarNode;
 import com.semkagtn.tree.WhileNode;
 
 public interface AstVisitor<T> {
+	// Standard functions
+	public static final String PRINT_FUNCTION = "_print";
+	public static final String READ_FUNCTION = "_read";
+	public static final String[] LIBRARY = {PRINT_FUNCTION, READ_FUNCTION};
+	
 	T visit(AddNode add);
 
 	T visit(AndNode and);

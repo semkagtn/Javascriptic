@@ -11,7 +11,7 @@ public class Out$Function0 extends JSFunction {
 	public JSObject call(JSObject... objects) {
 		scope0 = new Out$Scope0();
 		scope0.f = new Out$Function1(scope0);
-		scope0.f.call();
+		scope0.f.call(new JSNumber("1.0"));
 		return JSUndef.UNDEF;
 	}
 

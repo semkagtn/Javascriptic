@@ -43,6 +43,11 @@ public class Checker implements AstVisitor<Object> {
 	private LinkedList<FunctionNode> scopes; // for checking variable declarations
 	
 	private boolean findVariable(String name) {
+		for (String f : LIBRARY) {
+			if (f.equals(name)) {
+				return true;
+			}
+		}
 		for (FunctionNode scope : scopes) {
 			if (scope.findVariable(name)) {
 				return true;

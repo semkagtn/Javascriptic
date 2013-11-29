@@ -4,7 +4,7 @@ public class Main {
 	
 	public static void main(String[] args) {
 		Compiler compiler = new Compiler();
-		compiler.setInputFileName("test.js");
+		compiler.setInputFileName("func.js");
 		compiler.setOutputFileName("Out");
 		compiler.run();
 	}
