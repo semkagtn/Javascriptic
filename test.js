@@ -31,7 +31,7 @@ if ("123" == 123)
     print("6. Yes, \"123\" == 123\t O_O\n\n");
 
 // 7. Oh my JavaScript!
-print("7.\n");
+print("7. Oh my JavaScript\n");
 f = function() {
     print("First ");
     f = function() {
@@ -64,7 +64,7 @@ var fact = function(n) {
 print("10. 5! = " + fact(5) + "\n\n");
 
 // 11. Too much (too few) arguments
-print("11.\n");
+print("11. Wrong number of arguments: \n");
 var f = function(a, b) {
     print(a + " " + b + "\n");
 };
@@ -72,8 +72,22 @@ f(1, 2, 3); // 1 2
 f(1); // 1 undefined
 print("\n");
 
-// 12. Input
-print("12. Input your name: ");
+// 12. Closure
+print("12. Closure: ");
+var Counter = function() {
+    var i = 0;
+    return function() {
+        i = i + 1;
+        print(i + " ");
+    };
+};
+var c1 = Counter();
+var c2 = Counter();
+c1(); c1(); c1(); c2(); c1(); // 1 2 3 1 4
+print("\n\n");
+
+// 13. Input
+print("13. Input your name: ");
 var Greeter = function(name) {
     return function() {
         print("Hello " + name + "!\n");
@@ -82,5 +96,4 @@ var Greeter = function(name) {
 var name = read();
 var greeter = Greeter(name);
 greeter();
-
 
