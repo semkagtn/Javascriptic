@@ -11,7 +11,7 @@ public abstract class JSFunction extends JSString {
 			if (objects.length == 0) {
 				System.out.print(JSUndef.UNDEF);
 			} else {
-				System.out.print(objects[0]);
+				System.out.print(objects[0].toJSString());
 			}
 			return JSUndef.UNDEF;
 		}
@@ -25,12 +25,39 @@ public abstract class JSFunction extends JSString {
 		}
 	};
 	
+	public static final JSFunction ROUND = new JSFunction(DEFAULT_TEXT) {
+		public JSObject call(JSObject[] objects) {
+			if (objects.length == 0) {
+				return JSNumber.NAN;
+			}
+			JSNumber n = objects[0].toJSNumber();
+			if (n == JSNumber.NAN) {
+				return JSNumber.NAN;
+			}
+			long res = Math.round(Double.parseDouble(n.value));
+			return new JSNumber(res + "");
+		}
+	};
+	
+	public static final JSFunction LENGTH = new JSFunction(DEFAULT_TEXT) {
+		public JSObject call(JSObject[] objects) {
+			if (objects.length == 0) {
+				return JSUndef.UNDEF;
+			}
+			return objects[0].length();
+		}
+	};
+	
 	public JSFunction(String text) {
 		super(text);
 	}
 	
 	public JSObject add(JSObject rhs) {
 		return new JSString(value + rhs.value);
+	}
+	
+	public JSObject length() {
+		return JSUndef.UNDEF;
 	}
 	
 	protected JSBool toJSBool() {

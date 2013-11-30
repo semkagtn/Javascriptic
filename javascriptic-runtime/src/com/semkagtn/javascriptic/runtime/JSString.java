@@ -7,7 +7,15 @@ public class JSString extends JSObject {
 		this.value = value;
 	}
 	
+	public JSObject length() {
+		return new JSNumber(value.length() + "");
+	}
+	
 	public JSObject add(JSObject rhs) {
+		return this.add(rhs.toJSString());
+	}
+	
+	public JSObject add(JSString rhs) {
 		return new JSString(value + rhs.value);
 	}
 	

@@ -7,14 +7,21 @@ public class JSNumber extends JSObject {
 		this.value = value;
 	}
 	
+	public JSString toJSString() {
+		double d = Double.parseDouble(value);
+		if (d == (long) d) {
+			return new JSString((long) d + "");
+		}
+		return new JSString(d + "");
+	}
+	
 	public JSObject sub(JSObject rhs) {
 		double res = Double.parseDouble(value) - Double.parseDouble(rhs.value);
 		if (res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		String str = (long) res == res ? "" + (long) res : "" + res;
-		return new JSNumber(str);
+		return new JSNumber(res + "");
 	}
 	
 	public JSObject mul(JSObject rhs) {
@@ -23,8 +30,7 @@ public class JSNumber extends JSObject {
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		String str = (long) res == res ? "" + (long) res : "" + res;
-		return new JSNumber(str);
+		return new JSNumber(res + "");
 	}
 	
 	public JSObject div(JSObject rhs) {
@@ -33,14 +39,12 @@ public class JSNumber extends JSObject {
 				|| res == Double.NaN) {
 			return NAN;
 		}
-		String str = (long) res == res ? "" + (long) res : "" + res;
-		return new JSNumber(str);
+		return new JSNumber(res + "");
 	}
 	
 	public JSObject neg() {
 		double res = -Double.parseDouble(value);
-		String str = (long) res == res ? "" + (long) res : "" + res;
-		return new JSNumber(str);
+		return new JSNumber(res + "");
 	}
 	
 	public JSObject lt(JSObject rhs) {

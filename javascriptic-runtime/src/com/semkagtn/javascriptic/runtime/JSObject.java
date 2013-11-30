@@ -6,6 +6,10 @@ public abstract class JSObject {
 	protected abstract JSBool toJSBool();
 	protected abstract JSNumber toJSNumber();
 	
+	protected JSString toJSString() {
+		return new JSString(value);
+	}
+	
 	public String toString() {
 		return value;
 	}
@@ -13,6 +17,10 @@ public abstract class JSObject {
 	public int toInt() {
 		JSBool b = this.toJSBool();
 		return b.toInt();
+	}
+	
+	public JSObject length() {
+		return JSUndef.UNDEF;
 	}
 	
 	public JSObject call(JSObject[] objects) {
@@ -23,7 +31,7 @@ public abstract class JSObject {
 	
 	public JSObject add(JSObject rhs) {
 		if (rhs instanceof JSString) {
-			return new JSString(value + rhs.value);
+			return this.toJSString().add(rhs);
 		}
 		JSNumber l = this.toJSNumber();
 		JSNumber r = rhs.toJSNumber();

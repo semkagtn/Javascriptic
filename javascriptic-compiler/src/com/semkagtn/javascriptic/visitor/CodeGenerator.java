@@ -294,6 +294,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "READ", Type.FUNCTION);
 				mv.visitFieldInsn(PUTFIELD, scopeClass(number), READ_FUNCTION, Type.OBJECT);
+				
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "ROUND", Type.FUNCTION);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), ROUND_FUNCTION, Type.OBJECT);
+				
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "LENGTH", Type.FUNCTION);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), LENGTH_FUNCTION, Type.OBJECT);
 			}
 			
 			mv.visitInsn(RETURN);
