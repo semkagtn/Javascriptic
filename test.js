@@ -96,4 +96,3 @@ var Greeter = function(name) {
 var name = read();
 var greeter = Greeter(name);
 greeter();
-
