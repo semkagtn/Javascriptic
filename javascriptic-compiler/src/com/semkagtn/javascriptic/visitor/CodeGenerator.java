@@ -118,6 +118,11 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			return number;
 		}
 		
+		// Use this method after visitMethodInsn
+		public void stackPop(int times) {
+			currentStack -= times;
+		}
+		
 		public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 			if (opcode == GETSTATIC) {
 				++currentStack;
@@ -159,9 +164,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		}
 		
 		public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-			if (desc.charAt(desc.length() - 1) == 'V') {
-				--currentStack;
-			}
 			mv.visitMethodInsn(opcode, owner, name, desc);
 		}
 		
@@ -219,6 +221,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			visitTypeInsn(NEW, scopeClass(number));
 			visitInsn(DUP);
 			visitMethodInsn(INVOKESPECIAL, scopeClass(number), "<init>", "()V");
+			stackPop(1);
 			visitFieldInsn(PUTFIELD, functionClass(number),
 					scopeName(number), scopeType(number));
 			
@@ -360,6 +363,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		add.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "add", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -368,6 +372,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		and.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "and", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -409,6 +414,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		div.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "div", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -417,6 +423,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		eq.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "eq", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -440,6 +447,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		}
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "call", CALL_SIGNATURE);
+		writers.peek().stackPop(functionCall.getArguments().size());
 		return null;
 	}
 
@@ -458,6 +466,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		}
 		w.visitMethodInsn(INVOKESPECIAL,
 				functionClass(fw.getNumber()), "<init>", fw.getSignature());
+		writers.peek().stackPop(writers.size() + 1);
 		return null;
 	}
 
@@ -470,6 +479,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		ge.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "ge", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -478,15 +488,17 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		gt.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "gt", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
 	public Object visit(IfElseNode ifElse) {
 		Label elseBlock = new Label();
-		Label end = new Label();;
+		Label end = new Label();
 		ifElse.getCondition().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "toInt", "()I"); // 0(false) or 1(true)
+		writers.peek().stackPop(0);
 		writers.peek().visitJumpInsn(IFEQ, elseBlock); // if x == 0
 		ifElse.getIfStatement().accept(this);
 		writers.peek().visitJumpInsn(GOTO, end);
@@ -503,6 +515,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		le.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "le", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -511,6 +524,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		lt.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "lt", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -519,6 +533,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		mod.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "mod", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -527,6 +542,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		mul.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "mul", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -534,6 +550,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		neg.getExpression().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "neg", UNARY_SIGNATURE);
+		writers.peek().stackPop(0);
 		return null;
 	}
 
@@ -542,6 +559,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		ne.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "ne", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -549,6 +567,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		not.getExpression().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "not", UNARY_SIGNATURE);
+		writers.peek().stackPop(0);
 		return null;
 	}
 
@@ -558,6 +577,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		writers.peek().visitLdcInsn(number.getValue());
 		writers.peek().visitMethodInsn(INVOKESPECIAL,
 				Class.NUMBER, "<init>", "(Ljava/lang/String;)V");
+		writers.peek().stackPop(2);
 		return null;
 	}
 
@@ -566,6 +586,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		or.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "or", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -626,6 +647,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		writers.peek().visitLdcInsn(string.getValue());
 		writers.peek().visitMethodInsn(INVOKESPECIAL,
 				Class.STRING, "<init>", "(Ljava/lang/String;)V");
+		writers.peek().stackPop(2);
 		return null;
 	}
 
@@ -634,6 +656,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		sub.getRhs().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "sub", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 
@@ -660,6 +683,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		whileStat.getCondition().accept(this);
 		writers.peek().visitMethodInsn(
 				INVOKEVIRTUAL, Class.OBJECT, "toInt", "()I"); // 0(false) or 1(true)
+		writers.peek().stackPop(0);
 		writers.peek().visitJumpInsn(IFEQ, loopEnd); // if x == false
 		whileStat.getStatement().accept(this);
 		writers.peek().visitJumpInsn(GOTO, loopStart);
