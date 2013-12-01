@@ -76,11 +76,7 @@ public abstract class JSFunction extends JSString {
 	
 	public JSObject eq(JSObject rhs) {
 		if (rhs instanceof JSFunction) {
-			if (this == rhs) {
-				return JSBool.TRUE;
-			} else {
-				return JSBool.FALSE;
-			}
+			return rhs == this ? JSBool.TRUE : JSBool.FALSE;
 		}
 		return super.eq(rhs);
 	}
