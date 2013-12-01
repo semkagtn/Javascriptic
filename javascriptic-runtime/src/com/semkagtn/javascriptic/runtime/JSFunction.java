@@ -73,5 +73,20 @@ public abstract class JSFunction extends JSString {
 	protected JSNumber toJSNumber() {
 		return JSNumber.NAN;
 	}
+	
+	public JSObject eq(JSObject rhs) {
+		if (rhs instanceof JSFunction) {
+			if (this == rhs) {
+				return JSBool.TRUE;
+			} else {
+				return JSBool.FALSE;
+			}
+		}
+		return super.eq(rhs);
+	}
+	
+	public JSObject ne(JSObject rhs) {
+		return eq(rhs).not();
+	}
 
 }

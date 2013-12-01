@@ -63,5 +63,29 @@ public class JSArray extends JSString {
 		}
 		return new JSString(res);
 	}
+	
+	public JSBool toJSBool() {
+		return JSBool.TRUE;
+	}
+	
+	public JSNumber toJSNumber() {
+		if (length == 0) {
+			return new JSNumber("0.0");
+		} else if (length == 1) {
+			return get(new JSNumber("1.0")).toJSNumber();
+		}
+		return JSNumber.NAN;
+	}
+	
+	public JSObject eq(JSObject rhs) {
+		if (rhs instanceof JSArray) {
+			return rhs == this ? JSBool.TRUE : JSBool.FALSE;
+		}
+		return super.eq(rhs);
+	}
+	
+	public JSObject ne(JSObject rhs) {
+		return eq(rhs).not();
+	}
 
 }
