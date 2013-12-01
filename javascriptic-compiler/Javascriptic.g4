@@ -53,9 +53,10 @@ expr
     | expr op=('==' | '!=') expr # Eq
     | expr '&&' expr # And
     | expr '||' expr # Or
-    | ID '=' expr # Assign
-    | ID # Var
+    | ID index? '=' expr # Assign
+    | ID index? # Var
     | (NUM | STR | BOOL | UNDEF) # Constant
+    | '[' functionArgs? ']' # Array
     | 'function' '(' functionParams? ')' blockStat # Function
     ;
 
@@ -67,6 +68,10 @@ functionArgs
 // abstract values
 functionParams
     : ID (',' ID)* 
+    ;
+
+index
+    : '[' expr ']'
     ;
 
 NOT : '!' ;

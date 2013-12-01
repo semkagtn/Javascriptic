@@ -8,6 +8,7 @@ import com.semkagtn.javascriptic.generated.JavascripticBaseVisitor;
 import com.semkagtn.javascriptic.generated.JavascripticParser;
 import com.semkagtn.javascriptic.generated.JavascripticParser.AddSubContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.AndContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.ArrayContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.AssignContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.BlockStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.CmpContext;
@@ -30,6 +31,7 @@ import com.semkagtn.javascriptic.generated.JavascripticParser.VarDeclStatContext
 import com.semkagtn.javascriptic.generated.JavascripticParser.WhileStatContext;
 import com.semkagtn.javascriptic.tree.AddNode;
 import com.semkagtn.javascriptic.tree.AndNode;
+import com.semkagtn.javascriptic.tree.ArrayNode;
 import com.semkagtn.javascriptic.tree.AssignmentNode;
 import com.semkagtn.javascriptic.tree.AstNode;
 import com.semkagtn.javascriptic.tree.BinaryExpressionNode;
@@ -261,6 +263,9 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		VarNode var = new VarNode();
 		var.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		var.setName(ctx.ID().getText());
+		if (ctx.index() != null) {
+			var.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		}
 		assignment.setVariable(var);
 		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
 		return assignment;
@@ -270,6 +275,9 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		VarNode variable = new VarNode();
 		variable.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		variable.setName(ctx.ID().getText());
+		if (ctx.index() != null) {
+			variable.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		}
 		return variable;
 	}
 	
@@ -310,5 +318,15 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		}
 		scopes.pop();
 		return function;
+	}
+	
+	public ArrayNode visitArray(ArrayContext ctx) {
+		ArrayNode array = new ArrayNode();
+		if (ctx.functionArgs() != null) {
+			for (ExprContext elem : ctx.functionArgs().expr()) {
+				array.addElement((ExpressionNode) visit(elem));
+			}
+		}
+		return array;
 	}
 }

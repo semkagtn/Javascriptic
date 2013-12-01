@@ -11,6 +11,7 @@ import org.objectweb.asm.Opcodes;
 
 import com.semkagtn.javascriptic.tree.AddNode;
 import com.semkagtn.javascriptic.tree.AndNode;
+import com.semkagtn.javascriptic.tree.ArrayNode;
 import com.semkagtn.javascriptic.tree.AssignmentNode;
 import com.semkagtn.javascriptic.tree.BlockNode;
 import com.semkagtn.javascriptic.tree.BoolNode;
@@ -53,6 +54,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String STRING = RUNTIME_PACKAGE + "JSString";
 		public static final String NUMBER = RUNTIME_PACKAGE + "JSNumber";
 		public static final String FUNCTION = RUNTIME_PACKAGE + "JSFunction";
+		public static final String ARRAY = RUNTIME_PACKAGE + "JSArray";
 	}
 	
 	private class Type {
@@ -62,11 +64,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		//public static final String STRING = "L" + Class.STRING + ';';
 		//public static final String NUMBER = "L" + Class.NUMBER + ';';
 		public static final String FUNCTION = "L" + Class.FUNCTION + ';';
+		//public static final String ARRAY = "L" + Class.ARRAY + ";";
 	}
 	
 	public static final String CALL_SIGNATURE = "([" + Type.OBJECT + ")" +  Type.OBJECT;
 	public static final String BINARY_SIGNATURE  = "(" + Type.OBJECT + ")" + Type.OBJECT;
 	public static final String UNARY_SIGNATURE  = "()" + Type.OBJECT;
+	public static final String ARRAY_SIGNATURE = "([" + Type.OBJECT + ")V";
+	public static final String PUT_SIGNATURE = "(" + Type.OBJECT +  Type.OBJECT + ")" + Type.OBJECT;
 	
 	// Fields
 	private String fileName;
@@ -383,15 +388,24 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		w.visitVarInsn(ALOAD, 0);
 		w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
 				scopeName(number), scopeType(number));
-		assign.getExpression().accept(this);
-		w.visitFieldInsn(PUTFIELD, scopeClass(number),
-				assign.getVariable().getName(), Type.OBJECT);
-		
-		w.visitVarInsn(ALOAD, 0);
-		w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
-				scopeName(number), scopeType(number));
-		w.visitFieldInsn(GETFIELD, scopeClass(number),
-				assign.getVariable().getName(), Type.OBJECT);
+		if (assign.getVariable().getIndex() != null) {
+			w.visitFieldInsn(GETFIELD, scopeClass(number),
+					assign.getVariable().getName(), Type.OBJECT);
+			assign.getVariable().getIndex().accept(this);
+			assign.getExpression().accept(this);
+			w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "put", PUT_SIGNATURE);
+			w.stackPop(2);
+		} else {
+			assign.getExpression().accept(this);
+			w.visitFieldInsn(PUTFIELD, scopeClass(number),
+					assign.getVariable().getName(), Type.OBJECT);
+			
+			w.visitVarInsn(ALOAD, 0);
+			w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
+					scopeName(number), scopeType(number));
+			w.visitFieldInsn(GETFIELD, scopeClass(number),
+					assign.getVariable().getName(), Type.OBJECT);
+		}
 		return null;
 	}
 
@@ -662,7 +676,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 
 	public Object visit(UndefNode undef) {
 		writers.peek().visitFieldInsn(
-				GETSTATIC, Type.UNDEF, "UNDEF", Type.UNDEF);
+				GETSTATIC, Class.UNDEF, "UNDEF", Type.UNDEF);
 		return null;
 	}
 
@@ -673,6 +687,11 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		w.visitFieldInsn(GETFIELD,functionClass(w.getNumber()),
 				scopeName(number), scopeType(number));
 		w.visitFieldInsn(GETFIELD, scopeClass(number), var.getName(), Type.OBJECT);
+		if (var.getIndex() != null) {
+			var.getIndex().accept(this);
+			w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "get", BINARY_SIGNATURE);
+			w.stackPop(1);
+		}
 		return null;
 	}
 
@@ -688,6 +707,25 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		whileStat.getStatement().accept(this);
 		writers.peek().visitJumpInsn(GOTO, loopStart);
 		writers.peek().visitLabel(loopEnd);
+		return null;
+	}
+
+	public Object visit(ArrayNode array) {
+		writers.peek().visitTypeInsn(NEW, Class.ARRAY);
+		writers.peek().visitInsn(DUP);
+		writers.peek().visitLdcInsn(array.getElements().size());
+		writers.peek().visitTypeInsn(ANEWARRAY, Class.OBJECT);
+		int i = 0;
+		for (ExpressionNode elem : array.getElements()) {
+			writers.peek().visitInsn(DUP);
+			writers.peek().visitLdcInsn(i);
+			++i;
+			elem.accept(this);
+			writers.peek().visitInsn(AASTORE);
+		}
+		writers.peek().visitMethodInsn(
+				INVOKESPECIAL, Class.ARRAY, "<init>", ARRAY_SIGNATURE);
+		writers.peek().stackPop(array.getElements().size() + 1);
 		return null;
 	}
 

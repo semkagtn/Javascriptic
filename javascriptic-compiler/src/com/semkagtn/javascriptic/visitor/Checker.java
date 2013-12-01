@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import com.semkagtn.javascriptic.tree.AddNode;
 import com.semkagtn.javascriptic.tree.AndNode;
+import com.semkagtn.javascriptic.tree.ArrayNode;
 import com.semkagtn.javascriptic.tree.AssignmentNode;
 import com.semkagtn.javascriptic.tree.BinaryExpressionNode;
 import com.semkagtn.javascriptic.tree.BlockNode;
@@ -87,6 +88,9 @@ public class Checker implements AstVisitor<Object> {
 	}
 
 	public Object visit(VarNode var) {
+		if (var.getIndex() != null) {
+			var.getIndex().accept(this);
+		}
 		if (findVariable(var.getName())) {
 			return null;
 		}
@@ -242,6 +246,13 @@ public class Checker implements AstVisitor<Object> {
 	}
 
 	public Object visit(UndefNode undef) {
+		return null;
+	}
+
+	public Object visit(ArrayNode array) {
+		for (ExpressionNode elem : array.getElements()) {
+			elem.accept(this);
+		}
 		return null;
 	}
 }

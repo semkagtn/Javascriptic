@@ -2,6 +2,7 @@ package com.semkagtn.javascriptic.visitor;
 
 import com.semkagtn.javascriptic.tree.AddNode;
 import com.semkagtn.javascriptic.tree.AndNode;
+import com.semkagtn.javascriptic.tree.ArrayNode;
 import com.semkagtn.javascriptic.tree.AssignmentNode;
 import com.semkagtn.javascriptic.tree.BlockNode;
 import com.semkagtn.javascriptic.tree.BoolNode;
@@ -44,6 +45,8 @@ public interface AstVisitor<T> {
 
 	T visit(AndNode and);
 
+	T visit(ArrayNode array);
+	
 	T visit(AssignmentNode assign);
 
 	T visit(BlockNode block);

@@ -24,9 +24,19 @@ public abstract class JSObject {
 	}
 	
 	public JSObject call(JSObject[] objects) {
-		System.err.println("Runtime error");
+		System.err.println("Runtime error: " + this.toJSString() + " is not a function");
 		System.exit(1);
 		return null;
+	}
+	
+	public JSObject put(JSObject index, JSObject value) {
+		System.err.println("Runtime error: " + this.toJSString() + " is not an array");
+		System.exit(1);
+		return null;
+	}
+	
+	public JSObject get(JSObject index) {
+		return JSUndef.UNDEF;
 	}
 	
 	public JSObject add(JSObject rhs) {
