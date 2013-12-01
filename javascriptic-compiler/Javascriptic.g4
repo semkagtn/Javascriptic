@@ -45,6 +45,7 @@ exprStat
 // operations with priority
 expr
     : '(' expr ')' # Parens
+    | expr index # GetIndex
     | expr '(' functionArgs? ')' # FunctionCall
     | op=('!' | '-') expr # UnaryExpr
     | expr op=('*' | '/' | '%') expr # MulDivMod
@@ -53,8 +54,9 @@ expr
     | expr op=('==' | '!=') expr # Eq
     | expr '&&' expr # And
     | expr '||' expr # Or
-    | ID index? '=' expr # Assign
-    | ID index? # Var
+    | expr index '=' expr #PutIndex
+    | ID '=' expr # Assign
+    | ID # Var
     | (NUM | STR | BOOL | UNDEF) # Constant
     | '[' functionArgs? ']' # Array
     | 'function' '(' functionParams? ')' blockStat # Function

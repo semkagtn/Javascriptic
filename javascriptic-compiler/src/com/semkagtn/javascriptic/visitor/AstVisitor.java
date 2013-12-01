@@ -13,6 +13,7 @@ import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
+import com.semkagtn.javascriptic.tree.GetIndexNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -25,6 +26,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
+import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StringNode;
 import com.semkagtn.javascriptic.tree.SubNode;
@@ -38,8 +40,9 @@ public interface AstVisitor<T> {
 	public static final String READ_FUNCTION = "_read";
 	public static final String ROUND_FUNCTION = "_round";
 	public static final String LENGTH_FUNCTION = "_length";
+	public static final String RANDOM_FUNCTION = "_random";
 	public static final String[] LIBRARY = {
-		PRINT_FUNCTION, READ_FUNCTION, ROUND_FUNCTION, LENGTH_FUNCTION};
+		PRINT_FUNCTION, READ_FUNCTION, ROUND_FUNCTION, LENGTH_FUNCTION, RANDOM_FUNCTION};
 	
 	T visit(AddNode add);
 
@@ -65,6 +68,8 @@ public interface AstVisitor<T> {
 
 	T visit(FunctionParameterNode functionParam);
 
+	T visit (GetIndexNode getIndex);
+	
 	T visit(GeNode ge);
 
 	T visit(GtNode gt);
@@ -90,6 +95,8 @@ public interface AstVisitor<T> {
 	T visit(OrNode or);
 
 	T visit(ProgramNode program);
+	
+	T visit(PutIndexNode putIndex);
 
 	T visit(ReturnNode returnStat);
 

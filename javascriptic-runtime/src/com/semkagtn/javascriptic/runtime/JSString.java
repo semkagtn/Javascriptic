@@ -19,6 +19,25 @@ public class JSString extends JSObject {
 		return new JSString(value + rhs.value);
 	}
 	
+	public JSObject get(JSObject index) {
+		JSString strIndex = index.toJSString();
+		double d;
+		try {
+			d = Double.parseDouble(strIndex.value);
+		} catch (NumberFormatException e) {
+			return JSUndef.UNDEF;
+		}
+		if (d == (long) d) {
+			int i = (int) d;
+			try {
+				return new JSString(value.substring(i, i + 1));
+			} catch (Exception e) {
+				return JSUndef.UNDEF;
+			}
+		}
+		return JSUndef.UNDEF;
+	}
+	
 	public JSObject lt(JSObject rhs) {
 		if (rhs instanceof JSString) {
 			int res = value.compareTo(rhs.value);

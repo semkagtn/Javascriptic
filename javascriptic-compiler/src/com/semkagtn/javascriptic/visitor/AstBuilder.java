@@ -18,11 +18,13 @@ import com.semkagtn.javascriptic.generated.JavascripticParser.ExprContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ExprStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.FunctionCallContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.FunctionContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.GetIndexContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.IfStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.MulDivModContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.OrContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ParensContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ProgramContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.PutIndexContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ReturnStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.StatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.UnaryExprContext;
@@ -46,6 +48,7 @@ import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
+import com.semkagtn.javascriptic.tree.GetIndexNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -58,6 +61,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
+import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
 import com.semkagtn.javascriptic.tree.StringNode;
@@ -263,9 +267,6 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		VarNode var = new VarNode();
 		var.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		var.setName(ctx.ID().getText());
-		if (ctx.index() != null) {
-			var.setIndex((ExpressionNode) visit(ctx.index().expr()));
-		}
 		assignment.setVariable(var);
 		assignment.setExpression((ExpressionNode) visit(ctx.expr()));
 		return assignment;
@@ -275,9 +276,6 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		VarNode variable = new VarNode();
 		variable.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		variable.setName(ctx.ID().getText());
-		if (ctx.index() != null) {
-			variable.setIndex((ExpressionNode) visit(ctx.index().expr()));
-		}
 		return variable;
 	}
 	
@@ -328,5 +326,20 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 			}
 		}
 		return array;
+	}
+	
+	public GetIndexNode visitGetIndex(GetIndexContext ctx) {
+		GetIndexNode getIndex = new GetIndexNode();
+		getIndex.setVariable((ExpressionNode) visit(ctx.expr()));
+		getIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		return getIndex;
+	}
+	
+	public PutIndexNode visitPutIndex(PutIndexContext ctx) {
+		PutIndexNode putIndex = new PutIndexNode();
+		putIndex.setVariable((ExpressionNode) visit(ctx.expr(0)));
+		putIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		putIndex.setExpression((ExpressionNode) visit(ctx.expr(1)));
+		return putIndex;
 	}
 }

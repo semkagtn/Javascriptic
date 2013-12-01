@@ -23,6 +23,7 @@ import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
+import com.semkagtn.javascriptic.tree.GetIndexNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -35,6 +36,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
+import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
 import com.semkagtn.javascriptic.tree.StringNode;
@@ -310,6 +312,10 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				mv.visitVarInsn(ALOAD, 0);
 				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "LENGTH", Type.FUNCTION);
 				mv.visitFieldInsn(PUTFIELD, scopeClass(number), LENGTH_FUNCTION, Type.OBJECT);
+				
+				mv.visitVarInsn(ALOAD, 0);
+				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "RANDOM", Type.FUNCTION);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), RANDOM_FUNCTION, Type.OBJECT);
 			}
 			
 			mv.visitInsn(RETURN);
@@ -388,24 +394,15 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		w.visitVarInsn(ALOAD, 0);
 		w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
 				scopeName(number), scopeType(number));
-		if (assign.getVariable().getIndex() != null) {
-			w.visitFieldInsn(GETFIELD, scopeClass(number),
-					assign.getVariable().getName(), Type.OBJECT);
-			assign.getVariable().getIndex().accept(this);
-			assign.getExpression().accept(this);
-			w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "put", PUT_SIGNATURE);
-			w.stackPop(2);
-		} else {
-			assign.getExpression().accept(this);
-			w.visitFieldInsn(PUTFIELD, scopeClass(number),
-					assign.getVariable().getName(), Type.OBJECT);
-			
-			w.visitVarInsn(ALOAD, 0);
-			w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
-					scopeName(number), scopeType(number));
-			w.visitFieldInsn(GETFIELD, scopeClass(number),
-					assign.getVariable().getName(), Type.OBJECT);
-		}
+		assign.getExpression().accept(this);
+		w.visitFieldInsn(PUTFIELD, scopeClass(number),
+				assign.getVariable().getName(), Type.OBJECT);
+		
+		w.visitVarInsn(ALOAD, 0);
+		w.visitFieldInsn(GETFIELD, functionClass(w.getNumber()),
+				scopeName(number), scopeType(number));
+		w.visitFieldInsn(GETFIELD, scopeClass(number),
+				assign.getVariable().getName(), Type.OBJECT);
 		return null;
 	}
 
@@ -687,11 +684,6 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		w.visitFieldInsn(GETFIELD,functionClass(w.getNumber()),
 				scopeName(number), scopeType(number));
 		w.visitFieldInsn(GETFIELD, scopeClass(number), var.getName(), Type.OBJECT);
-		if (var.getIndex() != null) {
-			var.getIndex().accept(this);
-			w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "get", BINARY_SIGNATURE);
-			w.stackPop(1);
-		}
 		return null;
 	}
 
@@ -726,6 +718,24 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		writers.peek().visitMethodInsn(
 				INVOKESPECIAL, Class.ARRAY, "<init>", ARRAY_SIGNATURE);
 		writers.peek().stackPop(array.getElements().size() + 1);
+		return null;
+	}
+
+	public Object visit(GetIndexNode getIndex) {
+		getIndex.getVariable().accept(this);
+		getIndex.getIndex().accept(this);
+		writers.peek().visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "get", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
+		return null;
+	}
+
+	public Object visit(PutIndexNode putIndex) {
+		FunctionWriter w = writers.peek();
+		putIndex.getVariable().accept(this);
+		putIndex.getIndex().accept(this);
+		putIndex.getExpression().accept(this);
+		w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "put", PUT_SIGNATURE);
+		w.stackPop(2);
 		return null;
 	}
 

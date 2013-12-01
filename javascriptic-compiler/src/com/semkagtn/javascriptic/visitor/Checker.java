@@ -17,6 +17,7 @@ import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
+import com.semkagtn.javascriptic.tree.GetIndexNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -29,6 +30,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
+import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
 import com.semkagtn.javascriptic.tree.StringNode;
@@ -88,9 +90,6 @@ public class Checker implements AstVisitor<Object> {
 	}
 
 	public Object visit(VarNode var) {
-		if (var.getIndex() != null) {
-			var.getIndex().accept(this);
-		}
 		if (findVariable(var.getName())) {
 			return null;
 		}
@@ -125,7 +124,9 @@ public class Checker implements AstVisitor<Object> {
 		if (functionCount == 0) {
 			ErrorHandler.returnNotInFunction(returnStat.getPosition());
 		}
-		returnStat.getValue().accept(this);
+		if (returnStat.getValue() != null) {
+			returnStat.getValue().accept(this);
+		}
 		return null;
 	}
 
@@ -253,6 +254,19 @@ public class Checker implements AstVisitor<Object> {
 		for (ExpressionNode elem : array.getElements()) {
 			elem.accept(this);
 		}
+		return null;
+	}
+
+	public Object visit(GetIndexNode getIndex) {
+		getIndex.getVariable().accept(this);
+		getIndex.getIndex().accept(this);
+		return null;
+	}
+
+	public Object visit(PutIndexNode putIndex) {
+		putIndex.getVariable().accept(this);
+		putIndex.getIndex().accept(this);
+		putIndex.getExpression().accept(this);
 		return null;
 	}
 }

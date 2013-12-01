@@ -68,6 +68,14 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitGetIndex(@NotNull JavascripticParser.GetIndexContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitBlockStat(@NotNull JavascripticParser.BlockStatContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -165,6 +173,14 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
 	@Override public T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitPutIndex(@NotNull JavascripticParser.PutIndexContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

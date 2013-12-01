@@ -48,6 +48,12 @@ public abstract class JSFunction extends JSString {
 		}
 	};
 	
+	public static final JSFunction RANDOM = new JSFunction(DEFAULT_TEXT) {
+		public JSObject call(JSObject[] objects) {
+			return new JSNumber(Math.random() + "");
+		}
+	};
+	
 	public JSFunction(String text) {
 		super(text);
 	}

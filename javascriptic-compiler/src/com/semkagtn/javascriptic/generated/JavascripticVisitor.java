@@ -56,6 +56,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEq(@NotNull JavascripticParser.EqContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#GetIndex}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitGetIndex(@NotNull JavascripticParser.GetIndexContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#blockStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -145,6 +152,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#PutIndex}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPutIndex(@NotNull JavascripticParser.PutIndexContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#ifStat}.
