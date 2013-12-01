@@ -1,4 +1,6 @@
-### Javascriptic
+Javascriptic
+============
+
 Very simple Javascript-like language,
 written in java using ANTLR4 and ASM library.
 
