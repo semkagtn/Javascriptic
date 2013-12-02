@@ -103,11 +103,12 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			this.cw = new ClassWriter(0);
 			this.function = function;
 			this.number = functionCounter;
-			this.signature = "(";
+			StringBuilder signature = new StringBuilder("(");
 			for (FunctionWriter fw : writers) {
-				this.signature += scopeType(fw.getNumber());
+				signature.append(scopeType(fw.getNumber()));
 			}
-			this.signature += ")V";
+			signature.append(")V");
+			this.signature = signature.toString();
 			this.currentStack = 1;
 			this.maxStack = 2;
 			++functionCounter;

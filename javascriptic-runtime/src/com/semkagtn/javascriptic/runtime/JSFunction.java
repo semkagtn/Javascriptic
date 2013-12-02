@@ -1,17 +1,15 @@
 package com.semkagtn.javascriptic.runtime;
-
 import java.util.Scanner;
 
-public abstract class JSFunction extends JSString {
-	
+public abstract class JSFunction extends JSObject {
 	private static final String DEFAULT_TEXT = "[native code]";
-	
+
 	public static final JSFunction PRINT = new JSFunction(DEFAULT_TEXT) {
 		public JSObject call(JSObject[] objects) {
 			if (objects.length == 0) {
 				System.out.print(JSUndef.UNDEF);
 			} else {
-				System.out.print(objects[0].toJSString());
+				System.out.print(objects[0].toJSPrimitive(Type.STRING).value);
 			}
 			return JSUndef.UNDEF;
 		}
@@ -30,7 +28,7 @@ public abstract class JSFunction extends JSString {
 			if (objects.length == 0) {
 				return JSNumber.NAN;
 			}
-			JSNumber n = objects[0].toJSNumber();
+			JSObject n = objects[0].toJSPrimitive(Type.NUMBER);
 			if (n == JSNumber.NAN) {
 				return JSNumber.NAN;
 			}
@@ -54,35 +52,14 @@ public abstract class JSFunction extends JSString {
 		}
 	};
 	
-	public JSFunction(String text) {
-		super(text);
-	}
-	
-	public JSObject add(JSObject rhs) {
-		return new JSString(value + rhs.value);
-	}
-	
-	public JSObject length() {
-		return JSUndef.UNDEF;
-	}
-	
-	protected JSBool toJSBool() {
-		return JSBool.TRUE;
-	}
-
-	protected JSNumber toJSNumber() {
-		return JSNumber.NAN;
-	}
-	
-	public JSObject eq(JSObject rhs) {
-		if (rhs instanceof JSFunction) {
-			return rhs == this ? JSBool.TRUE : JSBool.FALSE;
+	protected JSObject toJSPrimitive(Type hint) {
+		if (hint == Type.NUMBER) {
+			return JSNumber.NAN;
 		}
-		return super.eq(rhs);
+		return new JSString(value);
 	}
 	
-	public JSObject ne(JSObject rhs) {
-		return eq(rhs).not();
+	public JSFunction(String text) {
+		super(Type.OBJECT, text);
 	}
-
 }
