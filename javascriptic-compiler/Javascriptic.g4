@@ -51,7 +51,7 @@ expr
     | expr op=('*' | '/' | '%') expr # MulDivMod
     | expr op=('+' | '-') expr # AddSub
     | expr op=('<' | '<=' | '>' | '>=') expr # Cmp
-    | expr op=('==' | '!=') expr # Eq
+    | expr op=('==' | '!=' | '===' | '!==') expr # Eq
     | expr '&&' expr # And
     | expr '||' expr # Or
     | expr index '=' expr #PutIndex
@@ -88,6 +88,8 @@ GT : '>' ;
 GE : '>=' ;
 EQ : '==' ;
 NE : '!=' ;
+SEQ : '===' ;
+SNE : '!==' ;
 
 NUM : (DIGIT+ ('.' DIGIT+)?) | 'NaN' ; // we can get negative numbers using unary minus operator
 STR : '"' (ESC | ~["\\] )*? '"' ; // unlike JavaScript, only double quotes

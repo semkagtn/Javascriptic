@@ -28,6 +28,8 @@ import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
+import com.semkagtn.javascriptic.tree.StrictEqNode;
+import com.semkagtn.javascriptic.tree.StrictNeNode;
 import com.semkagtn.javascriptic.tree.StringNode;
 import com.semkagtn.javascriptic.tree.SubNode;
 import com.semkagtn.javascriptic.tree.UndefNode;
@@ -100,6 +102,10 @@ public interface AstVisitor<T> {
 
 	T visit(ReturnNode returnStat);
 
+	T visit(StrictEqNode eq);
+	
+	T visit(StrictNeNode ne);
+	
 	T visit(StringNode string);
 	
 	T visit(SubNode sub);

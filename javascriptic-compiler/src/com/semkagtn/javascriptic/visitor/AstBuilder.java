@@ -236,6 +236,10 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		BinaryExpressionNode binary;
 		if (ctx.op.getType() == JavascripticParser.EQ) {
 			binary = new EqNode();
+		} else if (ctx.op.getType() == JavascripticParser.NE) {
+			binary = new NeNode();
+		} else if (ctx.op.getType() == JavascripticParser.SEQ) {
+			binary = new NeNode();
 		} else {
 			binary = new NeNode();
 		}

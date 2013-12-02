@@ -39,6 +39,8 @@ import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
+import com.semkagtn.javascriptic.tree.StrictEqNode;
+import com.semkagtn.javascriptic.tree.StrictNeNode;
 import com.semkagtn.javascriptic.tree.StringNode;
 import com.semkagtn.javascriptic.tree.SubNode;
 import com.semkagtn.javascriptic.tree.UndefNode;
@@ -758,6 +760,24 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		putIndex.getExpression().accept(this);
 		w.visitMethodInsn(INVOKEVIRTUAL, Class.OBJECT, "put", PUT_SIGNATURE);
 		w.stackPop(2);
+		return null;
+	}
+
+	public Object visit(StrictEqNode eq) {
+		eq.getLhs().accept(this);
+		eq.getRhs().accept(this);
+		writers.peek().visitMethodInsn(
+				INVOKEVIRTUAL, Class.OBJECT, "strictEq", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
+		return null;
+	}
+
+	public Object visit(StrictNeNode ne) {
+		ne.getLhs().accept(this);
+		ne.getRhs().accept(this);
+		writers.peek().visitMethodInsn(
+				INVOKEVIRTUAL, Class.OBJECT, "strictNe", BINARY_SIGNATURE);
+		writers.peek().stackPop(1);
 		return null;
 	}
 

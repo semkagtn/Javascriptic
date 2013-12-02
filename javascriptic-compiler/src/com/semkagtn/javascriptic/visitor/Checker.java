@@ -33,6 +33,8 @@ import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutIndexNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
+import com.semkagtn.javascriptic.tree.StrictEqNode;
+import com.semkagtn.javascriptic.tree.StrictNeNode;
 import com.semkagtn.javascriptic.tree.StringNode;
 import com.semkagtn.javascriptic.tree.SubNode;
 import com.semkagtn.javascriptic.tree.UnaryExpressionNode;
@@ -267,6 +269,16 @@ public class Checker implements AstVisitor<Object> {
 		putIndex.getVariable().accept(this);
 		putIndex.getIndex().accept(this);
 		putIndex.getExpression().accept(this);
+		return null;
+	}
+
+	public Object visit(StrictEqNode eq) {
+		visitBinary(eq);
+		return null;
+	}
+
+	public Object visit(StrictNeNode ne) {
+		visitBinary(ne);
 		return null;
 	}
 }

@@ -28,7 +28,7 @@ print("5. " + f + "\n\n");
 
 // 6. Implicit type conversion
 if ("123" == 123)
-    print("6. Yes, \"123\" == 123\t O_O\n\n");
+    print("6. Yes, \"123\" == 123\t O_O\n");
 
 // 7. Oh my JavaScript!
 print("7. Oh my JavaScript\n");
