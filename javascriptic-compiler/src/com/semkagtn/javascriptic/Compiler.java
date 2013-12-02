@@ -42,7 +42,8 @@ public class Compiler {
 			CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
 			codeGenerator.visit(ast);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.err.println("ERROR: file " + inputFileName + " doesn't exist");
+			System.exit(1);
 		}
 	}
 }
