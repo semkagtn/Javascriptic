@@ -24,7 +24,8 @@ public abstract class JSObject {
 	
 	// Need to overload in JSFunction
 	public JSObject call(JSObject[] objects) {
-		System.err.println("Call: Runtime error.");
+		System.err.println("RUNTIME ERROR: object '" +
+				this.toJSString().value + "' is not callable.");
 		System.exit(1);
 		return null;
 	}

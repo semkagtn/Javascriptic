@@ -131,6 +131,11 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			currentStack -= times;
 		}
 		
+		public void visitTryCatchBlock(Label tryStart, Label tryEnd,
+				Label catchStart, String exception) {
+			mv.visitTryCatchBlock(tryStart, tryEnd, catchStart, exception);
+		}
+		
 		public void visitFieldInsn(int opcode, String owner, String name, String desc) {
 			if (opcode == GETSTATIC) {
 				++currentStack;
@@ -238,7 +243,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				Label tryEnd = new Label();
 				Label catchStart = new Label();
 				Label catchEnd = new Label();
-				mv.visitTryCatchBlock(tryStart, tryEnd, catchStart, "java/lang/Exception");
+				visitTryCatchBlock(tryStart, tryEnd, catchStart, "java/lang/Exception");
 				visitLabel(tryStart);
 				i = 0;
 				for (FunctionParameterNode param : function.getParameters()) {
