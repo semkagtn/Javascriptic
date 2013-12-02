@@ -77,7 +77,7 @@ public abstract class JSObject {
 			return this.ne(JSNumber.ZERO);
 		}
 		if (type == Type.STRING) {
-			return this.ne(new JSString(""));
+			return this.ne(JSString.EMPTY);
 		}
 		return JSBool.TRUE;
 	}
@@ -106,7 +106,10 @@ public abstract class JSObject {
 	}
 	
 	private JSObject toJSString() {
-		if (type == Type.UNDEF || type == Type.BOOL || type == Type.STRING) {
+		if (type == Type.STRING) {
+			return this;
+		}
+		if (type == Type.UNDEF || type == Type.BOOL) {
 			return new JSString(value);
 		}
 		if (type == Type.NUMBER) {
@@ -259,6 +262,31 @@ public abstract class JSObject {
 	
 	public JSObject ne(JSObject rhs) {
 		return this.eq(rhs).not();
+	}
+	
+	public JSObject strictEq(JSObject rhs) {
+		if (this.type != rhs.type) {
+			return JSBool.FALSE;
+		}
+		if (this.type == Type.UNDEF) {
+			return JSBool.TRUE;
+		}
+		if (this.type == Type.NUMBER) {
+			if (this == JSNumber.NAN || rhs == JSNumber.NAN) {
+				return JSBool.FALSE;
+			}
+			double l = Double.parseDouble(this.value);
+			double r = Double.parseDouble(rhs.value);
+			return l == r ? JSBool.TRUE : JSBool.FALSE;
+		}
+		if (this.type == Type.STRING) {
+			return this.value.equals(rhs.value) ? JSBool.TRUE : JSBool.FALSE;
+		}
+		return this == rhs ? JSBool.TRUE : JSBool.FALSE;
+	}
+	
+	public JSObject strictNe(JSObject rhs) {
+		return this.strictEq(rhs).not();
 	}
 	
 	public JSObject lt(JSObject rhs) {

@@ -63,8 +63,8 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String OBJECT = "L" + Class.OBJECT + ';';
 		public static final String BOOL = "L" + Class.BOOL + ';';
 		public static final String UNDEF = "L" + Class.UNDEF + ';';
-		//public static final String STRING = "L" + Class.STRING + ';';
-		//public static final String NUMBER = "L" + Class.NUMBER + ';';
+		public static final String STRING = "L" + Class.STRING + ';';
+		public static final String NUMBER = "L" + Class.NUMBER + ';';
 		public static final String FUNCTION = "L" + Class.FUNCTION + ';';
 		//public static final String ARRAY = "L" + Class.ARRAY + ";";
 	}
@@ -589,12 +589,23 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 	}
 
 	public Object visit(NumberNode number) {
-		writers.peek().visitTypeInsn(NEW, Class.NUMBER);
-		writers.peek().visitInsn(DUP);
-		writers.peek().visitLdcInsn(number.getValue());
-		writers.peek().visitMethodInsn(INVOKESPECIAL,
-				Class.NUMBER, "<init>", "(Ljava/lang/String;)V");
-		writers.peek().stackPop(2);
+		if (number.getValue().equals("NaN")) {
+			writers.peek().visitFieldInsn(
+					GETSTATIC, Class.NUMBER, "NAN", Type.NUMBER);	
+		} else if (number.getValue().equals("0.0")) {
+			writers.peek().visitFieldInsn(
+					GETSTATIC, Class.NUMBER, "ZERO", Type.NUMBER);
+		} else if (number.getValue().equals("1.0")) {
+			writers.peek().visitFieldInsn(
+					GETSTATIC, Class.NUMBER, "ONE", Type.NUMBER);
+		} else {
+			writers.peek().visitTypeInsn(NEW, Class.NUMBER);
+			writers.peek().visitInsn(DUP);
+			writers.peek().visitLdcInsn(number.getValue());
+			writers.peek().visitMethodInsn(INVOKESPECIAL,
+					Class.NUMBER, "<init>", "(Ljava/lang/String;)V");
+			writers.peek().stackPop(2);
+		}
 		return null;
 	}
 
@@ -652,19 +663,24 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			returnStat.getValue().accept(this);
 		} else {
 			writers.peek().visitFieldInsn(
-					GETSTATIC, Type.UNDEF, "UNDEF", Type.UNDEF);
+					GETSTATIC, Class.UNDEF, "UNDEF", Type.UNDEF);
 		}
 		writers.peek().visitInsn(ARETURN);
 		return null;
 	}
 
 	public Object visit(StringNode string) {
-		writers.peek().visitTypeInsn(NEW, Class.STRING);
-		writers.peek().visitInsn(DUP);
-		writers.peek().visitLdcInsn(string.getValue());
-		writers.peek().visitMethodInsn(INVOKESPECIAL,
-				Class.STRING, "<init>", "(Ljava/lang/String;)V");
-		writers.peek().stackPop(2);
+		if (string.getValue().equals("")) {
+			writers.peek().visitFieldInsn(
+					GETSTATIC, Class.STRING, "EMPTY", Type.STRING);
+		} else {
+			writers.peek().visitTypeInsn(NEW, Class.STRING);
+			writers.peek().visitInsn(DUP);
+			writers.peek().visitLdcInsn(string.getValue());
+			writers.peek().visitMethodInsn(INVOKESPECIAL,
+					Class.STRING, "<init>", "(Ljava/lang/String;)V");
+			writers.peek().stackPop(2);
+		}
 		return null;
 	}
 
