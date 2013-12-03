@@ -1,3 +1,6 @@
+var print = Console.print;
+var read = Console.read;
+
 // 1. 1 2 3 4 5 6 7 8 9
 print("1. while test: ");
 var i = 0;
@@ -89,11 +92,57 @@ print("\n\n");
 // 13. Arrays
 var array = [1, 2, "hello", false, undefined, 0.9];
 print("13. " + array + "\n");
-array[length(array)] = "New element"; // push
+array[array.length] = "New element"; // push
 print(array + "\n\n");
 
-// 14. Input
-print("14. Input your name: ");
+// 14. String iteration
+print("14. String iteration: ");
+var abra = "abracadabra";
+var i = 0;
+while (i < abra.length) {
+    print(abra[i] + " ");
+    i = i + 1;
+}
+print("\n\n");
+
+// 15. Arrays as dictonary
+print("15. Arrays as dictonaries: ");
+var dict = [];
+dict["pi"] = 3.1416;
+print('dict["pi"] = ' + dict.pi + '\n\n'); // dict["pi"] = dict.pi
+
+// 16. Arrays as objects
+print("16. Arrays as objects: ");
+var Point = function(x, y) {
+    // private fields
+    var _x = x;
+    var _y = y;
+
+    var point = [];
+    // public methods
+    point.getX = function() {
+        return _x;
+    };
+    point.getY = function() {
+        return _y;
+    };
+    return point;
+};
+var p = Point(5, 3);
+print("p = (" + p.getX() + ", " + p.getY() + ")\n\n");
+
+// 17. Standard library
+// Console.print, Console.read
+// Math.random, Math.round, Math.ceil, Math.floor
+print('17. Standard library:\n');
+var n = Math.random() * 1000;
+print("n = " + n + "\n");
+print("Math.round(n) = " + Math.round(n) + "\n");
+print("Math.ceil(n) = " + Math.ceil(n) + "\n");
+print("Math.floor(n) = " + Math.floor(n) + "\n\n");
+
+// 18. Input
+print("18. Input your name: ");
 var Greeter = function(name) {
     return function() {
         print("Hello " + name + "!\n");

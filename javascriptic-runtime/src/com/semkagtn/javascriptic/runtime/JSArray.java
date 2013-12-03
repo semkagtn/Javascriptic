@@ -1,33 +1,30 @@
 package com.semkagtn.javascriptic.runtime;
+
 import java.util.HashMap;
 
 public class JSArray extends JSObject {
 	private HashMap<String, JSObject> a;
-	private int length;
 	
-	public JSArray(JSObject[] objects) {
+	public JSArray(JSObject... objects) {
 		super(Type.OBJECT, "");
 		a = new HashMap<>();
-		length = objects.length;
-		for (int i = 0; i < length; i++) {
+		a.put("length", new JSNumber(objects.length + ""));
+		for (int i = 0; i < objects.length; i++) {
 			a.put(i + "", objects[i]);
 		}
 	}
 	
-	protected JSObject length() {
-		return new JSNumber(length + "");
-	}
-	
 	protected JSObject toJSPrimitive(Type hint) {
 		if (hint == Type.NUMBER) {
-			if (length == 0) {
+			if (a.get("length") == JSNumber.ZERO) {
 				return JSNumber.ZERO;
-			} else if (length == 1) {
+			} else if (a.get("length") == JSNumber.ONE) {
 				return a.get(0);
 			}
 			return JSNumber.NAN;
 		}
 		StringBuilder result = new StringBuilder();
+		int length = Integer.parseInt(a.get("length").value);
 		for (int i = 0; i < length; i++) {
 			String key = i + "";
 			if (a.containsKey(key)) {
@@ -54,9 +51,10 @@ public class JSArray extends JSObject {
 		try {
 			double d = Double.parseDouble(strIndex);
 			if (d == (long) d) {
+				int length = Integer.parseInt(a.get("length").value);
 				int i = (int) d;
 				if (i >= length) {
-					length = i + 1;
+					a.put("length", new JSNumber(i + 1 + ""));
 				}
 			}
 		} catch (NumberFormatException e) {

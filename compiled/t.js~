@@ -1,3 +1,0 @@
-var x = [];
-x.lal = 1;
-print(x.lal);

@@ -60,6 +60,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String NUMBER = RUNTIME_PACKAGE + "JSNumber";
 		public static final String FUNCTION = RUNTIME_PACKAGE + "JSFunction";
 		public static final String ARRAY = RUNTIME_PACKAGE + "JSArray";
+		public static final String STANDARD_LIBRARY = RUNTIME_PACKAGE + "StandardLibrary";
 	}
 	
 	private class Type {
@@ -68,8 +69,8 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		public static final String UNDEF = "L" + Class.UNDEF + ';';
 		public static final String STRING = "L" + Class.STRING + ';';
 		public static final String NUMBER = "L" + Class.NUMBER + ';';
-		public static final String FUNCTION = "L" + Class.FUNCTION + ';';
-		//public static final String ARRAY = "L" + Class.ARRAY + ";";
+		//public static final String FUNCTION = "L" + Class.FUNCTION + ';';
+		public static final String ARRAY = "L" + Class.ARRAY + ";";
 	}
 	
 	public static final String CALL_SIGNATURE = "([" + Type.OBJECT + ")" +  Type.OBJECT;
@@ -307,24 +308,12 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				mainScope = false;
 				
 				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "PRINT", Type.FUNCTION);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), PRINT_FUNCTION, Type.OBJECT);
+				mv.visitFieldInsn(GETSTATIC, Class.STANDARD_LIBRARY, "CONSOLE", Type.ARRAY);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), CONSOLE_LIBRARY, Type.OBJECT);
 				
 				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "READ", Type.FUNCTION);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), READ_FUNCTION, Type.OBJECT);
-				
-				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "ROUND", Type.FUNCTION);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), ROUND_FUNCTION, Type.OBJECT);
-				
-				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "LENGTH", Type.FUNCTION);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), LENGTH_FUNCTION, Type.OBJECT);
-				
-				mv.visitVarInsn(ALOAD, 0);
-				mv.visitFieldInsn(GETSTATIC, Class.FUNCTION, "RANDOM", Type.FUNCTION);
-				mv.visitFieldInsn(PUTFIELD, scopeClass(number), RANDOM_FUNCTION, Type.OBJECT);
+				mv.visitFieldInsn(GETSTATIC, Class.STANDARD_LIBRARY, "MATH", Type.ARRAY);
+				mv.visitFieldInsn(PUTFIELD, scopeClass(number), MATH_LIBRARY, Type.OBJECT);
 			}
 			
 			mv.visitInsn(RETURN);

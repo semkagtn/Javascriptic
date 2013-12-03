@@ -39,13 +39,9 @@ import com.semkagtn.javascriptic.tree.WhileNode;
 
 public interface AstVisitor<T> {
 	// Standard functions
-	public static final String PRINT_FUNCTION = "_print";
-	public static final String READ_FUNCTION = "_read";
-	public static final String ROUND_FUNCTION = "_round";
-	public static final String LENGTH_FUNCTION = "_length";
-	public static final String RANDOM_FUNCTION = "_random";
-	public static final String[] LIBRARY = {
-		PRINT_FUNCTION, READ_FUNCTION, ROUND_FUNCTION, LENGTH_FUNCTION, RANDOM_FUNCTION};
+	public static final String CONSOLE_LIBRARY = "_Console";
+	public static final String MATH_LIBRARY = "_Math";
+	public static final String[] LIBRARY = {CONSOLE_LIBRARY, MATH_LIBRARY};
 	
 	T visit(AddNode add);
 

@@ -8,11 +8,6 @@ public abstract class JSObject {
 		this.value = value;
 	}
 	
-	// Need to overload in JSString and JSArray
-	protected JSObject length() {
-		return JSUndef.UNDEF;
-	}
-	
 	// Need to overload in Objects (Not-primitive types)
 	protected JSObject toJSPrimitive(Type hint) {
 		return this;
@@ -23,7 +18,7 @@ public abstract class JSObject {
 	}
 	
 	// Need to overload in JSFunction
-	public JSObject call(JSObject[] objects) {
+	public JSObject call(JSObject... objects) {
 		System.err.println("RUNTIME ERROR: object '" +
 				this.toJSString().value + "' is not callable.");
 		System.exit(1);

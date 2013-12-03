@@ -61,5 +61,5 @@ tree.insert(1);
 tree.insert(3);
 tree.insert(4);
 tree.insert(10);
-print(tree.min() + '\n');
-print(tree.max() + '\n');
+Console.print(tree.min() + '\n');
+Console.print(tree.max() + '\n');
