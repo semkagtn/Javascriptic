@@ -1,4 +1,4 @@
-// Binary Search Tree
+// Binary Search Tree (No delete function)
 
 var Tree = function() {
     // Inner class
@@ -17,7 +17,7 @@ var Tree = function() {
     var tree = [];
     tree.insert = function(value) {
         var current = root;
-        while (current.value) {
+        while (current.value !== undefined) {
             if (value < current.value) {
                 current = current.left;
             } else if (value > current.value) {
@@ -51,15 +51,21 @@ var Tree = function() {
     return tree;
 };
 
+// Tree test
+
+var N = 30;
+var MIN = 0;
+var MAX = 10000;
+
 var tree = Tree();
-tree.insert(9);
-tree.insert(1);
-tree.insert(7);
-tree.insert(2);
-tree.insert(20);
-tree.insert(1);
-tree.insert(3);
-tree.insert(4);
-tree.insert(10);
-Console.print(tree.min() + '\n');
-Console.print(tree.max() + '\n');
+
+var i = 0;
+while (i < N) {
+    var random = MIN + Math.random() * (MAX - MIN);
+    Console.print("Insert " + random + "\n");
+    tree.insert(random);
+    i = i + 1;
+}
+
+Console.print("Min = " + tree.min() + '\n');
+Console.print("Max = " + tree.max() + '\n');

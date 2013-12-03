@@ -123,7 +123,9 @@ public abstract class JSObject {
 		if (number == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber("-" + value);
+		double d = Double.parseDouble(number.value);
+		d = -d;
+		return new JSNumber(d + "");
 	}
 	
 	public JSObject not() {
