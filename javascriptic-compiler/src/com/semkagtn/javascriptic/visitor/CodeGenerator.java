@@ -36,6 +36,7 @@ import com.semkagtn.javascriptic.tree.NegNode;
 import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
+import com.semkagtn.javascriptic.tree.PlusNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
@@ -781,6 +782,14 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 				INVOKEVIRTUAL, Class.OBJECT, "toInt", "()I"); // 0(false) or 1(true)
 		writers.peek().stackPop(0);
 		writers.peek().visitJumpInsn(IFNE, loopStart); // if x == false
+		return null;
+	}
+
+	public Object visit(PlusNode plus) {
+		plus.getExpression().accept(this);
+		writers.peek().visitMethodInsn(
+				INVOKEVIRTUAL, Class.OBJECT, "plus", UNARY_SIGNATURE);
+		writers.peek().stackPop(0);
 		return null;
 	}
 

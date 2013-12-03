@@ -52,7 +52,7 @@ expr
     : '(' expr ')' # Parens
     | expr (index | field) # GetField
     | expr '(' functionArgs? ')' # FunctionCall
-    | op=('!' | '-') expr # UnaryExpr
+    | op=('!' | '-' | '+') expr # UnaryExpr
     | expr op=('*' | '/' | '%') expr # MulDivMod
     | expr op=('+' | '-') expr # AddSub
     | expr op=('<' | '<=' | '>' | '>=') expr # Cmp
@@ -90,7 +90,7 @@ MINUS : '-' ;
 MUL : '*' ;
 DIV : '/' ;
 MOD : '%' ;
-ADD : '+' ;
+PLUS : '+' ;
 LT : '<' ;
 LE : '<=' ;
 GT : '>' ;

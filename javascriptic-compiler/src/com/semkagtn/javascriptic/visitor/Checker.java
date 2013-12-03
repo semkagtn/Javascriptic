@@ -30,6 +30,7 @@ import com.semkagtn.javascriptic.tree.NegNode;
 import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
+import com.semkagtn.javascriptic.tree.PlusNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
@@ -286,6 +287,11 @@ public class Checker implements AstVisitor<Object> {
 
 	public Object visit(StrictNeNode ne) {
 		visitBinary(ne);
+		return null;
+	}
+
+	public Object visit(PlusNode plus) {
+		visitUnary(plus);
 		return null;
 	}
 }

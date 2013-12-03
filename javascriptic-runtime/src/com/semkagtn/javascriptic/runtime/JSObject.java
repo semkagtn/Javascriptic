@@ -88,7 +88,7 @@ public abstract class JSObject {
 			return this;
 		}
 		if (type == Type.STRING) {
-			String strValue = "0" + value;
+			String strValue = value;
 			double d;
 			try {
 				d = Double.parseDouble(strValue);
@@ -126,6 +126,10 @@ public abstract class JSObject {
 		double d = Double.parseDouble(number.value);
 		d = -d;
 		return new JSNumber(d + "");
+	}
+	
+	public JSObject plus() {
+		return this.toJSNumber();
 	}
 	
 	public JSObject not() {

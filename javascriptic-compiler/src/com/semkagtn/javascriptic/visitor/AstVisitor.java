@@ -26,6 +26,7 @@ import com.semkagtn.javascriptic.tree.NegNode;
 import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
+import com.semkagtn.javascriptic.tree.PlusNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
@@ -93,6 +94,8 @@ public interface AstVisitor<T> {
 
 	T visit(OrNode or);
 
+	T visit(PlusNode plus);
+	
 	T visit(ProgramNode program);
 	
 	T visit(PutFieldNode putIndex);

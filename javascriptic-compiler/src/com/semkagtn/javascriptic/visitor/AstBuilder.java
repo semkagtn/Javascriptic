@@ -62,10 +62,13 @@ import com.semkagtn.javascriptic.tree.NegNode;
 import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
+import com.semkagtn.javascriptic.tree.PlusNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
+import com.semkagtn.javascriptic.tree.StrictEqNode;
+import com.semkagtn.javascriptic.tree.StrictNeNode;
 import com.semkagtn.javascriptic.tree.StringNode;
 import com.semkagtn.javascriptic.tree.SubNode;
 import com.semkagtn.javascriptic.tree.UnaryExpressionNode;
@@ -181,8 +184,10 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		UnaryExpressionNode unary;
 		if (ctx.op.getType() == JavascripticParser.NOT) {
 			unary = new NotNode();
-		} else {
+		} else if (ctx.op.getType() == JavascripticParser.MINUS) {
 			unary = new NegNode();
+		} else {
+			unary = new PlusNode();
 		}
 		unary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		unary.setExpression((ExpressionNode) visit(ctx.expr()));
@@ -206,7 +211,7 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 	
 	public BinaryExpressionNode visitAddSub(AddSubContext ctx) {
 		BinaryExpressionNode binary;
-		if (ctx.op.getType() == JavascripticParser.ADD) {
+		if (ctx.op.getType() == JavascripticParser.PLUS) {
 			binary = new AddNode();
 		} else {
 			binary = new SubNode();
@@ -241,9 +246,9 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		} else if (ctx.op.getType() == JavascripticParser.NE) {
 			binary = new NeNode();
 		} else if (ctx.op.getType() == JavascripticParser.SEQ) {
-			binary = new NeNode();
+			binary = new StrictEqNode();
 		} else {
-			binary = new NeNode();
+			binary = new StrictNeNode();
 		}
 		binary.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
 		binary.setLhs((ExpressionNode) visit(ctx.expr(0)));
