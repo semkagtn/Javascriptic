@@ -9,7 +9,7 @@ public abstract class JSFunction extends JSObject {
 			if (objects.length == 0) {
 				System.out.print(JSUndef.UNDEF);
 			} else {
-				System.out.print(objects[0].toJSPrimitive(Type.STRING).value);
+				System.out.print(objects[0].toJSString().value);
 			}
 			return JSUndef.UNDEF;
 		}
@@ -28,7 +28,7 @@ public abstract class JSFunction extends JSObject {
 			if (objects.length == 0) {
 				return JSNumber.NAN;
 			}
-			JSObject n = objects[0].toJSPrimitive(Type.NUMBER);
+			JSObject n = objects[0].toJSNumber();
 			if (n == JSNumber.NAN) {
 				return JSNumber.NAN;
 			}

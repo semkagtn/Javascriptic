@@ -7,13 +7,14 @@ import com.semkagtn.javascriptic.tree.AssignmentNode;
 import com.semkagtn.javascriptic.tree.BlockNode;
 import com.semkagtn.javascriptic.tree.BoolNode;
 import com.semkagtn.javascriptic.tree.DivNode;
+import com.semkagtn.javascriptic.tree.DoWhileNode;
 import com.semkagtn.javascriptic.tree.EqNode;
 import com.semkagtn.javascriptic.tree.ExpressionStatementNode;
 import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
-import com.semkagtn.javascriptic.tree.GetIndexNode;
+import com.semkagtn.javascriptic.tree.GetFieldNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -26,7 +27,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
-import com.semkagtn.javascriptic.tree.PutIndexNode;
+import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StrictEqNode;
 import com.semkagtn.javascriptic.tree.StrictNeNode;
@@ -70,7 +71,7 @@ public interface AstVisitor<T> {
 
 	T visit(FunctionParameterNode functionParam);
 
-	T visit (GetIndexNode getIndex);
+	T visit (GetFieldNode getIndex);
 	
 	T visit(GeNode ge);
 
@@ -98,7 +99,7 @@ public interface AstVisitor<T> {
 
 	T visit(ProgramNode program);
 	
-	T visit(PutIndexNode putIndex);
+	T visit(PutFieldNode putIndex);
 
 	T visit(ReturnNode returnStat);
 
@@ -115,4 +116,6 @@ public interface AstVisitor<T> {
 	T visit(VarNode var);
 
 	T visit(WhileNode whileStat);
+	
+	T visit(DoWhileNode doWhile);
 }

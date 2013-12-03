@@ -82,7 +82,7 @@ public abstract class JSObject {
 		return JSBool.TRUE;
 	}
 	
-	private JSObject toJSNumber() {
+	protected JSObject toJSNumber() {
 		if (type == Type.UNDEF) {
 			return JSNumber.NAN;
 		}
@@ -105,7 +105,7 @@ public abstract class JSObject {
 		return this.toJSPrimitive(Type.NUMBER);
 	}
 	
-	private JSObject toJSString() {
+	protected JSObject toJSString() {
 		if (type == Type.STRING) {
 			return this;
 		}

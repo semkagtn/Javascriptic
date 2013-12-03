@@ -36,6 +36,14 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
+	@Override public T visitPutField(@NotNull JavascripticParser.PutFieldContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
 	@Override public T visitExprStat(@NotNull JavascripticParser.ExprStatContext ctx) { return visitChildren(ctx); }
 
 	/**
@@ -68,7 +76,7 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitGetIndex(@NotNull JavascripticParser.GetIndexContext ctx) { return visitChildren(ctx); }
+	@Override public T visitGetField(@NotNull JavascripticParser.GetFieldContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -172,7 +180,7 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx) { return visitChildren(ctx); }
+	@Override public T visitField(@NotNull JavascripticParser.FieldContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}
@@ -180,7 +188,15 @@ public class JavascripticBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.
 	 */
-	@Override public T visitPutIndex(@NotNull JavascripticParser.PutIndexContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDoWhileStat(@NotNull JavascripticParser.DoWhileStatContext ctx) { return visitChildren(ctx); }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.
+	 */
+	@Override public T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx) { return visitChildren(ctx); }
 
 	/**
 	 * {@inheritDoc}

@@ -2,11 +2,12 @@
 
 var Tree = function() {
     // Inner class
-    var VALUE = 0;
-    var LEFT = 1;
-    var RIGHT = 2;
     var Node = function() {
-        return [undefined, [], []];
+        var node = [];
+        node.value = undefined;
+        node.left = [];
+        node.right = [];
+        return node;
     };
 
     // private field
@@ -14,36 +15,36 @@ var Tree = function() {
 
     // public methods
     var tree = [];
-    tree["insert"] = function(value) {
+    tree.insert = function(value) {
         var current = root;
-        while (current[VALUE]) {
-            if (value < current[VALUE]) {
-                current = current[LEFT];
-            } else if (value > current[VALUE]) {
-                current = current[RIGHT];
+        while (current.value) {
+            if (value < current.value) {
+                current = current.left;
+            } else if (value > current.value) {
+                current = current.right;
             } else {
                 return;
             }
         }
-        current[VALUE] = value;
-        current[LEFT] = Node();
-        current[RIGHT] = Node();
+        current.value = value;
+        current.left = Node();
+        current.right = Node();
     };
-    tree["min"] = function() {
+    tree.min = function() {
         var current = root;
         var min;
-        while (current[VALUE]) {
-            min = current[VALUE];
-            current = current[LEFT];
+        while (current.value) {
+            min = current.value;
+            current = current.left;
         }
         return min;
     };
-    tree["max"] = function() {
+    tree.max = function() {
         var current = root;
         var max;
-        while (current[VALUE]) {
-            max = current[VALUE];
-            current = current[RIGHT];
+        while (current.value) {
+            max = current.value;
+            current = current.right;
         }
         return max;
     };
@@ -51,14 +52,14 @@ var Tree = function() {
 };
 
 var tree = Tree();
-tree["insert"](9);
-tree["insert"](1);
-tree["insert"](7);
-tree["insert"](2);
-tree["insert"](20);
-tree["insert"](1);
-tree["insert"](3);
-tree["insert"](4);
-tree["insert"](10);
-print(tree["min"]() + "\n");
-print(tree["max"]() + "\n");
+tree.insert(9);
+tree.insert(1);
+tree.insert(7);
+tree.insert(2);
+tree.insert(20);
+tree.insert(1);
+tree.insert(3);
+tree.insert(4);
+tree.insert(10);
+print(tree.min() + '\n');
+print(tree.max() + '\n');

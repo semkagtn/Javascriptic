@@ -2,13 +2,13 @@ package com.semkagtn.javascriptic.tree;
 
 import com.semkagtn.javascriptic.visitor.AstVisitor;
 
-public class PutIndexNode extends ExpressionNode {
+public class PutFieldNode extends ExpressionNode {
 
 	private ExpressionNode variable;
 	private ExpressionNode index;
 	private ExpressionNode expression;
 	
-	public PutIndexNode() {
+	public PutFieldNode() {
 		variable = null;
 		index = null;
 		expression = null;

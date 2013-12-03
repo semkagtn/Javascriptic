@@ -2,12 +2,12 @@ package com.semkagtn.javascriptic.tree;
 
 import com.semkagtn.javascriptic.visitor.AstVisitor;
 
-public class GetIndexNode extends ExpressionNode {
+public class GetFieldNode extends ExpressionNode {
 
 	private ExpressionNode variable;
 	private ExpressionNode index;
 	
-	public GetIndexNode() {
+	public GetFieldNode() {
 		variable = null;
 		index = null;
 	}

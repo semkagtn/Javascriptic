@@ -13,18 +13,19 @@ import com.semkagtn.javascriptic.generated.JavascripticParser.AssignContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.BlockStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.CmpContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ConstantContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.DoWhileStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.EqContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ExprContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ExprStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.FunctionCallContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.FunctionContext;
-import com.semkagtn.javascriptic.generated.JavascripticParser.GetIndexContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.GetFieldContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.IfStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.MulDivModContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.OrContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ParensContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ProgramContext;
-import com.semkagtn.javascriptic.generated.JavascripticParser.PutIndexContext;
+import com.semkagtn.javascriptic.generated.JavascripticParser.PutFieldContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.ReturnStatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.StatContext;
 import com.semkagtn.javascriptic.generated.JavascripticParser.UnaryExprContext;
@@ -41,6 +42,7 @@ import com.semkagtn.javascriptic.tree.BlockNode;
 import com.semkagtn.javascriptic.tree.BoolNode;
 import com.semkagtn.javascriptic.tree.ConstantNode;
 import com.semkagtn.javascriptic.tree.DivNode;
+import com.semkagtn.javascriptic.tree.DoWhileNode;
 import com.semkagtn.javascriptic.tree.EqNode;
 import com.semkagtn.javascriptic.tree.ExpressionNode;
 import com.semkagtn.javascriptic.tree.ExpressionStatementNode;
@@ -48,7 +50,7 @@ import com.semkagtn.javascriptic.tree.FunctionCallNode;
 import com.semkagtn.javascriptic.tree.FunctionNode;
 import com.semkagtn.javascriptic.tree.FunctionParameterNode;
 import com.semkagtn.javascriptic.tree.GeNode;
-import com.semkagtn.javascriptic.tree.GetIndexNode;
+import com.semkagtn.javascriptic.tree.GetFieldNode;
 import com.semkagtn.javascriptic.tree.GtNode;
 import com.semkagtn.javascriptic.tree.IfElseNode;
 import com.semkagtn.javascriptic.tree.LeNode;
@@ -61,7 +63,7 @@ import com.semkagtn.javascriptic.tree.NotNode;
 import com.semkagtn.javascriptic.tree.NumberNode;
 import com.semkagtn.javascriptic.tree.OrNode;
 import com.semkagtn.javascriptic.tree.ProgramNode;
-import com.semkagtn.javascriptic.tree.PutIndexNode;
+import com.semkagtn.javascriptic.tree.PutFieldNode;
 import com.semkagtn.javascriptic.tree.ReturnNode;
 import com.semkagtn.javascriptic.tree.StatementNode;
 import com.semkagtn.javascriptic.tree.StringNode;
@@ -332,18 +334,38 @@ public class AstBuilder extends JavascripticBaseVisitor<AstNode> {
 		return array;
 	}
 	
-	public GetIndexNode visitGetIndex(GetIndexContext ctx) {
-		GetIndexNode getIndex = new GetIndexNode();
+	public GetFieldNode visitGetField(GetFieldContext ctx) {
+		GetFieldNode getIndex = new GetFieldNode();
 		getIndex.setVariable((ExpressionNode) visit(ctx.expr()));
-		getIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		if (ctx.index() != null) {
+			getIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		} else if (ctx.field() != null) {
+			StringNode str = new StringNode();
+			str.setValue("'" + ctx.field().ID().getText() + "'");
+			getIndex.setIndex(str);
+		}
 		return getIndex;
 	}
 	
-	public PutIndexNode visitPutIndex(PutIndexContext ctx) {
-		PutIndexNode putIndex = new PutIndexNode();
+	public PutFieldNode visitPutField(PutFieldContext ctx) {
+		PutFieldNode putIndex = new PutFieldNode();
 		putIndex.setVariable((ExpressionNode) visit(ctx.expr(0)));
-		putIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		if (ctx.index() != null) {
+			putIndex.setIndex((ExpressionNode) visit(ctx.index().expr()));
+		} else if (ctx.field() != null) {
+			StringNode str = new StringNode();
+			str.setValue("'" + ctx.field().ID().getText() + "'");
+			putIndex.setIndex(str);
+		}
 		putIndex.setExpression((ExpressionNode) visit(ctx.expr(1)));
 		return putIndex;
+	}
+	
+	public DoWhileNode visitDoWhileStat(DoWhileStatContext ctx) {
+		DoWhileNode doWhile = new DoWhileNode();
+		doWhile.setPosition(ctx.start.getLine(), ctx.start.getCharPositionInLine());
+		doWhile.setCondition((ExpressionNode) visit(ctx.expr()));
+		doWhile.setStatement((StatementNode) visit(ctx.stat()));
+		return doWhile;
 	}
 }

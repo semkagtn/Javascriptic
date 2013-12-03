@@ -31,7 +31,7 @@ public class JSArray extends JSObject {
 		for (int i = 0; i < length; i++) {
 			String key = i + "";
 			if (a.containsKey(key)) {
-				result.append(a.get(key).toJSPrimitive(Type.STRING).value);
+				result.append(a.get(key).toJSString().value);
 			}
 			if (i != length - 1) {
 				result.append(",");
@@ -41,7 +41,7 @@ public class JSArray extends JSObject {
 	}
 	
 	public JSObject get(JSObject index) {
-		String key = index.toJSPrimitive(Type.STRING).value;
+		String key = index.toJSString().value;
 		if (a.containsKey(key)) {
 			return a.get(key);
 		}
@@ -49,7 +49,7 @@ public class JSArray extends JSObject {
 	}
 	
 	public JSObject put(JSObject index, JSObject value) {
-		String strIndex = index.toJSPrimitive(Type.STRING).value;
+		String strIndex = index.toJSString().value;
 		a.put(strIndex, value);
 		try {
 			double d = Double.parseDouble(strIndex);

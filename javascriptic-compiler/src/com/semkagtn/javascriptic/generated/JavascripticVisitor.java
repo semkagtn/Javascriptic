@@ -28,6 +28,13 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitFunctionParams(@NotNull JavascripticParser.FunctionParamsContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#PutField}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPutField(@NotNull JavascripticParser.PutFieldContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#exprStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -56,11 +63,11 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitEq(@NotNull JavascripticParser.EqContext ctx);
 
 	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#GetIndex}.
+	 * Visit a parse tree produced by {@link JavascripticParser#GetField}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitGetIndex(@NotNull JavascripticParser.GetIndexContext ctx);
+	T visitGetField(@NotNull JavascripticParser.GetFieldContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#blockStat}.
@@ -147,18 +154,25 @@ public interface JavascripticVisitor<T> extends ParseTreeVisitor<T> {
 	T visitStat(@NotNull JavascripticParser.StatContext ctx);
 
 	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#field}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitField(@NotNull JavascripticParser.FieldContext ctx);
+
+	/**
+	 * Visit a parse tree produced by {@link JavascripticParser#doWhileStat}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDoWhileStat(@NotNull JavascripticParser.DoWhileStatContext ctx);
+
+	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#whileStat}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitWhileStat(@NotNull JavascripticParser.WhileStatContext ctx);
-
-	/**
-	 * Visit a parse tree produced by {@link JavascripticParser#PutIndex}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPutIndex(@NotNull JavascripticParser.PutIndexContext ctx);
 
 	/**
 	 * Visit a parse tree produced by {@link JavascripticParser#ifStat}.
