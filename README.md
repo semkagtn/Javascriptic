@@ -1,8 +1,8 @@
 Javascriptic
 ============
 
-Very simple Javascript-like language,
-written in java using ANTLR4 and ASM library.
+Simple and very slow Javascript-like language,
+Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.ow2.org/).
 
 ### Usage
     $ git clone https://github.com/semkagtn/Javascriptic.git
@@ -12,8 +12,9 @@ written in java using ANTLR4 and ASM library.
     $ java Out
 
 ### Standard functions
-*    **print(text)** - print the text to console
-*    **read()** - returns user input
-*    **round(number)** - for example: round(3.7) = 4 or round(3.4) = 3
-*    **length(x)** - returns length of array or string (or an undefined for other arguments)
-*    **random()** - returns a number from 0.0 to 1.0
+*    **Console.print(text)** - print the text to the console
+*    **Console.read()** - returns user input
+*    **Math.random()** - returns a number from 0.0 to 1.0
+*    **Math.round(number)**  
+*    **Math.ceil(number)**
+*    **Math.floor(number)**
