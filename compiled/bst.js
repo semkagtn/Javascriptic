@@ -58,7 +58,7 @@ var tree = Tree();
 
 var i = 0;
 while (i < N) {
-    var random = MIN + Math.random() * (MAX - MIN);
+    var random = Math.round(MIN + Math.random() * (MAX - MIN));
     Console.print("Insert " + random + "\n");
     tree.insert(random);
     i = i + 1;
