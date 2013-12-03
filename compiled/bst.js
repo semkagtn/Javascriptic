@@ -1,12 +1,9 @@
-// Binary Search Tree (No delete function)
+// Binary Search Tree (No remove function)
 
 var Tree = function() {
     // Inner class
     var Node = function() {
         var node = [];
-        node.value = undefined;
-        node.left = [];
-        node.right = [];
         return node;
     };
 
