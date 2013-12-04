@@ -594,9 +594,9 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		} else {
 			writers.peek().visitTypeInsn(NEW, Class.NUMBER);
 			writers.peek().visitInsn(DUP);
-			writers.peek().visitLdcInsn(number.getValue());
+			writers.peek().visitLdcInsn(Double.parseDouble(number.getValue()));
 			writers.peek().visitMethodInsn(INVOKESPECIAL,
-					Class.NUMBER, "<init>", "(Ljava/lang/String;)V");
+					Class.NUMBER, "<init>", "(D)V");
 			writers.peek().stackPop(2);
 		}
 		return null;

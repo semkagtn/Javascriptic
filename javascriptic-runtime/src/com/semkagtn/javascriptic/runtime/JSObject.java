@@ -1,11 +1,12 @@
 package com.semkagtn.javascriptic.runtime;
+
 public abstract class JSObject {
 	private Type type;
 	protected String value;
+	protected double number;
 	
-	public JSObject(Type type, String value) {
+	public JSObject(Type type) {
 		this.type = type;
-		this.value = value;
 	}
 	
 	// Need to overload in Objects (Not-primitive types)
@@ -50,15 +51,10 @@ public abstract class JSObject {
 		}
 		JSObject lNumber = lPrimitive.toJSNumber();
 		JSObject rNumber = rPrimitive.toJSNumber();
-		if (lNumber == JSNumber.NAN) {
+		if (lNumber == JSNumber.NAN || rNumber == JSNumber.NAN) {
 			return JSUndef.UNDEF;
 		}
-		if (rNumber == JSNumber.NAN) {
-			return JSUndef.UNDEF;
-		}
-		double lValue = Double.parseDouble(lNumber.value);
-		double rValue = Double.parseDouble(rNumber.value);
-		return lValue < rValue ? JSBool.TRUE : JSBool.FALSE;
+		return lNumber.number < rNumber.number ? JSBool.TRUE : JSBool.FALSE;
 	}
 	
 	private JSObject toJSBool() {
@@ -95,7 +91,10 @@ public abstract class JSObject {
 			} catch (NumberFormatException e) {
 				return JSNumber.NAN;
 			}
-			return new JSNumber(Double.toString(d));
+			if (d == Double.NaN) {
+				return JSNumber.NAN;
+			}
+			return new JSNumber(d);
 		}
 		return this.toJSPrimitive(Type.NUMBER);
 	}
@@ -108,9 +107,8 @@ public abstract class JSObject {
 			return new JSString(value);
 		}
 		if (type == Type.NUMBER) {
-			double d = Double.parseDouble(value);
-			if (d == (long) d) {
-				int i = (int) d;
+			if (this.number == (long) this.number) {
+				int i = (int) this.number;
 				return new JSString(i + "");
 			}
 			return new JSString(value);
@@ -123,9 +121,7 @@ public abstract class JSObject {
 		if (number == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		double d = Double.parseDouble(number.value);
-		d = -d;
-		return new JSNumber(d + "");
+		return new JSNumber(-this.number);
 	}
 	
 	public JSObject plus() {
@@ -143,57 +139,41 @@ public abstract class JSObject {
 	public JSObject mul(JSObject rhs) {
 		JSObject l = this.toJSNumber();
 		JSObject r = rhs.toJSNumber();
-		double lValue, rValue;
-		try {
-			lValue = Double.parseDouble(l.value);
-			rValue = Double.parseDouble(r.value);
-		} catch (NumberFormatException e) {
+		if (l == JSNumber.NAN || r == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(lValue * rValue));
+		return new JSNumber(l.number * r.number);
 	}
 	
 	public JSObject mod(JSObject rhs) {
 		JSObject l = this.toJSNumber();
 		JSObject r = rhs.toJSNumber();
-		double lValue, rValue;
-		try {
-			lValue = Double.parseDouble(l.value);
-			rValue = Double.parseDouble(r.value);
-		} catch (NumberFormatException e) {
+		if (l == JSNumber.NAN || r == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(lValue % rValue));
+		return new JSNumber(l.number % r.number);
 	}
 	
 	public JSObject div(JSObject rhs) {
 		JSObject l = this.toJSNumber();
 		JSObject r = rhs.toJSNumber();
-		double lValue, rValue;
-		try {
-			lValue = Double.parseDouble(l.value);
-			rValue = Double.parseDouble(r.value);
-		} catch (NumberFormatException e) {
+		if (l == JSNumber.NAN || r == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		double res = lValue / rValue;
-		if (res == Double.NaN || res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY) {
+		double res = l.number / r.number;
+		if (res == Double.NaN | res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(res));
+		return new JSNumber(res);
 	}
 	
 	public JSObject sub(JSObject rhs) {
 		JSObject l = this.toJSNumber();
 		JSObject r = rhs.toJSNumber();
-		double lValue, rValue;
-		try {
-			lValue = Double.parseDouble(l.value);
-			rValue = Double.parseDouble(r.value);
-		} catch (NumberFormatException e) {
+		if (l == JSNumber.NAN || r == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(lValue - rValue));
+		return new JSNumber(l.number - r.number);
 	}
 	
 	public JSObject add(JSObject rhs) {
@@ -208,14 +188,10 @@ public abstract class JSObject {
 		}
 		JSObject lNumber = this.toJSNumber();
 		JSObject rNumber = rhs.toJSNumber();
-		double lValue, rValue;
-		try {
-			lValue = Double.parseDouble(lNumber.value);
-			rValue = Double.parseDouble(rNumber.value);
-		} catch (NumberFormatException e) {
+		if (lNumber == JSNumber.NAN || rNumber == JSNumber.NAN) {
 			return JSNumber.NAN;
 		}
-		return new JSNumber(Double.toString(lValue + rValue));
+		return new JSNumber(lNumber.number + rNumber.number);
 	}
 	
 	public JSObject eq(JSObject rhs) {
@@ -230,7 +206,7 @@ public abstract class JSObject {
 				if (rhs == JSNumber.NAN) {
 					return JSBool.FALSE;
 				}
-				if (Double.parseDouble(this.value) == Double.parseDouble(rhs.value)) {
+				if (this.number == rhs.number) {
 					return JSBool.TRUE;
 				}
 				return JSBool.FALSE;
@@ -276,9 +252,7 @@ public abstract class JSObject {
 			if (this == JSNumber.NAN || rhs == JSNumber.NAN) {
 				return JSBool.FALSE;
 			}
-			double l = Double.parseDouble(this.value);
-			double r = Double.parseDouble(rhs.value);
-			return l == r ? JSBool.TRUE : JSBool.FALSE;
+			return this.number == rhs.number ? JSBool.TRUE : JSBool.FALSE;
 		}
 		if (this.type == Type.STRING) {
 			return this.value.equals(rhs.value) ? JSBool.TRUE : JSBool.FALSE;

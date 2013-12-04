@@ -6,9 +6,9 @@ public class JSArray extends JSObject {
 	private HashMap<String, JSObject> a;
 	
 	public JSArray(JSObject... objects) {
-		super(Type.OBJECT, "");
+		super(Type.OBJECT);
 		a = new HashMap<>();
-		a.put("length", new JSNumber(objects.length + ""));
+		a.put("length", new JSNumber(objects.length));
 		for (int i = 0; i < objects.length; i++) {
 			a.put(i + "", objects[i]);
 		}
@@ -51,10 +51,10 @@ public class JSArray extends JSObject {
 		try {
 			double d = Double.parseDouble(strIndex);
 			if (d == (long) d) {
-				int length = Integer.parseInt(a.get("length").value);
+				int length = (int) a.get("length").number;
 				int i = (int) d;
 				if (i >= length) {
-					a.put("length", new JSNumber(i + 1 + ""));
+					a.put("length", new JSNumber(i + 1));
 				}
 			}
 		} catch (NumberFormatException e) {

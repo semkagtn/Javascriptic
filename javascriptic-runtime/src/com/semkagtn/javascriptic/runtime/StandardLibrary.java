@@ -36,8 +36,8 @@ public abstract class StandardLibrary {
 			if (n == JSNumber.NAN) {
 				return JSNumber.NAN;
 			}
-			long res = Math.round(Double.parseDouble(n.value));
-			return new JSNumber(res + "");
+			long res = Math.round(n.number);
+			return new JSNumber(res);
 		}
 	};
 	
@@ -50,8 +50,8 @@ public abstract class StandardLibrary {
 			if (n == JSNumber.NAN) {
 				return JSNumber.NAN;
 			}
-			long res = (long) Math.floor(Double.parseDouble(n.value));
-			return new JSNumber(res + "");
+			long res = (long) Math.floor(n.number);
+			return new JSNumber(res);
 		}
 	};
 	
@@ -64,14 +64,14 @@ public abstract class StandardLibrary {
 			if (n == JSNumber.NAN) {
 				return JSNumber.NAN;
 			}
-			long res = (long) Math.ceil(Double.parseDouble(n.value));
-			return new JSNumber(res + "");
+			long res = (long) Math.ceil(n.number);
+			return new JSNumber(res);
 		}
 	};
 	
 	private static final JSFunction MATH_RANDOM = new JSFunction(FUNCTION_TEXT) {
 		public JSObject call(JSObject... objects) {
-			return new JSNumber(Math.random() + "");
+			return new JSNumber(Math.random());
 		}
 	};
 	

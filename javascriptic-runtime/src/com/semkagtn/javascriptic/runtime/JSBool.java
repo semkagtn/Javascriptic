@@ -4,6 +4,7 @@ public class JSBool extends JSObject {
 	public static final JSBool FALSE = new JSBool("false");
 	
 	private JSBool(String value) {
-		super(Type.BOOL, value);
+		super(Type.BOOL);
+		this.value = value;
 	}
 }

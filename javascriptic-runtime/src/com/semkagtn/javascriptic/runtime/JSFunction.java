@@ -10,6 +10,7 @@ public abstract class JSFunction extends JSObject {
 	}
 	
 	public JSFunction(String text) {
-		super(Type.OBJECT, text);
+		super(Type.OBJECT);
+		this.value = text;
 	}
 }

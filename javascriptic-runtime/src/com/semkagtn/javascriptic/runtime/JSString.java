@@ -23,7 +23,8 @@ public class JSString extends JSObject {
 	}
 	
 	public JSString(String value) {
-		super(Type.STRING, value);
-		length = new JSNumber(value.length() + "");
+		super(Type.STRING);
+		this.value = value;
+		length = new JSNumber(value.length());
 	}
 }
