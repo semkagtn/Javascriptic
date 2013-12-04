@@ -50,16 +50,16 @@ var Tree = function() {
 
 // Tree test
 
-var N = 200000;
+var N = 30;
 var MIN = 0;
-var MAX = 10000;
+var MAX = 100000;
 
 var tree = Tree();
 
 var i = 0;
 while (i < N) {
     var random = Math.round(MIN + Math.random() * (MAX - MIN));
-    //Console.print("Insert " + random + "\n");
+    Console.print("Insert " + random + "\n");
     tree.insert(random);
     i = i + 1;
 }
