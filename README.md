@@ -18,3 +18,5 @@ Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.o
 *    **Math.round(number)** 
 *    **Math.ceil(number)**
 *    **Math.floor(number)**
+*    **Math.min(x1, x2,.., xn)**
+*    **Math.max(x1, x2,.., xn)**

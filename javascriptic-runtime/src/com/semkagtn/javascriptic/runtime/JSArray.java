@@ -8,7 +8,11 @@ public class JSArray extends JSObject {
 	public JSArray(JSObject... objects) {
 		super(Type.OBJECT);
 		a = new HashMap<>();
-		a.put("length", new JSNumber(objects.length));
+		if (objects.length == 0) {
+			a.put("length", JSNumber.ZERO);
+		} else {
+			a.put("length", new JSNumber(objects.length));
+		}
 		for (int i = 0; i < objects.length; i++) {
 			a.put(i + "", objects[i]);
 		}

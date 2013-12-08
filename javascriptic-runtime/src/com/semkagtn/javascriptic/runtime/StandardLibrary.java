@@ -75,6 +75,38 @@ public abstract class StandardLibrary {
 		}
 	};
 	
+	private static final JSFunction MATH_MIN = new JSFunction(FUNCTION_TEXT) {
+		public JSObject call(JSObject... objects) {
+			if (objects.length == 0) {
+				return JSUndef.UNDEF;
+			}
+			JSObject min = objects[0].toJSNumber();
+			for (int i = 1; i < objects.length; i++) {
+				JSObject o = objects[i].toJSNumber();
+				if (o.lt(min) == JSBool.TRUE) {
+					min = o;
+				}
+			}
+			return min;
+		}
+	};
+	
+	private static final JSFunction MATH_MAX = new JSFunction(FUNCTION_TEXT) {
+		public JSObject call(JSObject... objects) {
+			if (objects.length == 0) {
+				return JSUndef.UNDEF;
+			}
+			JSObject max = objects[0].toJSNumber();
+			for (int i = 1; i < objects.length; i++) {
+				JSObject o = objects[i].toJSNumber();
+				if (o.gt(max) == JSBool.TRUE) {
+					max = o;
+				}
+			}
+			return max;
+		}
+	};
+	
 	static {
 		CONSOLE = new JSArray();
 		CONSOLE.put(new JSString("print"), CONSOLE_PRINT);
@@ -85,5 +117,7 @@ public abstract class StandardLibrary {
 		MATH.put(new JSString("round"), MATH_ROUND);
 		MATH.put(new JSString("floor"), MATH_FLOOR);
 		MATH.put(new JSString("ceil"), MATH_CEIL);
+		MATH.put(new JSString("min"), MATH_MIN);
+		MATH.put(new JSString("max"), MATH_MAX);
 	}
 }
