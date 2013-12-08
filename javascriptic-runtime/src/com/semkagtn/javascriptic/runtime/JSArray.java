@@ -8,11 +8,7 @@ public class JSArray extends JSObject {
 	public JSArray(JSObject... objects) {
 		super(Type.OBJECT);
 		a = new HashMap<>();
-		if (objects.length == 0) {
-			a.put("length", JSNumber.ZERO);
-		} else {
-			a.put("length", new JSNumber(objects.length));
-		}
+		a.put("length", new JSNumber(objects.length));
 		for (int i = 0; i < objects.length; i++) {
 			a.put(i + "", objects[i]);
 		}
@@ -20,9 +16,9 @@ public class JSArray extends JSObject {
 	
 	protected JSObject toJSPrimitive(Type hint) {
 		if (hint == Type.NUMBER) {
-			if (a.get("length") == JSNumber.ZERO) {
+			if (a.get("length").eq(JSNumber.ZERO) == JSBool.TRUE) {
 				return JSNumber.ZERO;
-			} else if (a.get("length") == JSNumber.ONE) {
+			} else if (a.get("length").eq(JSNumber.ONE) == JSBool.TRUE) {
 				return a.get(0);
 			}
 			return JSNumber.NAN;
