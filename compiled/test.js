@@ -46,7 +46,7 @@ f();
 f();
 print("\n");
 
-// 8. Funny cast number to bool (double not)
+// 8. Funny cast number to bool (two logical not operators)
 print("8. " + !!0 + " " + !!1 + "\n\n"); // false true
 
 // 9. Typical JavaScript code

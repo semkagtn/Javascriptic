@@ -1,4 +1,4 @@
-// Binary Search Tree (No remove function)
+// Binary Search Tree (Without remove operation)
 
 var Tree = function() {
     // Inner class

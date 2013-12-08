@@ -1,4 +1,4 @@
-// Simple stack
+// Simple stack implementation.
 
 var Stack = function() {
     var array = [];

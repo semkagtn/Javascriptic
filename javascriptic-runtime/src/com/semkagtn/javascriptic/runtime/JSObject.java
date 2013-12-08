@@ -111,7 +111,7 @@ public abstract class JSObject {
 				int i = (int) this.number;
 				return new JSString(i + "");
 			}
-			return new JSString(value);
+			return new JSString(number + "");
 		}
 		return this.toJSPrimitive(Type.STRING);
 	}

@@ -24,7 +24,7 @@ public class JSArray extends JSObject {
 			return JSNumber.NAN;
 		}
 		StringBuilder result = new StringBuilder();
-		int length = Integer.parseInt(a.get("length").value);
+		int length = (int) a.get("length").number;
 		for (int i = 0; i < length; i++) {
 			String key = i + "";
 			if (a.containsKey(key)) {
