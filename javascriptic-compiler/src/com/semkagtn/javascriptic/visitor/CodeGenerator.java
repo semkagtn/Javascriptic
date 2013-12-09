@@ -591,6 +591,9 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		} else if (number.getValue().equals("1.0")) {
 			writers.peek().visitFieldInsn(
 					GETSTATIC, Class.NUMBER, "ONE", Type.NUMBER);
+		} else if (number.getValue().equals("Infinity")) {
+			writers.peek().visitFieldInsn(
+					GETSTATIC, Class.NUMBER, "POS_INFINITY", Type.NUMBER);
 		} else {
 			writers.peek().visitTypeInsn(NEW, Class.NUMBER);
 			writers.peek().visitInsn(DUP);

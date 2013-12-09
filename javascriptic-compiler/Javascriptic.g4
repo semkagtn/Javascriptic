@@ -100,7 +100,7 @@ NE : '!=' ;
 SEQ : '===' ;
 SNE : '!==' ;
 
-NUM : (DIGIT+ ('.' DIGIT+)?) | 'NaN' ; // we can get negative numbers using unary minus operator
+NUM : (DIGIT+ ('.' DIGIT+)?) | 'NaN' | 'Infinity' ; // we can get negative numbers using unary minus operator
 STR : ('"' (ESC | ~["\\])*? '"') | ('\'' (ESC | ~[\'\\])*? '\'') ; 
 BOOL : 'true' | 'false' ; 
 UNDEF : 'undefined' ; 

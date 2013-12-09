@@ -94,11 +94,8 @@ public abstract class StandardLibrary {
 	
 	private static final JSFunction MATH_MIN = new JSFunction(FUNCTION_TEXT) {
 		public JSObject call(JSObject... objects) {
-			if (objects.length == 0) {
-				return JSUndef.UNDEF;
-			}
-			JSObject min = objects[0].toJSNumber();
-			for (int i = 1; i < objects.length; i++) {
+			JSObject min = JSNumber.POS_INFINITY;
+			for (int i = 0; i < objects.length; i++) {
 				JSObject o = objects[i].toJSNumber();
 				if (o.lt(min) == JSBool.TRUE) {
 					min = o;
@@ -110,11 +107,8 @@ public abstract class StandardLibrary {
 	
 	private static final JSFunction MATH_MAX = new JSFunction(FUNCTION_TEXT) {
 		public JSObject call(JSObject... objects) {
-			if (objects.length == 0) {
-				return JSUndef.UNDEF;
-			}
-			JSObject max = objects[0].toJSNumber();
-			for (int i = 1; i < objects.length; i++) {
+			JSObject max = JSNumber.NEG_INFINITY;
+			for (int i = 0; i < objects.length; i++) {
 				JSObject o = objects[i].toJSNumber();
 				if (o.gt(max) == JSBool.TRUE) {
 					max = o;
