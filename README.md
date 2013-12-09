@@ -12,9 +12,10 @@ Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.o
     $ java Out
 
 ### Standard functions
-*    **Console.print(text)** - print the text to the console
+*    **Console.print(x1, x2,.., xn)** - prints x1, x2,.., xn to the console
+*    **Console.println(x1, x2,.., xn)** - prints x1, x2,.., xn and new-line-symbol to the console
 *    **Console.read()** - returns user input
-*    **Math.random()** - returns a number from 0.0 to 1.0
+*    **Math.random()** - returns a pseudo-random number from 0.0 to 1.0
 *    **Math.round(number)** 
 *    **Math.ceil(number)**
 *    **Math.floor(number)**

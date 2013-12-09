@@ -59,10 +59,10 @@ var tree = Tree();
 var i = 0;
 while (i < N) {
     var random = Math.round(MIN + Math.random() * (MAX - MIN));
-    Console.print("Insert " + random + "\n");
+    Console.println("Insert", random);
     tree.insert(random);
     i = i + 1;
 }
 
-Console.print("Min = " + tree.min() + '\n');
-Console.print("Max = " + tree.max() + '\n');
+Console.println("Min =", tree.min());
+Console.println("Max =", tree.max());

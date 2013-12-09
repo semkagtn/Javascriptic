@@ -10,11 +10,28 @@ public abstract class StandardLibrary {
 
 	private static final JSFunction CONSOLE_PRINT = new JSFunction(FUNCTION_TEXT) {
 		public JSObject call(JSObject... objects) {
-			if (objects.length == 0) {
-				System.out.print(JSUndef.UNDEF);
-			} else {
-				System.out.print(objects[0].toJSString().value);
+			StringBuilder result = new StringBuilder();
+			for (int i = 0; i < objects.length; i++) {
+				result.append(objects[i].toJSString().value);
+				if (i != objects.length - 1) {
+					result.append(" ");
+				}
 			}
+			System.out.print(result.toString());
+			return JSUndef.UNDEF;
+		}
+	};
+	
+	private static final JSFunction CONSOLE_PRINTLN = new JSFunction(FUNCTION_TEXT) {
+		public JSObject call(JSObject... objects) {
+			StringBuilder result = new StringBuilder();
+			for (int i = 0; i < objects.length; i++) {
+				result.append(objects[i].toJSString().value);
+				if (i != objects.length - 1) {
+					result.append(" ");
+				}
+			}
+			System.out.println(result.toString());
 			return JSUndef.UNDEF;
 		}
 	};
@@ -110,6 +127,7 @@ public abstract class StandardLibrary {
 	static {
 		CONSOLE = new JSArray();
 		CONSOLE.put(new JSString("print"), CONSOLE_PRINT);
+		CONSOLE.put(new JSString("println"), CONSOLE_PRINTLN);
 		CONSOLE.put(new JSString("read"), CONSOLE_READ);
 		
 		MATH = new JSArray();
