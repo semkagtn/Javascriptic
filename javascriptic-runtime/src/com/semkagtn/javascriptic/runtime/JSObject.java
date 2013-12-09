@@ -161,8 +161,14 @@ public abstract class JSObject {
 			return JSNumber.NAN;
 		}
 		double res = l.number / r.number;
-		if (res == Double.NaN | res == Double.POSITIVE_INFINITY || res == Double.NEGATIVE_INFINITY) {
+		if (res == Double.NaN) {
 			return JSNumber.NAN;
+		}
+		if (res == Double.POSITIVE_INFINITY) {
+			return JSNumber.POS_INFINITY;
+		}
+		if (res == Double.NEGATIVE_INFINITY) {
+			return JSNumber.NEG_INFINITY;
 		}
 		return new JSNumber(res);
 	}
