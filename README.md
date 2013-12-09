@@ -7,7 +7,7 @@ Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.o
 ### Usage
     $ git clone https://github.com/semkagtn/Javascriptic.git
     $ cd Javascriptic/compiled
-    $ export CLASSPATH=$CLASSPATH:./runtime.jar
+    $ export CLASSPATH=./runtime.jar:$CLASSPATH
     $ java -jar javascriptic.jar test.js
     $ java Out
 
