@@ -177,6 +177,9 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 		
 		public void visitLdcInsn(Object cst) {
 			++currentStack;
+			if (cst instanceof Double) {
+				++currentStack;
+			}
 			maxStack = Math.max(maxStack, currentStack);
 			mv.visitLdcInsn(cst);
 		}

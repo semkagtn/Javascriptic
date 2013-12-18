@@ -131,18 +131,33 @@ var Point = function(x, y) {
 var p = Point(5, 3);
 print("p = (" + p.getX() + ", " + p.getY() + ")\n\n");
 
-// 17. Standard library
+
+// 17. Someone little example
+print("17. \n");
+var diff = function(f) {
+    var dx = 0.000001;
+    return function(x) {
+        return (f(x + dx) - f(x)) / dx;
+    };
+};
+var f = function(x) { return x * x * x; };
+var df = diff(f);
+print("f(x) = " + f + "\n");
+print("df(x) = " + df + "\n");
+print("df(5) = " + df(5) + "\n\n");
+
+// 18. Standard library
 // Console.print, Console.read
 // Math.random, Math.round, Math.ceil, Math.floor
-print('17. Standard library:\n');
+print('18. Standard library:\n');
 var n = Math.random() * 1000;
 print("n = " + n + "\n");
 print("Math.round(n) = " + Math.round(n) + "\n");
 print("Math.ceil(n) = " + Math.ceil(n) + "\n");
 print("Math.floor(n) = " + Math.floor(n) + "\n\n");
 
-// 18. Input
-print("18. Input your name: ");
+// 19. Input
+print("19. Input your name: ");
 var Greeter = function(name) {
     return function() {
         print("Hello " + name + "!\n");
