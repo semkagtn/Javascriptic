@@ -603,7 +603,7 @@ public class CodeGenerator implements AstVisitor<Object>, Opcodes {
 			writers.peek().visitLdcInsn(Double.parseDouble(number.getValue()));
 			writers.peek().visitMethodInsn(INVOKESPECIAL,
 					Class.NUMBER, "<init>", "(D)V");
-			writers.peek().stackPop(2);
+			writers.peek().stackPop(3);
 		}
 		return null;
 	}
