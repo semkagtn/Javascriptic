@@ -4,6 +4,7 @@ import com.semkagtn.javascriptic.tree.ProgramNode;
 import com.semkagtn.javascriptic.visitor.AstBuilder;
 import com.semkagtn.javascriptic.visitor.Checker;
 import com.semkagtn.javascriptic.visitor.CodeGenerator;
+import com.semkagtn.javascriptic.visitor.ConstantFolder;
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -32,6 +33,8 @@ public class Compiler {
 			ProgramNode ast = (ProgramNode) astBuilder.visit(tree);
 			Checker checker = new Checker();
 			checker.visit(ast);
+            ConstantFolder constantFolder = new ConstantFolder();
+            ast = (ProgramNode) constantFolder.visit(ast);
 			CodeGenerator codeGenerator = new CodeGenerator(outputFileName);
 			codeGenerator.visit(ast);
 		} catch (Exception e) {
