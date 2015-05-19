@@ -5,9 +5,8 @@ Simple and very slow Javascript-like language,
 Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.ow2.org/).
 
 ### Usage
-    $ java -jar javascriptic.jar test.js
-    $ java Out
-
+    $ export CLASSPATH=javascriptic-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar:$CLASSPATH
+    $ java -jar javascriptic-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar test.js
 ### Standard functions
 *    **Console.print(x1, x2,.., xn)** - prints *x1*, *x2*,.., *xn* to the console
 *    **Console.println(x1, x2,.., xn)** - prints *x1*, *x2*,.., *xn* and *\n*(new line) to the console
