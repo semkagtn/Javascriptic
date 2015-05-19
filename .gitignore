@@ -5,6 +5,7 @@
 
 # Exclude target directories
 */target
+*.jar
 
 # Exclude log file
 *.log
