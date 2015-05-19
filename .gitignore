@@ -1,0 +1,12 @@
+# IDEA Files 
+.idea
+*.iml
+*.ipr
+
+# Exclude target directories
+*/target
+
+# Exclude log file
+*.log
+*.classpath
+*.java.orig
