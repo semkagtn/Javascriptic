@@ -20,7 +20,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>com.semkagtn.javascriptic.Main</mainClass>
+                            <mainClass>com.semkagtn.javascriptic.compiler.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
