@@ -5,8 +5,13 @@ Simple and very slow Javascript-like language,
 Written in java using [ANTLR4](http://antlr.org/) and [ASM library](http://asm.ow2.org/).
 
 ### Usage
+    Собрать мавен-проект:
+    $ mvn clean package
+    Добавить CLASSPATH (для рантайма):
     $ export CLASSPATH=javascriptic-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar:$CLASSPATH
+    Компилировать так (примеры рабочего кода есть в examples)
     $ java -jar javascriptic-compiler-1.0-SNAPSHOT-jar-with-dependencies.jar test.js
+    Запускать скомпилированный код так:
     $ java Out
 ### Standard functions
 *    **Console.print(x1, x2,.., xn)** - prints *x1*, *x2*,.., *xn* to the console
